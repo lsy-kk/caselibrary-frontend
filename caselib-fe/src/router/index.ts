@@ -1,32 +1,56 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
 import { store } from '@/store'
-import { getToken } from '@/request/token'
+import { getToken } from '@/request/api/token'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
-      path: '/',
-      name: 'home',
-      component: HomeView
+      path: '',
+      name: 'Home',
+      component: () => import('../views/HomeView.vue'),
+      children:[
+        {
+          // 首页，显示最热案例
+          path:'/hot',
+          component: () => import('../views/HotCaseView.vue')
+        },
+        {
+          // 消息中心，id为用户id
+          path:'/notification/:id',
+          component: () => import('../views/NotificationView.vue')
+        },
+        {
+          // 搜索结果页面，type为搜索类型，keyword为搜索关键字
+          path:'/search/:type/:keyword',
+          component: () => import('../views/SearchView.vue')
+        },
+        {
+          // 个人主页，id为用户id
+          path:'/user/:id',
+          component: () => import('../views/UserHomeView.vue'),
+          children:[
+            {
+              // 个人发布案例
+              path:'/user/:id/case',
+              component: () => import('../views/UserCaseView.vue'),
+            },
+            {
+              // 个人收藏夹
+              path:'/user/:id/favorites',
+              component: () => import('../views/UserFavoritesView.vue'),
+            },
+            {
+              // 个人设置页面
+              path:'/user/:id/setting',
+              component: () => import('../views/UserSettingView.vue'),
+            }
+          ]
+        },
+      ]
     },
     {
-      path: '/login',
-      name: 'login',
-      component: () => import('../views/LoginView.vue')
-    }, 
-    {
-      path: '/register',
-      name: 'register',
-      component: () => import('../views/RegisterView.vue')
-    }, 
-    {
-      path: '/confirmpwd',
-      name: 'confirmpwd',
-      component: () => import('../views/ConfirmPasswordView.vue')
-    }, 
-    {
+      // 后台管理系统（仅管理员可进）
       path: '/admin',
       name: 'admin',
       component: () => import('../views/AdminHomeView.vue'),
@@ -86,6 +110,24 @@ const router = createRouter({
           component: () => import('../views/AdminFavoritesView.vue'),
         },
       ]
+    }, 
+    {
+      // 登录页
+      path: '/login',
+      name: 'login',
+      component: () => import('../views/LoginView.vue')
+    }, 
+    {
+      // 注册页
+      path: '/register',
+      name: 'register',
+      component: () => import('../views/RegisterView.vue')
+    }, 
+    {
+      // 忘记密码页
+      path: '/confirmpwd',
+      name: 'confirmpwd',
+      component: () => import('../views/ConfirmPasswordView.vue')
     }, 
   ]
 })

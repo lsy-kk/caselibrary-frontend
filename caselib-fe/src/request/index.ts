@@ -1,7 +1,7 @@
 import axios from 'axios'
 // 创建axios实例
 const service = axios.create({
-    baseURL: "https://3228ef23.r5.vip.cpolar.cn",
+    baseURL: "https://6b3fce47.cpolar.cn",
     timeout: 5000,
     headers:{
         "Content-Type": "application/json;charset=utf-8"

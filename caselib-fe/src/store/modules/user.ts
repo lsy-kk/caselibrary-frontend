@@ -1,5 +1,6 @@
-import { logout, getUserByToken } from '@/request/login'
-import { getToken, removeToken } from '@/request/token'
+import { logout } from '@/request/api/login'
+import { getUserByToken } from '@/request/api/user'
+import { getToken, removeToken } from '@/request/api/token'
 import type { Module } from 'vuex'
 import type { IState } from '..'
 

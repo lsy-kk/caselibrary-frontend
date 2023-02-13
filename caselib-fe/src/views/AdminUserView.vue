@@ -1,18 +1,18 @@
 <template>
-    <!--后台用户管理-->
+    <!--后台管理：用户-->
     <div>
         <div class="search-box">
             <!--头部表单，搜索框-->
             <el-form :inline="true" >
-                <el-form-item label="用户ID" class="query-textbox">
+                <el-form-item label="用户ID" class="w-60">
                     <el-input v-model="data.selectData.id" placeholder="请输入用户ID" clearable/>
                 </el-form-item>
 
-                <el-form-item label="用户邮箱" class="query-textbox">
+                <el-form-item label="用户邮箱" class="w-60">
                     <el-input v-model="data.selectData.email" placeholder="请输入用户邮箱" clearable/>
                 </el-form-item>
 
-                <el-form-item label="用户权限" class="query-option">
+                <el-form-item label="用户权限" class="w-40">
                     <el-select v-model="data.selectData.authority" placeholder="所有" clearable>
                         <el-option label="管理员" :value="0" />
                         <el-option label="教师" :value="1" />
@@ -188,9 +188,8 @@
 import { ref, reactive, onMounted } from 'vue'
 import { ElMessage } from 'element-plus' 
 import type { FormInstance } from 'element-plus'
-import { getUserList, updateUser, updatePassword, insertUser } from '@/request/api';
-import { InitUser } from '@/type/user'
-import type { IUser } from '@/type/user'
+import { getUserList, updateUser, updatePassword, insertUser } from '@/request/api/user';
+import {type IUser, InitUser } from '@/type/user'
 const data = reactive(new InitUser())
 // 生命周期函数
 onMounted(() => {
@@ -198,10 +197,6 @@ onMounted(() => {
 })
 // 搜索操作
 const handleSearch = () => {
-    ElMessage({
-        type:"success",
-        message:"搜索成功"
-    })
     reload()
 }
 
@@ -271,7 +266,6 @@ const rules = reactive({
 const handleSave = (formEl: FormInstance | undefined) => {
     if (!formEl) return
     formEl.validate((valid) => {
-        console.log(formEl);
         if (valid) {
             insertUser(form.value).then(res=>{
                 if(res.msg === 'success'){
@@ -279,6 +273,8 @@ const handleSave = (formEl: FormInstance | undefined) => {
                         type:"success",
                         message:"新增成功"
                     })
+                    reload() // 刷新数据
+                    insertDialogVisible.value = false //关闭"新增"弹窗
                 }
                 else{
                     ElMessage({
@@ -289,11 +285,9 @@ const handleSave = (formEl: FormInstance | undefined) => {
             }).catch((err) => {
                 console.log(err)
             })
-            reload() // 刷新数据
-            insertDialogVisible.value = false //关闭"新增"弹窗
+            
         }
         else {
-            console.log('提交失败')
             return false
         }
     })
@@ -348,6 +342,8 @@ const handlePasswordUpdate = (formEl: FormInstance | undefined) => {
                         type:"success",
                         message:"更新密码成功"
                     })
+                    reload() // 刷新数据
+                    passwordDialogVisible.value = false //关闭"修改密码"弹窗
                 }
                 else{
                     ElMessage({
@@ -358,11 +354,8 @@ const handlePasswordUpdate = (formEl: FormInstance | undefined) => {
             }).catch((err) => {
                 console.log(err)
             })
-            reload() // 刷新数据
-            passwordDialogVisible.value = false //关闭"修改密码"弹窗
         }
         else {
-            console.log('提交失败')
             return false
         }
     })
@@ -393,7 +386,6 @@ const authorityRules = reactive({
 const handleAuthorityUpdate = (formEl: FormInstance | undefined) => {
     if (!formEl) return
     formEl.validate((valid) => {
-        console.log(formEl);
         if (valid) {
             updateUser(form.value).then(res=>{
                 if(res.msg === 'success'){
@@ -401,6 +393,8 @@ const handleAuthorityUpdate = (formEl: FormInstance | undefined) => {
                         type:"success",
                         message:"修改权限成功"
                     })
+                    reload() // 刷新数据
+                    authorityDialogVisible.value = false //关闭"修改权限"弹窗
                 }
                 else{
                     ElMessage({
@@ -411,11 +405,8 @@ const handleAuthorityUpdate = (formEl: FormInstance | undefined) => {
             }).catch((err) => {
                 console.log(err)
             })
-            reload() // 刷新数据
-            authorityDialogVisible.value = false //关闭"修改权限"弹窗
         }
         else {
-            console.log('提交失败')
             return false
         }
     })
@@ -442,12 +433,11 @@ const handleStatusEdit = (userForm: IUser) => {
     // 更新操作
     updateUser(form.value).then(res=>{
         if(res.msg === 'success'){
-            console.log("success");
-            
             ElMessage({
                 type:"success",
                 message:"更新状态成功"
             })
+            reload() // 刷新数据
         }
         else{
             ElMessage({
@@ -455,7 +445,7 @@ const handleStatusEdit = (userForm: IUser) => {
                 message:"更新状态失败"
             })
         }
-        reload() // 刷新数据
+        
     }).catch((err) => {
         console.log(err)
     })
@@ -477,10 +467,4 @@ const handleCurrentChange = (newPageNum:number) => {
 
 
 <style lang="scss" scoped>
-.query-textbox{
-    width: 250px;
-}
-.query-option{
-    width: 200px;
-}
 </style>

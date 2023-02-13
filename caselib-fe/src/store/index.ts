@@ -2,8 +2,9 @@ import { createStore, Store } from 'vuex'
 import type { InjectionKey } from 'vue'
 import { userModule} from './modules/user'
 import type { IUserState } from './modules/user'
-import { logout, getUserByToken } from '@/request/login'
-import { getToken, removeToken } from '@/request/token'
+import { logout } from '@/request/api/login'
+import { getUserByToken } from '@/request/api/user'
+import { getToken, removeToken } from '@/request/api/token'
 
 export interface IState{
     id: number,
@@ -82,7 +83,7 @@ export const store = createStore<IState>({
         // 登出
         logout({commit}) {
             return new Promise((resolve, reject) => {
-                logout(getToken()).then(res=>{
+                logout(getToken()).then(()=>{
                     commit('setId', -1)
                     commit('setEmail', '')
                     commit('setUsername', '')

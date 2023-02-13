@@ -1,210 +1,326 @@
 <template>
-    <div style="padding: 10px">
-        <!--功能区域-->
-        <div style="margin: 10px 0">
-            <el-button type="primary" @click="add">新增</el-button>
-        </div>
-        <!--搜索区域-->
-        <div style="margin: 10px 0">
-            <el-input v-model="search" placeholder="请输入标签名称" clearable style="width: 20%"/>
-            <el-button type="primary" style="margin-left: 5px" @click="load">查询</el-button>
-        </div>
-  
-        <!--表格数据展示区域-->
-        <!--border 边框 stripe 斑马纹 sortable 代表排序-->
-        <el-table :data="tableData" border stripe style="width: 100%">
-            <el-table-column prop="uid" label="员工序号" sortable/>
-            <el-table-column prop="uname" label="员工名称" sortable/>
-            <el-table-column prop="upwd" label="员工密码" sortable/>
-            <el-table-column prop="sex" label="性别" sortable>
-                <template #default="scope">
-                    <span v-if="scope.row.sex === '1'">男</span>
-                    <span v-if="scope.row.sex === '2'">女</span>
-                    <span v-if="scope.row.sex === '3'">未知</span>
-                </template>
-            </el-table-column>
-            <el-table-column prop="address" label="地址" sortable/>
-            <el-table-column label="Operations">
-                <template #default="scope">
-                    <el-button size="mini" @click="handleEdit(scope.row)">编辑</el-button>
-                    <el-popconfirm title="确认删除吗?" @confirm="handleDelete(scope.row.uid)">
-                        <template #reference>
-                            <el-button size="mini" type="danger">删除</el-button>
-                        </template>
-                    </el-popconfirm>
-                </template>
-            </el-table-column>
-        </el-table>
-  
-      <div style="margin: 10px 0">
-        <el-pagination
-            v-model:currentPage="currentPage"
-            :page-sizes="[5, 10, 15]"
-            :page-size="pageSize"
-            layout="total, sizes, prev, pager, next, jumper"
-            :total="total"
-            @size-change="handleSizeChange"
-            @current-change="handleCurrentChange"
-        >
-        </el-pagination>
-  
-        <el-dialog v-model="dialogFormVisible" title="员工更改" width = "30%">
-          <el-form :model = "form" label-width="120px">
-            <el-form-item label="员工名称">
-                <el-input v-model="form.uname" style="width: 80%"> </el-input>
-            </el-form-item>
-            <el-form-item label="员工密码">
-              <el-input v-model="form.upwd" style="width: 80%"> </el-input>
-            </el-form-item>
-            <el-form-item label="员工性别">
-              <el-radio v-model="form.sex" label="1">男</el-radio>
-              <el-radio v-model="form.sex" label="2">女</el-radio>
-              <el-radio v-model="form.sex" label="3">未知</el-radio>
-            </el-form-item>
-            <el-form-item label="员工地址">
-              <el-input type = "textarea" v-model="form.address" style="width: 80%"> </el-input>
-            </el-form-item>
+  <!--后台管理：标签-->
+  <div>
+      <div class="search-box">
+          <!--头部表单，搜索框-->
+          <el-form :inline="true" >
+              <el-form-item label="标签ID" class="w-60">
+                  <el-input v-model="data.selectData.id" placeholder="请输入标签ID" clearable/>
+              </el-form-item>
+              <el-form-item label="标签名称" class="w-60">
+                  <el-input v-model="data.selectData.name" placeholder="请输入标签名称" clearable/>
+              </el-form-item>
+              <el-form-item>
+                  <el-button type="primary" @click="handleSearch">查询</el-button>
+              </el-form-item>
+              <el-form-item>
+                  <el-button type="primary" @click="handleInsert">添加</el-button>
+              </el-form-item>
           </el-form>
-  
-          <template #footer>
-            <span class="dialog-footer">
-            <el-button @click="dialogFormVisible = false">取消</el-button>
-            <el-button type="primary" @click="save">确认</el-button>
-            </span>
-          </template>
-        </el-dialog>
-  
       </div>
-    </div>
-  </template>
-  
-  <script lang="ts">
-  
-  
-  
-  
-  import request from "../request";
-  import { ElMessage } from 'element-plus'
-  
-  export default {
-    name: 'Home',
-    components: {
-  
-    },
-  
-    created() {
-      this.load()
-    },
-  
-    data() {
-      return {
-        search:'',
-        currentPage:1,
-        pageSize:10,
-        total:0,
-        dialogFormVisible:false,
-        form:{},
-  
-        tableData: [
-  
-        ]
-      }
-    },
-  
-    methods:{
-      handleEdit(row){
-        // 深拷贝
-        this.form = JSON.parse(JSON.stringify(row))
-        this.dialogFormVisible = true
-      },
-      handleSizeChange(pageSize){ // 改变当前每页的个数触发
-        this.pageSize = pageSize
-        this.load()
-      },
-      handleCurrentChange(pageNum){ // 改变当前页码触发
-        this.currentPage = pageNum
-        this.load()
-      },
-  
-      handleDelete(uid){
-        request.delete("/user/" + uid).then(res => {
-          if(res.code === '0'){
-            ElMessage({
-              type:"success",
-              message:"删除成功"
-            })
-          }else{
-            ElMessage({
-              type:"error",
-              message:"删除失败"
-            })
-          }
-          this.load()
-        })
-      },
-      // 打开弹窗 进行新增操作
-      add(){
-        this.dialogFormVisible = true;
-        // 先清空表单属性
-        this.form = {}
-  
-      },
-      save(){
-        if(this.form.uid){
-          request.put("/user", this.form).then(res => {
-            console.log(res)
-            if(res.code === '0'){
-              ElMessage({
-                type:"success",
-                message:"更新成功"
-              })
-            }else{
-             ElMessage({
-                type:"error",
-                message:"更新失败"
-              })
-            }
-  
-            this.load() // 刷新数据
-            this.dialogFormVisible = false //关闭弹窗
+      <!--表格数据展示区域-->
+      <!--border 边框 stripe 斑马纹 sortable 代表排序-->
+      <el-table :data="data.list" border stripe style="width: 100%">
+          <el-table-column fixed prop="id" label="标签ID" sortable width="100px"/>
+          <el-table-column prop="name" label="名称" sortable width="150px"/>
+          <el-table-column prop="description" label="描述" sortable width="300px"/>
+          <el-table-column prop="image" label="图像" sortable width="200px"/>
+          <el-table-column prop="status" label="状态" sortable width="80px">
+              <template #default="scope">
+                  <span v-if="scope.row.status === 0">禁用中</span>
+                  <span v-if="scope.row.status === 1">启用中</span>
+              </template>
+          </el-table-column>
+          <el-table-column prop="createTime" label="创建时间" sortable width="250px"/>
+          <el-table-column prop="updateTime" label="更新时间" sortable width="250px"/>
+          <el-table-column label="操作" fixed="right" width="300px">
+              <template #default="scope">
+                  <el-button size="default" @click="handleEdit(scope.row)">修改信息</el-button>
+                  <el-button v-if="scope.row.status === 0" size="default" @click="handleStatusEdit(scope.row)" color="green">启用</el-button>
+                  <el-button v-if="scope.row.status === 1" size="default" @click="handleStatusEdit(scope.row)" color="red">禁用</el-button>
+              </template>
+          </el-table-column>
+      </el-table>
+
+      <div style="margin: 10px 0">
+          <!--分页栏-->
+          <el-pagination
+              v-model:currentPage="data.selectData.page"
+              :page-sizes="[5, 10, 15]"
+              :page-size="data.selectData.pageSize"
+              layout="total, sizes, prev, pager, next, jumper"
+              :total="data.pageCount"
+              @size-change="handleSizeChange"
+              @current-change="handleCurrentChange"
+          >
+          </el-pagination>
+
+          <!--对话框：点击"添加"按钮,弹出相应对话框-->
+          <el-dialog 
+              v-model="insertDialogVisible" 
+              title="新增标签" 
+              width = "50%"
+              @close="insertFormRef?.resetFields()">
+              <el-form 
+                  ref="insertFormRef"
+                  :model = "form" 
+                  status-icon
+                  :rules="rules"
+                  label-width="100px"
+                  class="dialog-form"
+              >
+                <el-form-item label="标签名" prop="name">
+                    <el-input v-model="form.name" style="width: 80%"> </el-input>
+                </el-form-item>
+                <el-form-item label="描述" prop="description">
+                    <el-input v-model="form.description" style="width: 80%"> </el-input>
+                </el-form-item>
+                <el-form-item label="图像" prop="image">
+                    <el-input v-model="form.image" style="width: 80%"> </el-input>
+                </el-form-item>
+              </el-form>
+              <template #footer>
+                  <span class="dialog-footer">
+                      <el-button @click="insertFormRef?.resetFields()">重置</el-button>
+                      <el-button @click="insertDialogVisible=false">取消</el-button>
+                      <el-button type="primary" @click="handleSave(insertFormRef)">确认</el-button>
+                  </span>
+              </template>
+          </el-dialog>
+          <!-- 对话框：修改信息 -->
+          <el-dialog 
+              v-model="editDialogVisible" 
+              title="修改信息" 
+              width = "50%"
+              @close="editFormRef?.resetFields()">
+              <el-form 
+                  ref="editFormRef"
+                  :model = "form" 
+                  status-icon
+                  :rules="rules"
+                  label-width="100px"
+                  class="dialog-form"
+              >
+                <el-form-item label="标签ID">
+                    <el-input v-model="form.id" style="width: 80%" disabled> </el-input>
+                </el-form-item>
+                <el-form-item label="标签名" prop="name">
+                    <el-input v-model="form.name" style="width: 80%"> </el-input>
+                </el-form-item>
+                <el-form-item label="描述" prop="description">
+                    <el-input v-model="form.description" style="width: 80%"> </el-input>
+                </el-form-item>
+                <el-form-item label="图像" prop="image">
+                    <el-input v-model="form.image" style="width: 80%"> </el-input>
+                </el-form-item>
+              </el-form>
+              <template #footer>
+                  <span class="dialog-footer">
+                      <el-button @click="editFormRef?.resetFields()">重置</el-button>
+                      <el-button @click="editDialogVisible=false">取消</el-button>
+                      <el-button type="primary" @click="handleUpdate(editFormRef)">确认</el-button>
+                  </span>
+              </template>
+          </el-dialog>
+      </div>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { ref, reactive, onMounted } from 'vue'
+import { ElMessage } from 'element-plus' 
+import type { FormInstance } from 'element-plus'
+import { getTagList, updateTag, insertTag } from '@/request/api/tag';
+import {type ITag, TagData } from '@/type/tag'
+const data = reactive(new TagData())
+// 生命周期函数
+onMounted(() => {
+  reload()
+})
+// 搜索操作
+const handleSearch = () => {
+  reload()
+}
+
+// 更新页面上的数据
+const reload = () => {
+  getTagList(data.selectData).then(res=>{
+      data.list = res.data
+      data.pageCount = res.data.length
+  })
+}
+
+// 用于存放对话框中的表单数据
+// 注意,不能直接给form赋值,会使得其失去响应式
+var form = ref<ITag>({
+    id: undefined,
+    name: undefined,
+    description: undefined,
+    image: undefined,
+})
+// 校验对话框表单输入
+const rules = reactive({
+    name: [{ 
+        required: true,
+        message: "请输入标签名",
+        trigger: 'blur' 
+    },{
+        min: 1,
+        max: 15,
+        message: "标签名的长度应当在1~15之间",
+        trigger: 'blur'
+    }],
+    description: [{
+        min: 0,
+        max: 200,
+        message: "标签描述的字数应当在0~200字之间",
+        trigger: 'blur'
+    },],
+    image: [{
+        min: 0,
+        max: 200,
+        message: "图像地址超长，请重新输入",
+        trigger: 'blur'
+    },]
+})
+
+// 控制"新增"对话框的弹出
+var insertDialogVisible = ref(false)
+const insertFormRef = ref<FormInstance>()
+// "新增"对话框中提交表单，检验参数，并新增数据
+const handleSave = (formEl: FormInstance | undefined) => {
+  if (!formEl) return
+  formEl.validate((valid) => {
+      if (valid) {
+          insertTag(form.value).then(res=>{
+              if(res.msg === 'success'){
+                  ElMessage({
+                      type:"success",
+                      message:"新增成功"
+                  })
+                  reload() // 刷新数据
+                  insertDialogVisible.value = false //关闭"新增"弹窗
+              }
+              else{
+                  ElMessage({
+                      type:"error",
+                      message:"新增失败"
+                  })
+              }
+          }).catch((err) => {
+              console.log(err)
           })
-        }
-        else{
-          request.post("/user", this.form).then(res => {
-            console.log(res)
-            if(res.code === '0'){
-              ElMessage({
-                type:"success",
-                message:"增加成功"
-              })
-            }else{
-              ElMessage({
-                type:"error",
-                message:"增加失败"
-              })
-            }
-  
-            this.load() // 刷新数据
-            this.dialogFormVisible = false //关闭弹窗
-          })
-        }
-      },
-  
-      load(){
-        request.get("/user",{
-          params:{
-            pageNum: this.currentPage,
-            pageSize: this.pageSize,
-            search: this.search
-          }
-        }).then(res => {
-          console.log(res)
-          this.tableData = res.data.records
-          this.total = res.data.total
-        })
+          
       }
-  
-    }
+      else {
+          return false
+      }
+  })
+}
+// 手动重置表单
+const reset = () => {
+  form.value = {
+    id: undefined,
+    name: undefined,
+    description: undefined,
+    image: undefined,
   }
-  </script>
-  
+}
+// 点击"新增"按钮,弹出对话框
+const handleInsert = () => { 
+  reset()
+  insertDialogVisible.value = true
+}
+
+
+
+
+var editDialogVisible = ref(false)
+const editFormRef = ref<FormInstance>()
+
+// "修改信息"对话框中点击"确认"按钮，检验参数、更新信息
+const handleUpdate = (formEl: FormInstance | undefined) => {
+  if (!formEl) return
+  formEl.validate((valid) => {
+      if (valid) {
+          updateTag(form.value).then(res=>{
+              if(res.msg === 'success'){
+                  ElMessage({
+                      type:"success",
+                      message:"修改权限成功"
+                  })
+                  reload() // 刷新数据
+                  editDialogVisible.value = false //关闭"修改信息"弹窗
+              }
+              else{
+                  ElMessage({
+                      type:"error",
+                      message:"修改权限失败"
+                  })
+              }
+          }).catch((err) => {
+              console.log(err)
+          })
+          
+      }
+      else {
+          return false
+      }
+  })
+}
+
+// 点击"修改信息"按钮,弹出对话框
+const handleEdit = (tagForm: ITag) => {
+  // 深拷贝
+  form.value = JSON.parse(JSON.stringify(tagForm))
+  editDialogVisible.value = true
+}
+
+
+// 点击"禁用"或是"启用"按钮,更新标签状态信息
+const handleStatusEdit = (tagForm: ITag) => {
+  // 深拷贝
+  form.value = JSON.parse(JSON.stringify(tagForm))
+  if (form.value.status == 1){
+      form.value.status = 0
+  }
+  else {
+      form.value.status = 1
+  }
+  // 更新操作
+  updateTag(form.value).then(res=>{
+      if(res.msg === 'success'){
+          ElMessage({
+              type:"success",
+              message:"更新状态成功"
+          })
+          reload() // 刷新数据
+      }
+      else{
+          ElMessage({
+              type:"error",
+              message:"更新状态失败"
+          })
+      }
+  }).catch((err) => {
+      console.log(err)
+  })
+}
+
+
+// 改变当前每页的显示条数时触发
+const handleSizeChange = (newPageSize:number) => { 
+  data.selectData.pageSize = newPageSize
+  reload()
+}
+
+// 改变当前页码时触发
+const handleCurrentChange = (newPageNum:number) => { 
+  data.selectData.page = newPageNum
+  reload()
+}
+</script>
+
+
+<style lang="scss" scoped>
+</style>

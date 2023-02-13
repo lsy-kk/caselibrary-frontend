@@ -10,21 +10,21 @@
         >
             <h2 class="m-4">登录</h2>
             <el-form-item label="账号" prop="email">
-            <el-input v-model="ruleForm.email" autocomplete="off" />
+              <el-input v-model="ruleForm.email" autocomplete="off" />
             </el-form-item>
 
             <el-form-item label="密码" prop="password">
-            <el-input 
-              v-model="ruleForm.password" 
-              type="password"
-              autocomplete="off" 
-              show-password
-            />
+              <el-input 
+                v-model="ruleForm.password" 
+                type="password"
+                autocomplete="off" 
+                show-password
+              />
             </el-form-item>
             <!--忘记密码和注册链接-->
             <el-form-item class="relative">
-              <el-button class="w-1/5 absolute right-16" key="primary" type="primary" text @click="">忘记密码</el-button>
-              <el-button class="w-1/5 absolute right-0" key="primary" type="primary" text @click="">注册</el-button>
+              <el-button class="w-20 absolute right-16" key="primary" type="primary" text @click="handleResetPwd">忘记密码</el-button>
+              <el-button class="w-12 absolute right-0" key="primary" type="primary" text @click="handleRegister">注册</el-button>
             </el-form-item>
             <!--两个点击按钮-->
             <el-form-item>
@@ -38,7 +38,7 @@
 <script setup lang="ts">
 import { reactive, ref } from 'vue'
 import { ElMessage, type FormInstance } from 'element-plus'
-import { login} from '../request/login'
+import { login} from '../request/api/login'
 import { useRouter } from 'vue-router';
 import type { ILoginForm } from '@/type/login';
 const ruleFormRef = ref<FormInstance>()
@@ -115,6 +115,14 @@ const submitForm = (formEl: FormInstance | undefined) => {
 const resetForm = (formEl: FormInstance | undefined) => {
   if (!formEl) return 
   formEl.resetFields()
+}
+
+const handleResetPwd = () => {
+  router.push('/')
+}
+
+const handleRegister = () => {
+  router.push('/register')
 }
 </script>
 
