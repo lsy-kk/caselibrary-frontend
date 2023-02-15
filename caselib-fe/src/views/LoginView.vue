@@ -9,11 +9,11 @@
             class="w-1/2 mx-auto mt-28 p-6 rounded-2xl bg-white"
         >
             <h2 class="m-4">登录</h2>
-            <el-form-item label="账号" prop="email">
+            <el-form-item label="账号" prop="email" label-width="4rem">
               <el-input v-model="ruleForm.email" autocomplete="off" />
             </el-form-item>
 
-            <el-form-item label="密码" prop="password">
+            <el-form-item label="密码" prop="password" label-width="4rem">
               <el-input 
                 v-model="ruleForm.password" 
                 type="password"

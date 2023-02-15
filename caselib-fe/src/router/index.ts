@@ -26,6 +26,11 @@ const router = createRouter({
           component: () => import('../views/SearchView.vue')
         },
         {
+          // markdown编辑案例页面
+          path:'/md',
+          component: () => import('../views/Markdown/MarkdownView.vue')
+        },
+        {
           // 个人主页，id为用户id
           path:'/user/:id',
           component: () => import('../views/UserHomeView.vue'),

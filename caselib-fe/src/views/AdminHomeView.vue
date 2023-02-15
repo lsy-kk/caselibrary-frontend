@@ -23,19 +23,7 @@
 
 <script setup lang="ts">
 import AdminAsideView from '@/views/AdminAsideView.vue'
-import BaseHeader from './BaseHeader.vue';
-// import { useRouter } from 'vue-router';
-// 动态路由模式
-// const router = useRouter();
-// const list = router.getRoutes().filter(v=>v.meta.isShow)
-// console.log(list)
-
-const handleOpen = (key: string, keyPath: string[]) => {
-  console.log(key, keyPath)
-}
-const handleClose = (key: string, keyPath: string[]) => {
-  console.log(key, keyPath)
-}
+import BaseHeader from './BaseHeader.vue'
 </script>
 
 <style scoped>

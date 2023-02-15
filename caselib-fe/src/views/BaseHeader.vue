@@ -82,12 +82,11 @@ import { ArrowDown, Edit, Notification } from '@element-plus/icons-vue';
 // 组件参数
 defineProps<{
   // 当前默认选中页面
-  activeIndex?: {
+  activeIndex: {
     type: String,
-    default: '/hot',
   },
   // 是否展示BaseHeader头部
-  showHeader?: {
+  showHeader: {
     type: Boolean,
     default: false,
   }
