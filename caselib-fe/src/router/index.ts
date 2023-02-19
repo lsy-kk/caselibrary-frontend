@@ -28,6 +28,11 @@ const router = createRouter({
         {
           // markdown编辑案例页面
           path:'/md',
+          component: () => import('../views/CaseEditorView.vue')
+        },
+        {
+          // markdown编辑案例页面
+          path:'/mdx',
           component: () => import('../views/Markdown/MarkdownView.vue')
         },
         {

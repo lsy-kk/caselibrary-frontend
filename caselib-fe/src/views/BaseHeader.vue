@@ -80,7 +80,7 @@ import { useStore } from 'vuex';
 import { key } from '@/store'
 import { ArrowDown, Edit, Notification } from '@element-plus/icons-vue';
 // 组件参数
-defineProps<{
+const props = defineProps<{
   // 当前默认选中页面
   activeIndex: {
     type: String,

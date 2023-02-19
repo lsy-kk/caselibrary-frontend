@@ -1,5 +1,6 @@
-import type { ICaseHeader, ISelectCase } from "@/type/case";
+import type { ICaseHeader, ISelectCase, ICaseBody } from "@/type/case";
 import service from "..";
+import serviceFile from "..";
 
 // 获取案例列表
 export function getCaseList(data: ISelectCase){
@@ -50,10 +51,60 @@ export function getCaseBodyByCaseId(id: number){
 }
 
 // 新增案例头部
-export function insertCase(data: ICaseHeader){
+export function insertCaseHeader(data: ICaseHeader){
     return service({
-        url: "/case??????", 
+        url: "/case/insertCaseHeader", 
         method: "post",
         data,
+    })
+}
+
+// 获取案例头部
+export function getCaseHeader(caseId: Number){
+    return service({
+        url: "/case/getCaseHeader", 
+        method: "get",
+        params:{
+            caseId: caseId,
+        }
+    })
+}
+
+// 新增案例头部
+export function updateCaseHeader(data: ICaseHeader){
+    return service({
+        url: "/case/updateCaseHeader", 
+        method: "post",
+        data,
+    })
+}
+
+// 更新案例内容
+export function updateCaseBody(data: ICaseBody){
+    return service({
+        url: "/case/updateCaseBody", 
+        method: "post",
+        data,
+    })
+}
+
+// 获取案例内容
+export function getCaseBody(caseId: Number){
+    return service({
+        url: "/case/getCaseBodyByCaseId", 
+        method: "get",
+        params:{
+            caseId: caseId,
+        }
+    })
+}
+
+// 导出markdown文本
+export function exportMarkdownFile(data: ICaseBody){
+    return service({
+        url: "/case/exportMarkdownFile", 
+        method: "post",
+        data,
+        responseType: 'blob',
     })
 }
