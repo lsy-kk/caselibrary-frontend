@@ -27,13 +27,15 @@ const router = createRouter({
         },
         {
           // markdown编辑案例页面
-          path:'/md',
-          component: () => import('../views/CaseEditorView.vue')
+          path:'/md/:caseId?',
+          name: 'md',
+          props: true,
+          component: () => import('../views/Markdown/MarkdownView.vue')
         },
         {
-          // markdown编辑案例页面
-          path:'/mdx',
-          component: () => import('../views/Markdown/MarkdownView.vue')
+          // 个人发布案例
+          path:'/case/:id',
+          component: () => import('../views/CaseView.vue'),
         },
         {
           // 个人主页，id为用户id
@@ -146,7 +148,6 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   // 前端已登录
   if (getToken()) {
-    console.log('???');
     console.log(store);
     console.log(getToken());
     // 找不到用户信息，则根据token从后端接口获取
