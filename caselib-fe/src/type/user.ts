@@ -10,6 +10,13 @@ export interface IUser{
     createTime?: Date,
     updateTime?: Date,
 }
+export interface IUserVo{
+    id: number,
+    email: string,
+    image: string,
+    username: string,
+    authority: number,
+}
 export interface ISelectData{
     // 搜索信息，非必要
     id?: number,

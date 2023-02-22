@@ -1,6 +1,6 @@
 <template>
     <!--后台管理：收藏夹-->
-    <div>
+    <div class="flex-1 box-border overflow-auto p-8 bg-white">
         <div class="search-box">
           <!--头部表单，搜索框-->
           <el-form :inline="true" >

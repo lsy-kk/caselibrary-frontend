@@ -1,8 +1,8 @@
 <template>
   <!--案例列表-->
-  <div>
+  <div class="m-1 flex-1 box-border overflow-auto block">
       <!--案例列表主体-->
-      <CaseItem v-for="a in data.list" :key="a.id" v-bind="a" />
+      <CaseItem v-for="a in data.list" :key="a.id" v-bind="a" class="mb-4"/>
 
       <div style="margin: 10px 0">
           <!--分页栏-->

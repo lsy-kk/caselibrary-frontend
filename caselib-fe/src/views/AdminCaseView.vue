@@ -1,7 +1,7 @@
 <template>
     <!--后台管理:案例-->
-    <div>
-        <div class="search-box">
+    <div class="flex-1 box-border overflow-auto p-8 bg-white">
+        <div>
           <!--头部表单，搜索框-->
           <el-form :inline="true" >
               <el-form-item label="案例ID" class="w-50">
@@ -60,19 +60,18 @@
               </template>
           </el-table-column>
       </el-table>
-
-      <div style="margin: 10px 0">
-          <!--分页栏-->
-          <el-pagination
-              v-model:currentPage="data.selectData.page"
-              :page-sizes="[5, 10, 15]"
-              :page-size="data.selectData.pageSize"
-              layout="total, sizes, prev, pager, next, jumper"
-              :total="data.pageCount"
-              @size-change="handleSizeChange"
-              @current-change="handleCurrentChange"
-          >
-          </el-pagination>
+      <div class="">
+        <!--分页栏-->
+        <el-pagination
+            v-model:currentPage="data.selectData.page"
+            :page-sizes="[5, 10, 15]"
+            :page-size="data.selectData.pageSize"
+            layout="total, sizes, prev, pager, next, jumper"
+            :total="data.pageCount"
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+        >
+        </el-pagination>
       </div>
     </div>
 </template>
@@ -107,10 +106,11 @@ const handleShowCase = (caseForm: ICaseHeader) => {
 // 用于存放对话框中的表单数据
 // 注意,不能直接给form赋值,会使得其失去响应式
 var form = ref<ICaseHeader>({
-    id: undefined,
-    title: undefined,
-    visible: undefined,
-    status: undefined,
+    title: "",
+    summary: "",
+    authorId: 0,
+    state: 0,
+    visible: 0,
 })
 // 点击"禁用"或是"启用"按钮,更新案例状态信息
 const handleStatusEdit = (caseForm: ICaseHeader) => {

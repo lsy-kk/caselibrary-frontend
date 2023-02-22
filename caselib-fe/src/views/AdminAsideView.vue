@@ -8,7 +8,7 @@
         </template>
         <el-menu
             :collapse="isCollapse"
-            default-active="/admin/user"
+            default-active="activeIndex"
             @open="handleOpen"
             @close="handleClose"
             router
@@ -71,6 +71,10 @@ import { ref } from 'vue';
 // const router = useRouter();
 // const list = router.getRoutes().filter(v=>v.meta.isShow)
 // console.log(list)
+const props = defineProps<{
+  // 当前默认选中页面
+  activeIndex: String,
+}>()
 const isCollapse = ref(false)
 
 const handleOpen = (key: string, keyPath: string[]) => {

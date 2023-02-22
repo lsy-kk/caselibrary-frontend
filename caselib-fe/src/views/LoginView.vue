@@ -6,7 +6,7 @@
             status-icon
             :rules="rules"
             label-width="50px"
-            class="w-1/2 mx-auto mt-28 p-6 rounded-2xl bg-white"
+            class="w-1/2 mx-auto mt-28 py-8 pl-2 pr-6 rounded-2xl bg-white"
         >
             <h2 class="m-4">登录</h2>
             <el-form-item label="账号" prop="email" label-width="4rem">
@@ -23,8 +23,22 @@
             </el-form-item>
             <!--忘记密码和注册链接-->
             <el-form-item class="relative">
-              <el-button class="w-20 absolute right-16" key="primary" type="primary" text @click="handleResetPwd">忘记密码</el-button>
-              <el-button class="w-12 absolute right-0" key="primary" type="primary" text @click="handleRegister">注册</el-button>
+              <el-button 
+                class="w-20 absolute right-16" 
+                key="primary" 
+                type="primary" 
+                text 
+                @click="handleResetPwd">
+                忘记密码
+              </el-button>
+              <el-button 
+                class="w-12 absolute right-0" 
+                key="primary" 
+                type="primary" 
+                text 
+                @click="handleRegister">
+                注册
+              </el-button>
             </el-form-item>
             <!--两个点击按钮-->
             <el-form-item>

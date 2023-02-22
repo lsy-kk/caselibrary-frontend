@@ -1,7 +1,7 @@
 <template>
   <!--后台管理：标签-->
-  <div>
-      <div class="search-box">
+  <div class="flex-1 box-border overflow-auto p-8 bg-white">
+      <div>
           <!--头部表单，搜索框-->
           <el-form :inline="true" >
               <el-form-item label="标签ID" class="w-60">
