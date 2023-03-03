@@ -35,6 +35,7 @@ const router = createRouter({
         {
           // 个人发布案例
           path:'/case/:id',
+          name: 'case',
           component: () => import('../views/CaseView.vue'),
         },
         {
@@ -84,15 +85,6 @@ const router = createRouter({
             title: "标签管理"
           },
           component: () => import('../views/AdminTagView.vue'),
-        },
-        {
-          path: '/admin/audit',
-          name: 'adminAudit',
-          meta: {
-            isShow: true,
-            title: "审核案例"
-          },
-          component: () => import('../views/AdminAuditView.vue'),
         },
         {
           path: '/admin/case',

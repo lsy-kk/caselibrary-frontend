@@ -11,13 +11,13 @@
                   <el-input v-model="data.selectData.authorId" placeholder="请输入作者ID" clearable/>
               </el-form-item>
               <el-form-item label="状态" class="w-60" >
-                    <el-select v-model="data.selectData.state" placeholder="所有" clearable multiple>
-                        <el-option label="未发布" :value="0" />
-                        <el-option label="待审核" :value="1" />
-                        <el-option label="被退回" :value="2" />
-                        <el-option label="已发布" :value="3" />
-                    </el-select>
-                </el-form-item>
+                <el-select v-model="data.selectData.state" placeholder="所有" clearable multiple>
+                    <el-option label="未发布" :value="0" />
+                    <el-option label="待审核" :value="1" />
+                    <el-option label="被退回" :value="2" />
+                    <el-option label="已发布" :value="3" />
+                </el-select>
+              </el-form-item>
               <el-form-item>
                   <el-button type="primary" @click="handleSearch">查询</el-button>
               </el-form-item>
@@ -70,6 +70,7 @@
             :total="data.pageCount"
             @size-change="handleSizeChange"
             @current-change="handleCurrentChange"
+            class="mt-4"
         >
         </el-pagination>
       </div>
@@ -81,7 +82,9 @@ import { ref, reactive, onMounted } from 'vue'
 import { ElMessage } from 'element-plus'
 import { getCaseList, updateCase} from '@/request/api/case';
 import {type ICaseHeader, CaseData } from '@/type/case'
+import { useRouter } from 'vue-router';
 const data = reactive(new CaseData())
+const router = useRouter()
 // 生命周期函数
 onMounted(() => {
   reload()
@@ -101,7 +104,12 @@ const reload = () => {
 
 // 显示案例具体内容  未完待续...
 const handleShowCase = (caseForm: ICaseHeader) => {
-
+    router.push({
+        name: 'case',
+        params:{
+            id: caseForm.id,
+        }
+    })
 }
 // 用于存放对话框中的表单数据
 // 注意,不能直接给form赋值,会使得其失去响应式

@@ -31,11 +31,6 @@
                 <span>标签管理</span>
             </el-menu-item>
 
-            <el-menu-item index="/admin/audit">
-                <el-icon><DocumentChecked /></el-icon>
-                <span>案例审核</span>
-            </el-menu-item>
-
             <el-menu-item index="/admin/case">
                 <el-icon><Document /></el-icon>
                 <span>案例管理</span>

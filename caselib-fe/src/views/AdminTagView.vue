@@ -52,6 +52,7 @@
               :total="data.pageCount"
               @size-change="handleSizeChange"
               @current-change="handleCurrentChange"
+              class="mt-4"
           >
           </el-pagination>
 
