@@ -26,9 +26,12 @@
         </template>
         <!--搜索框-->
         <div class="mx-auto">
-            <el-input
-              class="w-12 mt-4 border-2 border-gray-300 rounded-md"
-              placeholder="搜索"
+            <el-autocomplete
+              v-model="keyword"
+              class="w-100 mt-4 border-2 border-gray-300 rounded-md"
+              :fetch-suggestions="querySearch"
+              placeholder="输入关键字搜索......"
+              @select="handleSelect"
             />
         </div>
       </el-menu>
@@ -46,26 +49,40 @@
         </template>
         <template v-else>
           <!--已登录-下拉菜单-->
-          <el-dropdown class="mt-2">
-              <img 
-                class="bg-gray-200 w-10 h-10 rounded-lg" 
+          <el-dropdown class="mt-2" @command="handleCommand">
+            <div>
+              <el-avatar
                 :src="store.state.image"/>
+            </div>
             <template #dropdown>
-              <el-dropdown-menu>
-                <el-dropdown-item> 
-                  <img 
-                    class="bg-gray-200 w-20 h-20 rounded-lg mr-4" 
+              <el-dropdown-menu 
+                size="large"
+                class="">
+                <div class="relative">
+                  <el-avatar
+                    :size="80"
+                    class="block mr-4"
                     :src="store.state.image"/>
-                  <template v-if="store.state.authority === 0">
-                    管理员 {{ store.state.username }}
-                  </template>
-                  <template v-else>
-                    {{ store.state.username }}
-                  </template>
-                </el-dropdown-item>
-                <el-dropdown-item @click="">个人中心</el-dropdown-item>
-                <el-dropdown-item @click="">个人设置</el-dropdown-item>
-                <el-dropdown-item @click="">退出登录</el-dropdown-item>
+                    <div class="inline-block">
+                      <div class="text-sm align-middle"> 
+                        <template v-if="store.state.authority === 0">
+                          管理员
+                        </template>
+                        <template v-if="store.state.authority === 1">
+                          教师
+                        </template>
+                        <template v-if="store.state.authority === 2">
+                          用户 
+                        </template>
+                      </div>
+                      <div class="mr-4">
+                        {{ store.state.username }}
+                      </div>
+                    </div>
+                </div>
+                <el-dropdown-item command="center" divided>个人中心</el-dropdown-item>
+                <el-dropdown-item command="setting" divided>个人设置</el-dropdown-item>
+                <el-dropdown-item command="logout" divided>退出登录</el-dropdown-item>
               </el-dropdown-menu>
             </template>
           </el-dropdown>
@@ -78,7 +95,7 @@
 <script setup lang="ts">
 import { useStore } from 'vuex';
 import { key } from '@/store'
-import { ArrowDown, Edit, Notification } from '@element-plus/icons-vue';
+import { Edit, Notification } from '@element-plus/icons-vue';
 import { useRouter } from 'vue-router';
 // 组件参数
 const props = defineProps<{
@@ -90,8 +107,6 @@ const props = defineProps<{
 
 // 获取store
 const store = useStore(key)
-console.log(store.state);
-
 // 获取router
 const router = useRouter()
 const handleLogin = () => {
@@ -99,6 +114,26 @@ const handleLogin = () => {
 }
 const handleRegister = () => {
   router.push('/register')
+}
+const handleCommand = (command: string) => {
+  console.log(`click on item ${command}`);
+  if (command === 'center'){
+    router.push('/user')
+  }
+  else if (command === 'setting'){
+    router.push('/setting')
+  }
+  else if (command === 'logout'){
+    store.dispatch('logout').then(() => { 
+        // 登出并跳转到首页
+        router.push('/hot')
+      }).catch(() => {
+        // 后端token失效，退出登录状态
+        return false
+      })
+  }
+  
+  
 }
 </script>
 
