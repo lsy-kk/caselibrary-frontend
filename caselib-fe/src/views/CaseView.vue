@@ -6,8 +6,9 @@
     <!--案例作者相关-->
     <div class="relative align-middle block mt-2">
       <!--头像-->
-      <img 
-        class="align-top bg-gray-200 w-20 h-20 rounded-lg" 
+      <el-avatar
+        :size="100" 
+        class="mr-4" 
         :src="caseHeader.author.image"/>
       
       <div class="mt-2 inline-block">
@@ -41,8 +42,8 @@
         v-if="caseHeader.author.id == store.state.id"
         @click="handleEdit()"
         class="absolute top-0 right-0"
-        size="small"
-        round>
+        type="success"
+        plain>
         <el-icon class="mr-1"><Edit   /></el-icon>编辑
       </el-button>
     </div>
@@ -62,7 +63,6 @@
         </el-tag>
       </div>
     </template>
-    
     <div>
       <!--markdown编辑器-->
       <md-editor 
@@ -70,6 +70,22 @@
         previewTheme="vuepress"
         v-model="caseHeader.caseBody.content"
         class=" mb-4"/>
+    </div>
+    <div class="relative align-middle mb-8">
+      <el-button
+        @click="handleThumb()"
+        class="absolute top-0 right-20 mr-4"
+        type="primary"
+        plain>
+        <el-icon class="mr-1"><CaretTop /></el-icon>点赞
+      </el-button>
+      <el-button
+        @click="handleFavorites()"
+        class="absolute top-0 right-0"
+        type="warning"
+        plain>
+        <el-icon class="mr-1"><StarFilled /></el-icon>收藏
+      </el-button>
     </div>
   </div>
 </template>
@@ -83,7 +99,7 @@ import type {ICaseHeaderVo } from '@/type/case'
 import { useRoute } from 'vue-router'
 import { useStore } from 'vuex'
 import { key } from '@/store'
-import { Comment, View, Edit, Stopwatch} from '@element-plus/icons-vue'; 
+import { Comment, View, Edit, Stopwatch, CaretTop, StarFilled} from '@element-plus/icons-vue'; 
 import router from '@/router'
 const caseHeader = ref<ICaseHeaderVo>({
     id: 0,

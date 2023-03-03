@@ -23,7 +23,7 @@
 <script setup lang="ts">
 import { reactive, onMounted } from 'vue'
 import CaseItem from '@/components/CaseItem.vue' 
-import { getCaseList } from '@/request/api/case';
+import { getCaseVoList } from '@/request/api/case';
 import { CaseData } from '@/type/case';
 const data = reactive(new CaseData())
 // 生命周期函数
@@ -37,9 +37,11 @@ const handleSearch = () => {
 
 // 更新页面上的数据
 const reload = () => {
-  getCaseList(data.selectData).then(res=>{
+  getCaseVoList(data.selectData).then(res=>{
       data.list = res.data
       data.pageCount = res.data.length
+      console.log(res.data);
+      
   })
 }
 

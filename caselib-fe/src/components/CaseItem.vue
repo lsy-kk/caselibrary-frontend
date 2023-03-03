@@ -18,7 +18,7 @@
 
       <div>
         <span class="text-sm pr-4 text-gray-400">
-          <el-icon><User /></el-icon>&nbsp;{{authorName}}
+          <el-icon><User /></el-icon>&nbsp;{{author.username}}
         </span>
 
         <el-tag v-for="t in tags" :key="t.id" size="mini" type="success">{{t.name}}</el-tag>
@@ -32,25 +32,26 @@
 
 <script setup lang="ts">
 import { useRouter } from 'vue-router';
-import type { ICaseBodyVo } from '@/type/case';
+import type { ICaseBodyVo, ICaseHeaderVo } from '@/type/case';
+import type { IUserVo } from '@/type/user';
+import type { ICommentVo } from '@/type/comment';
 import type { ITagVo } from "@/type/tag";
 import { Comment, View, User, Stopwatch} from '@element-plus/icons-vue'; 
 defineProps<{
   id: number,
   title: string,
   summary: string,
-  authorId: string, 
   thumb: number,
   viewtimes: number, 
   comment: number,
   visible: number,
-  createTime: String,
-  updateTime: String,
+  createTime: string,
+  updateTime: string,
   caseBody: ICaseBodyVo,
-  authorName: String,
+  author: IUserVo,
   tags: Array<ITagVo>,
+  comments: Array<ICommentVo>,
 }>()
-
 const router = useRouter()
 // 跳转到案例内容页面
 const handleViewCase = (id: Number) => {
