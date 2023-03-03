@@ -8,9 +8,9 @@ import { getToken, removeToken } from '@/request/api/token'
 
 export interface IState{
     id: number,
-    email: String,
-    username: String,
-    image: String,
+    email: string,
+    username: string,
+    image: string,
     authority: number,
 }
 
@@ -54,7 +54,7 @@ export const store = createStore<IState>({
                         commit('setId', res.data.id)
                         commit('setEmail', res.data.email)
                         commit('setUsername', res.data.username)
-                        commit('setImage', res.data.username)
+                        commit('setImage', res.data.image)
                         commit('setAuthority', res.data.authority)
                         resolve('success')
                     }

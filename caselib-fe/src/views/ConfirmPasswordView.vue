@@ -9,15 +9,15 @@
             class="demo-ruleForm"
         >
             <el-form-item label="密码" prop="pass">
-            <el-input v-model="ruleForm.pass" type="password" autocomplete="off" />
+              <el-input v-model="ruleForm.pass" type="password" autocomplete="off" />
             </el-form-item>
 
             <el-form-item label="确认密码" prop="checkPass">
-            <el-input
-                v-model="ruleForm.checkPass"
-                type="password"
-                autocomplete="off"
-            />
+              <el-input
+                  v-model="ruleForm.checkPass"
+                  type="password"
+                  autocomplete="off"
+              />
             </el-form-item>
             <!--两个点击按钮-->
             <el-form-item>

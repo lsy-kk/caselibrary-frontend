@@ -6,14 +6,14 @@
             status-icon
             :rules="rules"
             label-width="50px"
-            class="w-1/2 mx-auto mt-28 py-8 pl-2 pr-6 rounded-2xl bg-white"
+            class="max-w-xl mx-auto mt-28 py-8 pl-2 pr-6 rounded-2xl bg-white"
         >
-            <h2 class="m-4">登录</h2>
-            <el-form-item label="账号" prop="email" label-width="4rem">
+            <h2 class="m-4  mx-auto">登录</h2>
+            <el-form-item label="账号" prop="email" label-width="6rem" class="mr-8">
               <el-input v-model="ruleForm.email" autocomplete="off" />
             </el-form-item>
 
-            <el-form-item label="密码" prop="password" label-width="4rem">
+            <el-form-item label="密码" prop="password" label-width="6rem" class="mr-8">
               <el-input 
                 v-model="ruleForm.password" 
                 type="password"
@@ -24,15 +24,15 @@
             <!--忘记密码和注册链接-->
             <el-form-item class="relative">
               <el-button 
-                class="w-20 absolute right-16" 
+                class="w-20 absolute right-16 mr-8" 
                 key="primary" 
                 type="primary" 
                 text 
-                @click="handleResetPwd">
-                忘记密码
+                @click="handleRegister">
+                邮箱登录
               </el-button>
               <el-button 
-                class="w-12 absolute right-0" 
+                class="w-12 absolute right-0 mr-8" 
                 key="primary" 
                 type="primary" 
                 text 
@@ -41,10 +41,17 @@
               </el-button>
             </el-form-item>
             <!--两个点击按钮-->
-            <el-form-item>
-              <el-button class="w-2/5" type="primary" @click="submitForm(ruleFormRef)">登录</el-button>
-              <el-button class="w-2/5" @click="resetForm(ruleFormRef)">重置</el-button>
-            </el-form-item>
+            <el-button 
+              class="w-1/3 mx-auto" 
+              type="primary" 
+              @click="submitForm(ruleFormRef)">
+              登录
+            </el-button>
+            <el-button 
+              class="w-1/3 mx-auto" 
+              @click="resetForm(ruleFormRef)">
+              重置
+            </el-button>
         </el-form>
     </div>
 </template>
@@ -129,10 +136,6 @@ const submitForm = (formEl: FormInstance | undefined) => {
 const resetForm = (formEl: FormInstance | undefined) => {
   if (!formEl) return 
   formEl.resetFields()
-}
-
-const handleResetPwd = () => {
-  router.push('/')
 }
 
 const handleRegister = () => {
