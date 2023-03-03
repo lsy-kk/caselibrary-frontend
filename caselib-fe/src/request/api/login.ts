@@ -17,3 +17,21 @@ export function logout(token: string){
         params: token,
     })
 }
+
+// 发送验证码
+export function sendEmailCode(data:ILoginForm){
+    return service({
+        url: "/sendEmailCode",
+        method: "post",
+        data,
+    })
+}
+// 通过邮件验证码登录
+export function loginByEmailCode(data:ILoginForm){
+    return service({
+        url: "/loginByEmailCode", 
+        method: "post",
+        data,
+    })
+}
+
