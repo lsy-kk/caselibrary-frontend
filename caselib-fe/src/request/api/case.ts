@@ -1,20 +1,25 @@
-import type { ICaseHeader, ISelectCase, ICaseBody } from "@/type/case";
+import type { ICaseHeader, ISelectCase, ICaseBody, ICaseParam, ICaseBodyVo } from "@/type/case";
 import service from "..";
 import serviceFile from "..";
 
 // 获取案例列表
-export function getCaseList(data: ISelectCase){
+export function getCaseVoList(data: ISelectCase){
     return service({
-        url: "/case/getList", 
+        url: "/case/getCaseVoList", 
         method: "get",
         params: {
             page: data.page,
             pageSize: data.pageSize,
+            id: data.id,
             authorId: data.authorId,
-            id: data.id
+            visible: data.visible,
+            state: data.state,
+            status: data.status,
         }
     })
 }
+
+
 
 // 根据用户id，获取他人案例列表
 export function getOtherAuthorList(page: Number, pageSize: Number, userid: Number){
@@ -40,7 +45,7 @@ export function updateCase(data: ICaseHeader){
 }
 
 // 获取收藏夹内案例列表
-export function getCaseBodyByCaseId(id: number){
+export function getCaseListByCaseId(id: number){
     return service({
         url: "/", 
         method: "get",
@@ -50,48 +55,19 @@ export function getCaseBodyByCaseId(id: number){
     })
 }
 
-// 新增案例头部
-export function insertCaseHeader(data: ICaseHeader){
+// 新增/提交案例Param（header,body和tags）
+export function submitCaseParam(data: ICaseParam){
     return service({
-        url: "/case/insertCaseHeader", 
+        url: "/case/submitCaseParam", 
         method: "post",
         data,
     })
 }
 
-// 获取案例头部
-export function getCaseHeader(caseId: Number){
+// 获取案例Param（header,body和tags）
+export function getCaseParam(caseId: number|undefined){
     return service({
-        url: "/case/getCaseHeader", 
-        method: "get",
-        params:{
-            caseId: caseId,
-        }
-    })
-}
-
-// 新增案例头部
-export function updateCaseHeader(data: ICaseHeader){
-    return service({
-        url: "/case/updateCaseHeader", 
-        method: "post",
-        data,
-    })
-}
-
-// 更新案例内容
-export function updateCaseBody(data: ICaseBody){
-    return service({
-        url: "/case/updateCaseBody", 
-        method: "post",
-        data,
-    })
-}
-
-// 获取案例内容
-export function getCaseBody(caseId: Number){
-    return service({
-        url: "/case/getCaseBodyByCaseId", 
+        url: "/case/getCaseParam", 
         method: "get",
         params:{
             caseId: caseId,
@@ -100,7 +76,7 @@ export function getCaseBody(caseId: Number){
 }
 
 // 导出markdown文本
-export function exportMarkdownFile(data: ICaseBody){
+export function exportMarkdownFile(data: ICaseBodyVo){
     return service({
         url: "/case/exportMarkdownFile", 
         method: "post",

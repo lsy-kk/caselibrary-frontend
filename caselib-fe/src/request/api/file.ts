@@ -1,7 +1,7 @@
 import axios from 'axios'
 // 另一种，用来传输文件
 const serviceFile = axios.create({
-    baseURL: "https://233f0532.r3.vip.cpolar.cn",
+    baseURL: "http://kkysl.free.svipss.top",
     timeout: 5000,
     headers:{
         "Content-Type": "multipart/form-data;charset=utf-8"
@@ -29,7 +29,7 @@ serviceFile.interceptors.response.use((res)=>{
 // 上传图片
 export function uploadImg(data: FormData){
     return serviceFile({
-        url: "/case/uploadImg", 
+        url: "/case/uploadFile", 
         method: "post",
         data,
     })

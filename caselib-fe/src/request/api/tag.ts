@@ -1,7 +1,7 @@
 import service from "..";
 import type { ITag, ISelectTag } from "@/type/tag"
 
-// 获取标签列表
+// 分页获取标签列表
 export function getTagList(data: ISelectTag){
     return service({
         url: "/tag/getList", 
@@ -14,7 +14,26 @@ export function getTagList(data: ISelectTag){
         }
     })
 }
-
+// 根据前缀，获取标签列表
+export function getTagListByPrefix(prefix: String){
+    return service({
+        url: "/tag/getTagListByPrefix", 
+        method: "get",
+        params: {
+            prefix: prefix
+        }
+    })
+}
+// 根据案例id，获取标签列表
+export function findTagVoByCaseId(caseId: number){
+    return service({
+        url: "/tag/findTagVoByCaseId", 
+        method: "get",
+        params: {
+            caseId: caseId
+        }
+    })
+}
 // 更新标签信息
 export function updateTag(data: ITag){
     return service({

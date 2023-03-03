@@ -1,17 +1,18 @@
-import type { ITag, ITagVo } from "./tag";
-import type { IUser } from "./user";
+import type { ICommentVo } from "./comment";
+import type { ITagVo } from "./tag";
+import type { IUserVo } from "./user";
 
 // 案例头部信息
 export interface ICaseHeader{
     id?: number,
-    title: string,
-    summary: string,
-    authorId: number, 
+    title?: string,
+    summary?: string,
+    authorId?: number, 
     thumb?: number,
     viewtimes?: number, 
     comment?: number,
-    state: number,
-    visible: number,
+    state?: number,
+    visible?: number,
     status?: number, 
     createTime?: Date,
     updateTime?: Date,
@@ -21,7 +22,6 @@ export interface ICaseHeaderVo{
     id: number,
     title: string,
     summary: string,
-    authorId: number, 
     thumb: number,
     viewtimes: number, 
     comment: number,
@@ -29,28 +29,44 @@ export interface ICaseHeaderVo{
     createTime: string,
     updateTime: string,
     caseBody: ICaseBodyVo,
-    authorName: string,
+    author: IUserVo,
     tags: Array<ITagVo>,
+    comments: Array<ICommentVo>,
 }
 export interface ICaseBody{
     id?: number,
     caseId?: number,
-    content: string,
-    appendix: string,
-    version: number,
+    content?: string,
+    appendix?: string,
+    version?: number, 
+    state?: number,
     status?: number, 
     createTime?: Date,
     updateTime?: Date,
 }
 export interface ICaseBodyVo{
+    id?: number,
     content: string,
     appendixList: Array<string>,
+    state: number,
+    version: number,
+    createTime: string,
+    updateTime: string,
+}
+export interface ICaseParam{
+    caseHeader: ICaseHeader,
+    caseBodyVo?: ICaseBodyVo,
+    caseBodyVoLatest: ICaseBodyVo,
+    oldTags: Number[],
+    newTags: Number[],
 }
 export interface ISelectCase{
     // 搜索信息（案例id，案例名称，作者id）
     id?: number,
     authorId?: number,
+    visible?: number,
     state?: number,
+    status?: number,
     // 当前页码
     page: number,
     // 页面大小
@@ -58,9 +74,6 @@ export interface ISelectCase{
 }
 export class CaseData{
     selectData: ISelectCase={
-        id: undefined,
-        state: undefined,
-        authorId: undefined,
         page: 1,
         pageSize: 10,
     }

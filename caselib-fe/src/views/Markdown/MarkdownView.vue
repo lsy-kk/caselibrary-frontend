@@ -6,21 +6,38 @@
         <!--案例头部信息-->
         <el-form 
             ref="caseHeaderRef"
-            :model="caseHeader" 
+            :model="caseParam.caseHeader" 
             status-icon
             :rules="caseHeaderRules"
             label-width="100px">
             <el-form-item label="文章标题" prop="title" class="mt-4">
-                <el-input v-model="caseHeader.title" style="width: 80%"/>
+                <el-input v-model="caseParam.caseHeader.title" style="width: 80%"/>
             </el-form-item>
             <el-form-item label="简介" prop="summary" >
-                <el-input v-model="caseHeader.summary" type="textarea" :rows="5" style="width: 80%"/>
+                <el-input v-model="caseParam.caseHeader.summary" type="textarea" :rows="5" style="width: 80%"/>
             </el-form-item>
             <el-form-item label="可见等级" prop="visible">
-                <el-radio-group v-model="caseHeader.visible">
+                <el-radio-group v-model="caseParam.caseHeader.visible">
                     <el-radio :label="0">仅自己可见</el-radio>
                     <el-radio :label="1">所有人可见</el-radio>
                 </el-radio-group>
+            </el-form-item>
+            <el-form-item label="标签" prop="tag">
+              <el-select
+                v-model="caseParam.newTags"
+                multiple
+                :multiple-limit="4"
+                filterable
+                placeholder="请搜索并选择标签（最多4个）"
+                style="width: 80%"
+              >
+                <el-option
+                  v-for="(item, index) in optionList.slice(0,6)" 
+                  :key="index"
+                  :label="item.name"
+                  :value="item.id"
+                />
+              </el-select>
             </el-form-item>
         </el-form>
       </el-collapse-item>
@@ -34,6 +51,7 @@
           :before-upload="beforeUpload"
           :on-success="onSuccess"
           :on-error="onError"
+          :on-preview="onPreview"
           :limit="3"
           :on-exceed="onExceed"
           class="w-1/3">
@@ -53,7 +71,7 @@
             action=""
             :before-upload="beforeUploadMd"
             :limit="1"
-            show-file-list=false
+            :show-file-list="false"
             :on-exceed="onExceedMd"
             class="w-1/4">
             <template #trigger>
@@ -71,21 +89,21 @@
         <!--markdown编辑器-->
         <md-editor 
           previewTheme="vuepress"
-          v-model="caseBody.content" 
+          v-model="caseParam.caseBodyVoLatest.content" 
           width="400px"
           @onSave="onSave" 
           @onUploadImg="onUploadImg"/>
       </el-collapse-item>
     </el-collapse>
     <div class="fixed inset-x-0 bottom-0 text-center">
-      <el-button type="primary" @click="handleSubmit" class="w-2/5">提交</el-button>
-      <el-button @click="handleSaveAndReload" class="w-2/5">保存</el-button>
+      <el-button type="primary" @click="handleSubmit" class="w-2/5 z-50">提交</el-button>
+      <el-button @click="handleSaveAndReload" class="w-2/5 z-50">保存</el-button>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, reactive, onBeforeUnmount } from 'vue'
+import { ref, watch, onMounted, reactive, onBeforeUnmount } from 'vue'
 import MdEditor from 'md-editor-v3'
 import 'md-editor-v3/lib/style.css'
 import { ElMessage, genFileId} from 'element-plus'
@@ -98,35 +116,103 @@ import type {
   UploadFile } from 'element-plus'
 import { uploadImg } from '@/request/api/file'
 import {
-  insertCaseHeader, 
-  getCaseHeader, 
-  updateCaseHeader, 
-  updateCaseBody, 
-  getCaseBodyByCaseId,
-  exportMarkdownFile} from '@/request/api/case'
-import type {ICaseBody, ICaseHeader} from '@/type/case'
-import { useRouter } from 'vue-router'
+  exportMarkdownFile,
+  submitCaseParam,
+  getCaseParam,} from '@/request/api/case'
+import { getTagListByPrefix } from '@/request/api/tag'
+import type { ICaseParam } from '@/type/case'
+import type { ITagVo, ICaseTagVo} from '@/type/tag'
+import { useRouter, useRoute } from 'vue-router'
 import { useStore } from 'vuex';
 import { key } from '@/store'
-const props = defineProps<{
-  caseId?: number,
-}>()
+const router = useRouter()
 // 初始化内容
 const activeNames = ref(['1','2','3'])
 // 获取store
 const store = useStore(key);
-var caseBody = ref<ICaseBody>({
-  content: '# Hello Editor',
-  appendix: '',
-  version: 0,
+const route = useRoute();
+var timer: number
+// 该方法在页面初始化，刷新时被调用
+onMounted(() => {
+  // 每5分钟存一次md文本
+  timer = setInterval(onSave, 1000 * 60 * 5)
+  clearCase()
+  // 载入案例
+  reload()
+  // 载入标签
+  reloadTag('')
 })
-var caseHeader = ref<ICaseHeader>({
-  id: undefined,
-  title: '',
-  summary: '',
-  authorId: store.state.id,
-  state: 0,
-  visible: 1,
+onBeforeUnmount(() => {
+  // 清除定时器
+  clearInterval(timer)
+  // 清除缓存
+  localStorage.removeItem('body')
+})
+// 刷新或离开界面时触发
+window.onbeforeunload = function (e){
+  // 弹出弹窗，提示用户保存
+}
+// 监听用户是否在当前页面
+document.addEventListener('visibilitychange',function(e){
+  let state = document.visibilityState
+  if (state == 'hidden'){
+      console.log(document.visibilityState,'用户离开了')
+  }
+  if (state == 'visible'){
+      console.log(document.visibilityState,'回来了')
+  }
+})
+var caseParam = ref<ICaseParam>({
+  caseHeader : {
+      title: '',
+      // 作者id赋值
+      authorId: store.state.id,
+      state: 0,
+      visible: 1,
+  },
+  caseBodyVoLatest : {
+      content: '# Hello Editor',
+      appendixList: [],
+      state: 0,
+      version: 1,
+      createTime: '',
+      updateTime: '',
+  },
+  oldTags : [],
+  newTags : [],
+});
+// 清空、重置表单
+const clearCase = () => {
+  caseParam.value = ({
+    caseHeader : {
+      title: '',
+      authorId: store.state.id,
+      state: 0,
+      visible: 1,
+    },
+    caseBodyVoLatest : {
+        content: '# Hello Editor',
+        appendixList: [],
+        state: 0,
+        version: 1,
+        createTime: '',
+        updateTime: '',
+    },
+    oldTags : [],
+    newTags : [],
+  })
+}
+// 监听路由
+watch(route, async (newRoute, oldRoute) => {
+  // 清除定时器
+  clearInterval(timer)
+  // 清除缓存
+  localStorage.removeItem('body')
+  timer = setInterval(onSave, 1000 * 60 * 5)
+  clearCase()
+  activeNames.value = ['1','2','3']
+  fileList.value = []
+  reload()
 })
 // 头部表单
 const caseHeaderRef = ref<FormInstance>()
@@ -157,43 +243,18 @@ const caseHeaderRules = reactive({
     }
   ],
 })
-var timer: number
-// 该方法在页面初始化，刷新时被调用
-onMounted(() => {
-  console.log(props.caseId);
-  
-  // 每5分钟存一次md文本
-  timer = setInterval(onSave, 1000 * 60 * 5)
-  reload()
-  // 当用户打开页面时：若是新建的案例，则先新建案例头；否则从后端获取当前md文本内容
-  // 设置定时器，每5分钟提交一次内容（或是存放到本地缓存localStorage）
-  // 当用户不在当前页面时，停止计时
-  // 当用户点击保存，将当前数据提交到后端（这会是个同步调用）
-  // 当用户关闭页面，清空缓存
-})
-onBeforeUnmount(() => {
-  // 清除定时器
-  clearInterval(timer)
-  // 清除缓存
-  localStorage.removeItem('body')
-})
-// 刷新或离开界面时触发
-window.onbeforeunload = function (e){
-  // 弹出弹窗，提示用户保存
 
+// 选择列表
+var optionList = ref<ITagVo[]>([])
+const reloadTag = (prefix: String) => {
+  if (!optionList.value || optionList.value.length === 0){
+    getTagListByPrefix(prefix).then((res) => {
+      if (res.msg === 'success'){
+        optionList.value = res.data
+      }
+    })
+  }
 }
-
-// 监听用户是否在当前页面
-document.addEventListener('visibilitychange',function(e){
-  console.log(document.visibilityState)
-  let state = document.visibilityState
-  if (state == 'hidden'){
-      console.log(document.visibilityState,'用户离开了')
-  }
-  if (state == 'visible'){
-      console.log(document.visibilityState,'回来了')
-  }
-})
 // 上传前，检查上传文件大小
 const beforeUpload: UploadProps['beforeUpload'] = (rawFile: UploadRawFile) => {
   let fileName = rawFile.name
@@ -230,6 +291,10 @@ const onError: UploadProps['onError'] = (response, uploadFile) => {
 const onExceed: UploadProps['onExceed'] = (files, uploadFiles) => {
   ElMessage.warning("上传文件过多，最多上传3个附件")
 }
+// 点击文件列表，预览文件
+const onPreview: UploadProps['onPreview'] = (uploadFile) => {
+  window.open(uploadFile.url, "_blank");
+}
 // 文件选中后，检查参数，然后读取文件
 const beforeUploadMd: UploadProps['beforeUpload'] = (rawFile: UploadRawFile) => {
   let fileName = rawFile.name
@@ -262,7 +327,7 @@ const readMarkdownFile = (file: UploadRawFile) => {
   }
   reader.onload = () => {
     if (typeof reader.result === 'string'){
-      caseBody.value.content = reader.result
+      caseParam.value.caseBodyVoLatest.content = reader.result
       ElMessage.success("导入成功")
     }
     else {
@@ -273,7 +338,7 @@ const readMarkdownFile = (file: UploadRawFile) => {
 
 // 后端将casebody中的content转化为文件，返回文件流，前端下载
 const handleExport = () => {
-  exportMarkdownFile(caseBody.value).then((res) => {
+  exportMarkdownFile(caseParam.value.caseBodyVoLatest).then((res) => {
     let blob = new Blob([res], {
       type: 'application/force-download'
     })
@@ -289,31 +354,26 @@ const handleExport = () => {
   })
 }
 // 附件列表
-var appendixList: string[]=[]
 const fileList = ref<UploadUserFile[]>([])
 // 加载案例头部以及内容
 const reload = () => {
-  let body = localStorage.getItem('body')
-  if (caseHeader.value.id === undefined){
-    caseHeader.value.id = props.caseId
+  // 获取caseId
+  if (caseParam.value.caseHeader.id === undefined){
+    caseParam.value.caseHeader.id = Number(route.params.caseId)
+    if (caseParam.value.caseHeader.id === 0){
+      caseParam.value.caseHeader.id = undefined
+    }
   }
-  // 若存在caseId,则从数据库获取案例内容
-  if (caseHeader.value.id !== undefined){
-    getCaseHeader(caseHeader.value.id).then((res)=>{
+  // 后端获取接口
+  if (caseParam.value.caseHeader.id !== undefined){
+    getCaseParam(caseParam.value.caseHeader.id).then((res) => {
       if (res.msg === 'success'){
-        caseHeader.value = res.data 
-      }
-    })
-    getCaseBodyByCaseId(caseHeader.value.id).then((res) => {
-      if (res.msg === 'success'){
-        caseBody.value = res.data 
-        if (caseBody.value.appendix !== undefined){
-          // 处理附件
-          appendixList = caseBody.value.appendix.split("")
+        caseParam.value = res.data
+        if (caseParam.value.caseBodyVoLatest.appendixList !== null){
           // 将附件加入
-          appendixList.forEach(appendix => {
+          caseParam.value.caseBodyVoLatest.appendixList.forEach(appendix => {
             var file: UploadUserFile = {
-              name: appendix.split(".")[0],
+              name: appendix.substring(appendix.lastIndexOf('/')+1),
               url: appendix,
             }
             fileList.value.push(file)
@@ -322,69 +382,20 @@ const reload = () => {
       }
     })
   }
+  let body = localStorage.getItem('body')
   if (body) {
     // 假设本地有缓存，则使用缓存
-    caseBody.value.content = body
+    caseParam.value.caseBodyVoLatest.content = body
   }
-}
-
-// Promise: 插入一个新的案例头，获取并返回案例id
-const pCaseHeaderInsert = () => {
-  return new Promise((resolve, reject) => {
-    insertCaseHeader(caseHeader.value).then((res) => {
-      if (res.msg ===  'success'){
-        caseHeader.value.id = res.data
-        caseBody.value.caseId = res.data
-        resolve(res.data)
-      }
-      else {
-        reject('fail')
-      }
-    })
-    .catch((error) => {reject(error)})
-  })
-}
-// Promise: 更新caseheader
-const pCaseHeaderSave = () => {
-  return new Promise((resolve, reject) => {
-    updateCaseHeader(caseHeader.value).then((res) => {
-      if (res.msg ===  'success'){
-        console.log("success");
-        resolve(res.data)
-      }
-      else {
-        console.log("fail");
-        reject('fail')
-      }
-    })
-    .catch((error) => reject(error))
-  })
-}
-// Promise: 提交casebody
-const pCaseBodySave = () => {
-  return new Promise((resolve, reject) => {
-    updateCaseBody(caseBody.value).then((res) => {
-      if (res.msg ===  'success'){
-        console.log("success");
-        resolve(res.data)
-      }
-      else {
-        console.log("fail");
-        reject('fail')
-      }
-    })
-    .catch((error) => reject(error))
-  })
 }
 // 保存内容并且刷新界面
 const handleSaveAndReload = ()=>{
-  // 还没有提交，说明还在草稿阶段
-  caseHeader.value.state = 0;
-  handleSave();
+  handleSave("保存");
   reload()
 }
 // 全部保存，header和body
-const handleSave = () => {
+// op有两种，保存save和提交submit
+const handleSave = (op: String) => {
   // 组装附件
   let appendixList:string[] = []
   fileList.value.forEach(file => {
@@ -392,51 +403,31 @@ const handleSave = () => {
       appendixList.push(file.url)
     }
   });
-  caseBody.value.appendix = appendixList.join(";")
-  console.log(caseBody.value.appendix);
-  console.log(fileList.value);
-  console.log(caseHeader.value.id)
-  if (caseHeader.value.id === undefined){
-    // 先提交header，获取id后再提交body
-    pCaseHeaderInsert().then(pCaseBodySave).then(()=>{
-      ElMessage.success("保存成功")
-    })
-    .catch((error) => {
-      ElMessage.error("保存失败")
-      console.log(error)
-    })
-  }
-  else {
-    // 同时更新header和body
-    console.log("here");
-    pCaseHeaderSave().then(pCaseBodySave).then(() => {
-      ElMessage.success("保存成功")
-    })
-    .catch((error) => {
-      ElMessage.error("保存失败")
-      console.log(error)
-    })
-  }
-  reload()
+  // 后端提交接口
+  submitCaseParam(caseParam.value).then((res) => {
+    if (res.msg === 'success'){
+      caseParam.value.caseHeader.id = res.data
+      ElMessage.success(op + "成功")
+    }
+    else {
+      ElMessage.success(op + "失败")
+    }
+  }).catch(error => {
+    console.log(error);
+    ElMessage.success(op + "失败")
+  })
 }
-// 发布案例：把state改为1,version+1,提交header和body
+// 发布案例：把state改为1,提交
 const handleSubmit = () => {
-  caseHeader.value.state = 1
-  caseBody.value.version ++
-  handleSave()
-  // 跳转到待审核页面,....
-  //var router = useRouter()
-  //router.push('/')
+  caseParam.value.caseHeader.state = 1
+  caseParam.value.caseBodyVoLatest.state = 1
+  handleSave("提交")
+  // 跳转到案例页面,....
+  router.push('/hot')
 }
 // 保存文章，点击保存案件或是快捷键触发
 // v为markdown形式文本，h为html形式文本
 const onSave = (v: string, h: Promise<string>) => {
-  console.log(caseHeader.value.title);
-  
-  // console.log(v)
-  // h.then((html) => {
-  //   console.log(html)
-  // })
   localStorage.setItem('body', v)
 }
 // 上传图片，需要返回图片的url
@@ -455,11 +446,10 @@ const onUploadImg = async (files: FileList, callback: (urls: string[]) => void) 
       })
     })
   )
-  callback(res.map((item:any) => item.data.url))
+  callback(res.map((item:any) => item))
 }
 
 </script>
 
 <style scoped>
-
 </style>

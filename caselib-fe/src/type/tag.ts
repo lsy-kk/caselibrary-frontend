@@ -15,6 +15,11 @@ export interface ITagVo{
     description: string,
     image: string,
 }
+export interface ICaseTagVo{
+    id: number,
+    tagId: number,
+    name: string,
+}
 export interface ISelectTag{
     // 搜索信息
     id?: number
