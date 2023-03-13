@@ -1,6 +1,8 @@
 <!--单个案例：表项-->
 <template>
-    <el-card class="me-area" :body-style="{ padding: '16px' }">
+    <el-card 
+      :body-style="{ padding: '16px' }"
+      shadow="hover">
       <div class="pb-4">
 
         <a @click="handleViewCase(id)" class="font-semibold text-base">{{title}}</a>
@@ -21,7 +23,16 @@
           <el-icon><User /></el-icon>&nbsp;{{author.username}}
         </span>
 
-        <el-tag v-for="t in tags" :key="t.id" size="mini" type="success">{{t.name}}</el-tag>
+        <el-tag 
+          v-for="t in tags" 
+          :key="t.id" 
+          size="mini" 
+          type="primary" 
+          round 
+          plain
+          class="mr-2">
+          {{t.name}}
+        </el-tag>
 
         <span class="float-right pl-4 text-xs text-gray-400">
           <el-icon><Stopwatch /></el-icon>&nbsp;{{createTime}}

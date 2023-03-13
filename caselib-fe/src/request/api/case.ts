@@ -1,7 +1,5 @@
-import type { ICaseHeader, ISelectCase, ICaseBody, ICaseParam, ICaseBodyVo } from "@/type/case";
+import type { ICaseHeader, ISelectCase, ICaseParam } from "@/type/case";
 import service from "..";
-import serviceFile from "..";
-
 // 获取案例列表
 export function getCaseVoList(data: ISelectCase){
     return service({
@@ -18,7 +16,6 @@ export function getCaseVoList(data: ISelectCase){
         }
     })
 }
-
 
 
 // 根据用户id，获取他人案例列表
@@ -75,12 +72,16 @@ export function getCaseParam(caseId: number|undefined){
     })
 }
 
-// 导出markdown文本
-export function exportMarkdownFile(data: ICaseBodyVo){
+// 获取案例头部
+export function getCaseHeaderVo(caseId: Number, isBody:boolean, isComment:boolean){
     return service({
-        url: "/case/exportMarkdownFile", 
-        method: "post",
-        data,
-        responseType: 'blob',
+        url: "/case/getCaseHeaderVo", 
+        method: "get",
+        params:{
+            caseId: caseId,
+            isBody: isBody,
+            isComment: isComment,
+        }
     })
 }
+

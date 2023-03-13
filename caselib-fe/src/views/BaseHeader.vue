@@ -10,7 +10,7 @@
         :default-active="activeIndex"
         mode="horizontal">
         <el-menu-item index="/hot">首页</el-menu-item>
-        <el-menu-item index="/admin/user">标签</el-menu-item>
+        <el-menu-item index="/tag">标签</el-menu-item>
         <!--管理员的后台管理按钮-->
         <template v-if="store.state.authority === 0">
           <el-menu-item index="/admin">后台管理</el-menu-item>
@@ -64,7 +64,7 @@
                     class="block mr-4"
                     :src="store.state.image"/>
                     <div class="inline-block">
-                      <div class="text-sm align-middle"> 
+                      <div class="text-sm align-middle mr-4"> 
                         <template v-if="store.state.authority === 0">
                           管理员
                         </template>
@@ -121,7 +121,7 @@ const handleCommand = (command: string) => {
     router.push('/user')
   }
   else if (command === 'setting'){
-    router.push('/setting')
+    router.push({path:`/user/setting`})
   }
   else if (command === 'logout'){
     store.dispatch('logout').then(() => { 

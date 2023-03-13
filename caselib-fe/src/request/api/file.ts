@@ -1,4 +1,7 @@
 import axios from 'axios'
+import service from '..'
+import type { ICaseBodyVo } from "@/type/case";
+
 // 另一种，用来传输文件
 const serviceFile = axios.create({
     baseURL: "http://kkysl.free.svipss.top",
@@ -26,11 +29,32 @@ serviceFile.interceptors.response.use((res)=>{
     console.log(err)
 })
 
-// 上传图片
-export function uploadImg(data: FormData){
+// 上传文件
+export function uploadFile(data: FormData){
     return serviceFile({
-        url: "/case/uploadFile", 
+        url: "/file/uploadFile", 
         method: "post",
         data,
+    })
+}
+
+// 删除云存储器中文件
+export function deleteFile(data: String){
+    return service({
+        url: "/file/deleteFile", 
+        method: "get",
+        params:{
+            path: data,
+        }
+    })
+}
+
+// 导出markdown文本
+export function exportMarkdownFile(data: ICaseBodyVo){
+    return service({
+        url: "/file/exportMarkdownFile", 
+        method: "post",
+        data,
+        responseType: 'blob',
     })
 }

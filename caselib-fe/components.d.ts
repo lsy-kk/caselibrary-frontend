@@ -8,11 +8,13 @@ export {}
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
     CaseItem: typeof import('./src/components/CaseItem.vue')['default']
+    ElAffix: typeof import('element-plus/es')['ElAffix']
     ElAlert: typeof import('element-plus/es')['ElAlert']
     ElAside: typeof import('element-plus/es')['ElAside']
     ElAutocomplete: typeof import('element-plus/es')['ElAutocomplete']
     ElAvatar: typeof import('element-plus/es')['ElAvatar']
     ElButton: typeof import('element-plus/es')['ElButton']
+    ElButtonGroup: typeof import('element-plus/es')['ElButtonGroup']
     ElCard: typeof import('element-plus/es')['ElCard']
     ElCol: typeof import('element-plus/es')['ElCol']
     ElCollapse: typeof import('element-plus/es')['ElCollapse']
@@ -34,6 +36,7 @@ declare module '@vue/runtime-core' {
     ElMenuItem: typeof import('element-plus/es')['ElMenuItem']
     ElOption: typeof import('element-plus/es')['ElOption']
     ElPagination: typeof import('element-plus/es')['ElPagination']
+    ElPopover: typeof import('element-plus/es')['ElPopover']
     ElRadio: typeof import('element-plus/es')['ElRadio']
     ElRadioGroup: typeof import('element-plus/es')['ElRadioGroup']
     ElRow: typeof import('element-plus/es')['ElRow']
@@ -41,6 +44,7 @@ declare module '@vue/runtime-core' {
     ElTable: typeof import('element-plus/es')['ElTable']
     ElTableColumn: typeof import('element-plus/es')['ElTableColumn']
     ElTag: typeof import('element-plus/es')['ElTag']
+    ElTooltip: typeof import('element-plus/es')['ElTooltip']
     ElUpload: typeof import('element-plus/es')['ElUpload']
     FavoritesAside: typeof import('./src/components/FavoritesAside.vue')['default']
     FavoritesHeader: typeof import('./src/components/FavoritesHeader.vue')['default']
@@ -50,6 +54,8 @@ declare module '@vue/runtime-core' {
     IconEcosystem: typeof import('./src/components/icons/IconEcosystem.vue')['default']
     IconSupport: typeof import('./src/components/icons/IconSupport.vue')['default']
     IconTooling: typeof import('./src/components/icons/IconTooling.vue')['default']
+    MarkdownCatalog: typeof import('./src/components/MarkdownCatalog.vue')['default']
+    MarkdownPreview: typeof import('./src/components/MarkdownPreview.vue')['default']
     NotificationAside: typeof import('./src/components/NotificationAside.vue')['default']
     NotificationItem: typeof import('./src/components/NotificationItem.vue')['default']
     PersonHeader: typeof import('./src/components/PersonHeader.vue')['default']
@@ -57,5 +63,6 @@ declare module '@vue/runtime-core' {
     RouterView: typeof import('vue-router')['RouterView']
     SearchHeader: typeof import('./src/components/SearchHeader.vue')['default']
     SettingForm: typeof import('./src/components/SettingForm.vue')['default']
+    UploadItem: typeof import('./src/components/UploadItem.vue')['default']
   }
 }
