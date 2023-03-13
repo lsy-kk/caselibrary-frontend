@@ -27,7 +27,7 @@
       <!--border 边框 stripe 斑马纹 sortable 代表排序-->
       <el-table :data="data.list" border stripe style="width: 100%">
           <el-table-column fixed prop="id" label="案例ID" sortable width="100px"/>
-          <el-table-column prop="authorId" label="作者ID" sortable width="100px"/>
+          <el-table-column prop="author.id" label="作者ID" sortable width="100px"/>
           <el-table-column prop="visible" label="可视等级" sortable width="120px">
               <template #default="scope">
                   <span v-if="scope.row.visible === 0">仅所有者可见</span>
@@ -80,7 +80,7 @@
 <script setup lang="ts">
 import { ref, reactive, onMounted } from 'vue'
 import { ElMessage } from 'element-plus'
-import { getCaseList, updateCase} from '@/request/api/case';
+import { getCaseVoList, updateCase} from '@/request/api/case';
 import {type ICaseHeader, CaseData } from '@/type/case'
 import { useRouter } from 'vue-router';
 const data = reactive(new CaseData())
@@ -96,7 +96,7 @@ const handleSearch = () => {
 
 // 更新页面上的数据
 const reload = () => {
-  getCaseList(data.selectData).then(res=>{
+  getCaseVoList(data.selectData).then(res=>{
       data.list = res.data
       data.pageCount = res.data.length
   })

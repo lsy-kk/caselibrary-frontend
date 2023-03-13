@@ -1,4 +1,5 @@
 import type { ICommentVo } from "./comment";
+import type { IFileVo } from "./file";
 import type { ITagVo } from "./tag";
 import type { IUserVo } from "./user";
 
@@ -47,7 +48,7 @@ export interface ICaseBody{
 export interface ICaseBodyVo{
     id?: number,
     content: string,
-    appendixList: Array<string>,
+    appendixList: Array<IFileVo>,
     state: number,
     version: number,
     createTime: string,
