@@ -1,3 +1,5 @@
+import type { IUserVo } from "./user";
+
 // 评论信息
 export interface IComment{
     id?: number,
@@ -5,9 +7,19 @@ export interface IComment{
     content?: string,
     authorId?: number,
     parentId?: number,
+    toUserId?: number,
     status?: number,
     createTime?: Date,
     updateTime?: Date,
+}
+export interface ICommentVo{
+    id: number,
+    content: string,
+    author: IUserVo,
+    toUser: IUserVo,
+    children: Array<ICommentVo>,
+    createTime: string,
+    updateTime: string,
 }
 export interface ISelectData{
     // 搜索信息，非必要

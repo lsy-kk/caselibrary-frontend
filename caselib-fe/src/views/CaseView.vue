@@ -2,8 +2,7 @@
   <div class="p-5">
     <!--标题头部分-->
     <div class="m-2 flex">
-      <div 
-        class="mr-2"
+      <div class="mr-2"
         style="width: 200px;">
       </div>
       <div class="bg-white px-4 flex-1">
@@ -52,7 +51,8 @@
             <el-icon class="mr-1"><Edit   /></el-icon>编辑
           </el-button>
           <template 
-            v-if="caseHeader.tags !== undefined && caseHeader.tags.length !== 0">
+            v-if="caseHeader.tags !== undefined && 
+            caseHeader.tags.length !== 0">
             <div class="m-2">
               <span>标签：</span>
               <el-tag 
@@ -67,13 +67,16 @@
               </el-tag>
             </div>
           </template>
-          <div class="m-2 flex">
-              <span>附件：</span>
-              <UploadItem 
-                v-for="(item, index) in caseHeader.caseBody.appendixList"
-                :key="index"
-                :file="item"
-                class="inline-block"/>
+          <div v-if="caseHeader.caseBody.appendixList !== undefined && 
+                    caseHeader.caseBody.appendixList !== null && 
+                    caseHeader.caseBody.appendixList.length !== 0" 
+            class="m-2 flex">
+            <span>附件：</span>
+            <UploadItem 
+              v-for="(item, index) in caseHeader.caseBody.appendixList"
+              :key="index"
+              :file="item"
+              class="inline-block"/>
           </div>
         </div>
       </div>
@@ -82,12 +85,12 @@
     <!--md部分-->
     <div class="m-2 flex">
       <!--markdown预览+目录-->
-      <div class="bg-white mr-2">
-        <el-affix :offset="80">
+      <div class="mr-2">
+        <el-affix :offset="160">
           <MarkdownCatalog 
               theme="light" 
               id="my-editor"
-              class="sticky overflow-auto"
+              class="sticky overflow-auto bg-white"
               style="width: 200px;"
             />
         </el-affix>
@@ -119,26 +122,74 @@
       </div>
     </div>
     <!--md部分结束-->
-    <div></div>
+    <!--评论部分开始-->
+    <div class="m-2 flex">
+      <div class="mr-2 "
+        style="width: 200px;">
+      </div>
+      <div class="flex-1 bg-white">
+        <!--评论提交-->
+        <div class="relative align-middle flex">
+          <el-avatar
+            :size="80" 
+            class="mx-4" 
+            :src="store.state.image"/>
+          <div class="my-4 w-full flex">
+              <el-input
+                  type="textarea"
+                  :autosize="{ minRows: 2}"
+                  maxlength="255"
+                  show-word-limit
+                  placeholder="你的评论..."
+                  v-model="comment.content"
+                  resize="none">
+              </el-input>
+              <el-button
+                @click="handleComment"
+                class="mx-2">
+                <el-icon class="mr-1"><ChatSquare /></el-icon>发布评论
+              </el-button>
+          </div>
+        </div>
+        <!--评论展示-->
+        <div v-if="caseHeader.comments !== undefined && 
+                  caseHeader.comments !== null && 
+                  caseHeader.comments.length !== 0" 
+            class="my-2 w-full">
+            <CommentItem 
+              v-for="(item, index) in caseHeader.comments"
+              :key="index"
+              :comment="item"
+              :case-id="caseHeader.id"
+              :caseAuthorId="caseHeader.author.id"
+              :index="index"
+              @clickReplyReload="getReply"
+              class="inline-block"/>
+        </div>
+      </div>
+      <!--评论部分结束-->
+  </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import UploadItem from '@/components/UploadItem.vue';
+import CommentItem from '@/components/CommentItem.vue';
 import MarkdownCatalog from '@/components/MarkdownCatalog.vue';
 import MarkdownPreview from '@/components/MarkdownPreview.vue';
-import { ref, reactive, onMounted } from 'vue'
-import MdEditor from 'md-editor-v3'
-import 'md-editor-v3/lib/style.css'
+import { ref, onMounted } from 'vue'
 import { getCaseHeaderVo } from '@/request/api/case'
 import type {ICaseHeaderVo } from '@/type/case'
+import type {IComment, ICommentVo } from '@/type/comment'
 import { useRoute } from 'vue-router'
 import { useStore } from 'vuex'
 import { key } from '@/store'
-import { Comment, View, Edit, Stopwatch, CaretTop, StarFilled} from '@element-plus/icons-vue'; 
+import { Comment, View, Edit, ChatSquare, CaretTop, StarFilled} from '@element-plus/icons-vue'; 
 import router from '@/router'
-const MdCatalog = MdEditor.MdCatalog;
-const scrollElement = document.documentElement;
+import { insertComment } from '@/request/api/comment';
+import { ElMessage } from 'element-plus';
+const store = useStore(key)
+const route = useRoute()
 const caseHeader = ref<ICaseHeaderVo>({
     id: 0,
     title: "",
@@ -168,14 +219,17 @@ const caseHeader = ref<ICaseHeaderVo>({
     tags: [],
     comments: [],
 })
-const store = useStore(key)
-const route = useRoute()
+const comment = ref<IComment>({
+    content: "",
+    authorId: store.state.id,
+    parentId: 0,
+})
 onMounted(() => {
   reload()
 })
 const reload = () => {
   caseHeader.value.id = Number(route.params.id)
-  getCaseHeaderVo(caseHeader.value.id, true, false).then((res) => {
+  getCaseHeaderVo(caseHeader.value.id, true, true).then((res) => {
       if (res.msg === "success"){
           caseHeader.value = res.data
       }
@@ -188,6 +242,40 @@ const handleEdit = () => {
     	caseId: caseHeader.value.id,
     },
   })
+}
+const reloadComment = () => {
+  comment.value = {
+    caseId: caseHeader.value.id,
+    content: "",
+    authorId: store.state.id,
+    parentId: 0,
+  }
+}
+// 发布一级评论
+const handleComment = () => {
+  comment.value.caseId = caseHeader.value.id
+  insertComment(comment.value).then((res) => {
+    if (res.msg === "success"){
+      ElMessage.success("评论成功");
+      // 更新评论列表
+      caseHeader.value.comments.push(res.data)
+    }
+    else {
+      ElMessage.error("评论失败，请稍后重试")
+    }
+  })
+  reload()
+  reloadComment()
+}
+// 获取子组件的评论，更新评论列表
+const getReply = (index: number, commentVo: ICommentVo) => {
+  caseHeader.value.comments[index].children.push(commentVo);
+}
+const handleThumb = () => {
+  
+}
+const handleFavorites = () =>{
+
 }
 </script>
 

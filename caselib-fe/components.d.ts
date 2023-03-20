@@ -8,6 +8,8 @@ export {}
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
     CaseItem: typeof import('./src/components/CaseItem.vue')['default']
+    ChildCommentItem: typeof import('./src/components/ChildCommentItem.vue')['default']
+    CommentItem: typeof import('./src/components/CommentItem.vue')['default']
     ElAffix: typeof import('element-plus/es')['ElAffix']
     ElAlert: typeof import('element-plus/es')['ElAlert']
     ElAside: typeof import('element-plus/es')['ElAside']
@@ -59,6 +61,7 @@ declare module '@vue/runtime-core' {
     NotificationAside: typeof import('./src/components/NotificationAside.vue')['default']
     NotificationItem: typeof import('./src/components/NotificationItem.vue')['default']
     PersonHeader: typeof import('./src/components/PersonHeader.vue')['default']
+    ReplyCommentItem: typeof import('./src/components/ReplyCommentItem.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     SearchHeader: typeof import('./src/components/SearchHeader.vue')['default']
