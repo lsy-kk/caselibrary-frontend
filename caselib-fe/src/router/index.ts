@@ -28,7 +28,7 @@ const router = createRouter({
         },
         {
           // 搜索结果页面，type为搜索类型，keyword为搜索关键字
-          path:'/search/:type/:keyword',
+          path:'/search/:keyword',
           component: () => import('../views/SearchView.vue')
         },
         {

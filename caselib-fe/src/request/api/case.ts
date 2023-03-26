@@ -1,6 +1,6 @@
 import type { ICaseHeader, ISelectCase, ICaseParam } from "@/type/case";
 import service from "..";
-// 获取案例列表
+// 根据条件，获取案例列表
 export function getCaseVoList(data: ISelectCase){
     return service({
         url: "/case/getCaseVoList", 
@@ -16,8 +16,18 @@ export function getCaseVoList(data: ISelectCase){
         }
     })
 }
-
-
+// 根据关键字，获取案例列表
+export function getSearchList(page: Number, pageSize: Number, keyword: string){
+    return service({
+        url: "/case/getSearchList", 
+        method: "get",
+        params: {
+            page: page,
+            pageSize: pageSize,
+            keyword: keyword,
+        }
+    })
+}
 // 根据用户id，获取他人案例列表
 export function getOtherAuthorList(page: Number, pageSize: Number, userid: Number){
     return service({
@@ -32,7 +42,7 @@ export function getOtherAuthorList(page: Number, pageSize: Number, userid: Numbe
 }
 
 
-// 更新收藏夹信息
+// 更新信息
 export function updateCase(data: ICaseHeader){
     return service({
         url: "/case/update", 

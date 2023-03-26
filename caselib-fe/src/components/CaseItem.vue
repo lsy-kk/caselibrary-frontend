@@ -5,7 +5,7 @@
       shadow="hover">
       <div class="pb-4">
 
-        <a @click="handleViewCase(id)" class="font-semibold text-base">{{title}}</a>
+        <a @click="handleViewCase(id)" class="font-semibold text-base" v-html="title"></a>
         <span class="float-right pl-4 text-xs text-gray-400">
           <el-icon><Comment /></el-icon>&nbsp;{{comment}}
         </span>
@@ -15,7 +15,7 @@
       </div>
 
       <div class="text-sm mb-4 break-all">
-        {{summary}}
+        <a v-html="summary"></a>
       </div> 
 
       <div>
@@ -43,7 +43,7 @@
 
 <script setup lang="ts">
 import { useRouter } from 'vue-router';
-import type { ICaseBodyVo, ICaseHeaderVo } from '@/type/case';
+import type { ICaseBodyVo} from '@/type/case';
 import type { IUserVo } from '@/type/user';
 import type { ICommentVo } from '@/type/comment';
 import type { ITagVo } from "@/type/tag";
