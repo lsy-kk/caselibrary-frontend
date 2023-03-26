@@ -6,7 +6,7 @@
         style="width: 200px;">
       </div>
       <div class="bg-white px-4 flex-1">
-        <span class="text-2xl font-semibold leading-loose px-4">
+        <span class="text-2xl font-semibold leading-loose px-4 break-all">
           {{caseHeader.title}}
         </span>
         <!--案例作者相关-->
@@ -14,7 +14,7 @@
           <!--头像-->
           <el-avatar
             :size="100" 
-            class="mr-4" 
+            class="m-2" 
             :src="caseHeader.author.image"/>
           <div class="mt-2 inline-block">
             <!--作者名称-->
@@ -50,9 +50,12 @@
             plain>
             <el-icon class="mr-1"><Edit   /></el-icon>编辑
           </el-button>
+          <div class="m-2 break-all" v-if="caseHeader.summary !== undefined && caseHeader.summary !== null">
+              <span>简介：</span>
+              {{caseHeader.summary}}
+            </div> 
           <template 
-            v-if="caseHeader.tags !== undefined && 
-            caseHeader.tags.length !== 0">
+            v-if="caseHeader.tags !== undefined && caseHeader.tags.length !== 0">
             <div class="m-2">
               <span>标签：</span>
               <el-tag 
@@ -112,13 +115,19 @@
             <el-icon class="mr-1"><CaretTop /></el-icon>点赞
           </el-button>
           <el-button
-            @click="handleFavorites()"
+            @click="dialogShow = true"
             class="absolute bottom-0 right-0"
             type="warning"
             plain>
             <el-icon class="mr-1"><StarFilled /></el-icon>收藏
           </el-button>
         </div>
+        <!--收藏弹窗-->
+        <FavoritesDialog 
+            :dialogShow="dialogShow" 
+            @dialogClose="dialogClose"
+            @dialogSuccess="dialogSuccess">
+        </FavoritesDialog>
       </div>
     </div>
     <!--md部分结束-->
@@ -132,7 +141,7 @@
         <div class="relative align-middle flex">
           <el-avatar
             :size="80" 
-            class="mx-4" 
+            class="m-2" 
             :src="store.state.image"/>
           <div class="my-4 w-full flex">
               <el-input
@@ -167,8 +176,8 @@
               class="inline-block"/>
         </div>
       </div>
-      <!--评论部分结束-->
-  </div>
+    </div>
+    <!--评论部分结束-->
   </div>
 </template>
 
@@ -177,6 +186,7 @@ import UploadItem from '@/components/UploadItem.vue';
 import CommentItem from '@/components/CommentItem.vue';
 import MarkdownCatalog from '@/components/MarkdownCatalog.vue';
 import MarkdownPreview from '@/components/MarkdownPreview.vue';
+import FavoritesDialog from '@/components/FavoritesDialog.vue';
 import { ref, onMounted } from 'vue'
 import { getCaseHeaderVo } from '@/request/api/case'
 import type {ICaseHeaderVo } from '@/type/case'
@@ -184,7 +194,7 @@ import type {IComment, ICommentVo } from '@/type/comment'
 import { useRoute } from 'vue-router'
 import { useStore } from 'vuex'
 import { key } from '@/store'
-import { Comment, View, Edit, ChatSquare, CaretTop, StarFilled} from '@element-plus/icons-vue'; 
+import { Comment, View, Edit, ChatSquare, CaretTop, StarFilled, Plus} from '@element-plus/icons-vue'; 
 import router from '@/router'
 import { insertComment } from '@/request/api/comment';
 import { ElMessage } from 'element-plus';
@@ -271,11 +281,18 @@ const handleComment = () => {
 const getReply = (index: number, commentVo: ICommentVo) => {
   caseHeader.value.comments[index].children.push(commentVo);
 }
+// 点赞操作
 const handleThumb = () => {
   
 }
-const handleFavorites = () =>{
-
+// 控制收藏弹窗操作
+const dialogShow = ref(false)
+const dialogClose = () =>{
+  dialogShow.value = false
+}
+const dialogSuccess = () =>{
+  dialogShow.value = false
+  ElMessage.success("收藏成功")
 }
 </script>
 

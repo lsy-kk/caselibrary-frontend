@@ -14,6 +14,19 @@ export function getTagList(data: ISelectTag){
         }
     })
 }
+
+export function getTagVoList(data: ISelectTag){
+    return service({
+        url: "/tag/getTagVoList", 
+        method: "get",
+        params: {
+            page: data.page,
+            pageSize: data.pageSize,
+            id: data.id,
+            name: data.name
+        }
+    })
+}
 // 根据前缀，获取标签列表
 export function getTagListByPrefix(prefix: String){
     return service({

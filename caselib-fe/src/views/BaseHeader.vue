@@ -118,10 +118,10 @@ const handleRegister = () => {
 const handleCommand = (command: string) => {
   console.log(`click on item ${command}`);
   if (command === 'center'){
-    router.push('/user')
+    router.push({path:`/user/${store.state.id}`})
   }
   else if (command === 'setting'){
-    router.push({path:`/user/setting`})
+    router.push({path:`/user/${store.state.id}/setting`})
   }
   else if (command === 'logout'){
     store.dispatch('logout').then(() => { 

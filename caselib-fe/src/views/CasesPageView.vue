@@ -8,8 +8,8 @@
           <!--分页栏-->
           <el-pagination
               v-model:currentPage="data.selectData.page"
+              v-model:page-size="data.selectData.pageSize"
               :page-sizes="[5, 10, 15]"
-              :page-size="data.selectData.pageSize"
               layout="total, sizes, prev, pager, next, jumper"
               :total="data.pageCount"
               @size-change="handleSizeChange"
@@ -38,21 +38,19 @@ const handleSearch = () => {
 // 更新页面上的数据
 const reload = () => {
   getCaseVoList(data.selectData).then(res=>{
-      data.list = res.data
-      data.pageCount = res.data.length
-      console.log(res.data);
-      
+      data.list = res.data.recordList
+      data.pageCount = res.data.total
   })
 }
 
 // 改变当前每页的显示条数时触发
-const handleSizeChange = (newPageSize:number) => { 
+const handleSizeChange = (newPageSize: number) => { 
   data.selectData.pageSize = newPageSize
   reload()
 }
 
 // 改变当前页码时触发
-const handleCurrentChange = (newPageNum:number) => { 
+const handleCurrentChange = (newPageNum: number) => { 
   data.selectData.page = newPageNum
   reload()
 }

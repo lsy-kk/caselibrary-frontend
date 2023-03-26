@@ -16,6 +16,12 @@ const router = createRouter({
           component: () => import('../views/HotCaseView.vue')
         },
         {
+          // 标签
+          path:'/tag',
+          name: 'tag',
+          component: () => import('../views/TagView.vue'),
+        },
+        {
           // 消息中心，id为用户id
           path:'/notification/:id',
           component: () => import('../views/NotificationView.vue')
