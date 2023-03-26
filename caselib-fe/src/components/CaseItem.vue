@@ -14,7 +14,7 @@
         </span>
       </div>
 
-      <div class="text-sm mb-4">
+      <div class="text-sm mb-4 break-all">
         {{summary}}
       </div> 
 

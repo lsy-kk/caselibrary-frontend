@@ -5,7 +5,7 @@
             <!--头像-->
             <el-avatar
                 :size="80" 
-                class="mx-4" 
+                class="m-2" 
                 :src="comment.author.image" />
             <div class="m-2 w-full">
                 <!--作者名称-->
@@ -44,7 +44,7 @@
                 <div class="relative align-middle flex" v-show="replyInputShow">
                     <el-avatar
                         :size="80" 
-                        class="mx-4" 
+                        class="m-2" 
                         :src="store.state.image"/>
                     <div class="my-2 w-full flex">
                         <el-input

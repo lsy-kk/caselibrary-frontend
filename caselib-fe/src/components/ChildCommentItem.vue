@@ -5,7 +5,7 @@
             <!--头像-->
             <el-avatar
                 :size="80" 
-                class="mx-4" 
+                class="m-2" 
                 :src="comment.author.image" />
             <div class="my-2 w-full">
                 <!--作者名称-->

@@ -5,7 +5,7 @@ import type { IUserState } from './modules/user'
 import { logout } from '@/request/api/login'
 import { getUserByToken } from '@/request/api/user'
 import { getToken, removeToken } from '@/request/api/token'
-
+import userImg from '@/assets/image/user.png';
 export interface IState{
     id: number,
     email: string,
@@ -21,7 +21,7 @@ export const store = createStore<IState>({
         id: -1,
         email: '',
         username: '',
-        image: '',
+        image: userImg,
         authority: -1,
     },
     // 通过getter对state状态进行筛选（例如过滤、计数），类似于计算属性
@@ -63,7 +63,7 @@ export const store = createStore<IState>({
                         commit('setId', -1)
                         commit('setEmail', '')
                         commit('setUsername', '')
-                        commit('setImage', '')
+                        commit('setImage', userImg)
                         commit('setAuthority', -1)
                         removeToken()
                         resolve('fail')
@@ -72,7 +72,7 @@ export const store = createStore<IState>({
                     commit('setId', -1)
                     commit('setEmail', '')
                     commit('setUsername', '')
-                    commit('setImage', '')
+                    commit('setImage', userImg)
                     commit('setAuthority', -1)
                     // 抛出异常
                     reject(err)
@@ -87,7 +87,7 @@ export const store = createStore<IState>({
                     commit('setId', -1)
                     commit('setEmail', '')
                     commit('setUsername', '')
-                    commit('setImage', '')
+                    commit('setImage', userImg)
                     commit('setAuthority', -1)
                     removeToken()
                     resolve('success')
