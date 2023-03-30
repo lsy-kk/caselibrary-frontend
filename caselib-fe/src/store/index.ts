@@ -112,7 +112,7 @@ export const store = createStore<IState>({
         // 登出
         logout({commit}) {
             return new Promise((resolve, reject) => {
-                logout(getToken()).then((res)=>{ 
+                logout().then((res)=>{ 
                     if (res.success){
                         commit('setId', -1)
                         commit('setEmail', '')

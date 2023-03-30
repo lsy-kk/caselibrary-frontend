@@ -10,9 +10,8 @@ export function login(data: ILoginForm){
 }
 
 // 登出
-export function logout(token: string){
+export function logout(){
     return service({
-        headers: {'Authorization': token},
         url: "/logout", 
         method: "get",
     })
