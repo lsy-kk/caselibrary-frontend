@@ -47,7 +47,7 @@ export const userModule: Module<IUserState, IState> = {
         getUserByToken({commit}){
             return new Promise((resolve, reject) => {
                 getUserByToken(getToken()).then((res) => { 
-                    if (res.msg == 'success'){
+                    if (res.success){
                         // 保存用户信息
                         commit('setId', res.data.id)
                         commit('setEmail', res.data.email)

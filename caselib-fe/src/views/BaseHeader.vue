@@ -93,8 +93,7 @@
 </template>
 
 <script setup lang="ts">
-import { useStore } from 'vuex';
-import { key } from '@/store'
+import { useStore } from '@/store'
 import { Edit, Notification } from '@element-plus/icons-vue';
 import { useRouter } from 'vue-router';
 // 组件参数
@@ -106,7 +105,7 @@ const props = defineProps<{
 }>()
 
 // 获取store
-const store = useStore(key)
+const store = useStore()
 // 获取router
 const router = useRouter()
 const handleLogin = () => {
@@ -125,12 +124,9 @@ const handleCommand = (command: string) => {
   }
   else if (command === 'logout'){
     store.dispatch('logout').then(() => { 
-        // 登出并跳转到首页
-        router.push('/hot')
-      }).catch(() => {
-        // 后端token失效，退出登录状态
-        return false
-      })
+      // 登出并跳转到首页
+      router.push('/hot')
+    })
   }
   
   

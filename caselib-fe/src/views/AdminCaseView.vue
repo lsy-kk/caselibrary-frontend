@@ -132,7 +132,7 @@ const handleStatusEdit = (caseForm: ICaseHeader) => {
   }
   // 更新操作
   updateCase(form.value).then(res=>{
-      if(res.msg === 'success'){
+      if (res.success){
           ElMessage({
               type:"success",
               message:"更新状态成功"

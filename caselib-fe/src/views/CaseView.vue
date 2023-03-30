@@ -192,13 +192,12 @@ import { getCaseHeaderVo } from '@/request/api/case'
 import type {ICaseHeaderVo } from '@/type/case'
 import type {IComment, ICommentVo } from '@/type/comment'
 import { useRoute } from 'vue-router'
-import { useStore } from 'vuex'
-import { key } from '@/store'
+import { useStore } from '@/store'
 import { Comment, View, Edit, ChatSquare, CaretTop, StarFilled, Plus} from '@element-plus/icons-vue'; 
 import router from '@/router'
 import { insertComment } from '@/request/api/comment';
 import { ElMessage } from 'element-plus';
-const store = useStore(key)
+const store = useStore()
 const route = useRoute()
 const caseHeader = ref<ICaseHeaderVo>({
     id: 0,
@@ -240,7 +239,7 @@ onMounted(() => {
 const reload = () => {
   caseHeader.value.id = Number(route.params.id)
   getCaseHeaderVo(caseHeader.value.id, true, true).then((res) => {
-      if (res.msg === "success"){
+      if (res.success){
           caseHeader.value = res.data
       }
   })
@@ -265,10 +264,11 @@ const reloadComment = () => {
 const handleComment = () => {
   comment.value.caseId = caseHeader.value.id
   insertComment(comment.value).then((res) => {
-    if (res.msg === "success"){
+    if (res.success){
       ElMessage.success("评论成功");
-      // 更新评论列表
+      // 更新评论列表，评论数+1
       caseHeader.value.comments.push(res.data)
+      caseHeader.value.comment += 1
     }
     else {
       ElMessage.error("评论失败，请稍后重试")
@@ -277,9 +277,10 @@ const handleComment = () => {
   reload()
   reloadComment()
 }
-// 获取子组件的评论，更新评论列表
+// 获取子组件的评论（二级评论），更新评论列表，评论数+1
 const getReply = (index: number, commentVo: ICommentVo) => {
   caseHeader.value.comments[index].children.push(commentVo);
+  caseHeader.value.comment += 1
 }
 // 点赞操作
 const handleThumb = () => {

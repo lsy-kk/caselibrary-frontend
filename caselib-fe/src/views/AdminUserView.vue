@@ -269,7 +269,7 @@ const handleSave = (formEl: FormInstance | undefined) => {
     formEl.validate((valid) => {
         if (valid) {
             insertUser(form.value).then(res=>{
-                if(res.msg === 'success'){
+                if (res.success){
                     ElMessage({
                         type:"success",
                         message:"新增成功"
@@ -338,7 +338,7 @@ const handlePasswordUpdate = (formEl: FormInstance | undefined) => {
     formEl.validate((valid) => {
         if (valid) {
             updatePassword(form.value).then(res=>{
-                if(res.msg === 'success'){
+                if (res.success){
                     ElMessage({
                         type:"success",
                         message:"更新密码成功"
@@ -389,7 +389,7 @@ const handleAuthorityUpdate = (formEl: FormInstance | undefined) => {
     formEl.validate((valid) => {
         if (valid) {
             updateUser(form.value).then(res=>{
-                if(res.msg === 'success'){
+                if (res.success){
                     ElMessage({
                         type:"success",
                         message:"修改权限成功"
@@ -433,7 +433,7 @@ const handleStatusEdit = (userForm: IUser) => {
     }
     // 更新操作
     updateUser(form.value).then(res=>{
-        if(res.msg === 'success'){
+        if (res.success){
             ElMessage({
                 type:"success",
                 message:"更新状态成功"

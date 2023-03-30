@@ -194,7 +194,7 @@ const handleSave = (formEl: FormInstance | undefined) => {
   formEl.validate((valid) => {
       if (valid) {
           insertTag(form.value).then(res=>{
-              if(res.msg === 'success'){
+              if(res.success){
                   ElMessage({
                       type:"success",
                       message:"新增成功"
@@ -245,7 +245,7 @@ const handleUpdate = (formEl: FormInstance | undefined) => {
   formEl.validate((valid) => {
       if (valid) {
           updateTag(form.value).then(res=>{
-              if(res.msg === 'success'){
+              if (res.success){
                   ElMessage({
                       type:"success",
                       message:"修改权限成功"
@@ -290,7 +290,7 @@ const handleStatusEdit = (tagForm: ITag) => {
   }
   // 更新操作
   updateTag(form.value).then(res=>{
-      if(res.msg === 'success'){
+      if (res.success){
           ElMessage({
               type:"success",
               message:"更新状态成功"

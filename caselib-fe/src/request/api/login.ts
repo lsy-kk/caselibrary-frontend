@@ -1,7 +1,7 @@
 import service from "..";
 import type { ILoginForm } from "@/type/login";
 // 登录
-export function login(data:ILoginForm){
+export function login(data: ILoginForm){
     return service({
         url: "/login", 
         method: "post",
@@ -12,9 +12,9 @@ export function login(data:ILoginForm){
 // 登出
 export function logout(token: string){
     return service({
+        headers: {'Authorization': token},
         url: "/logout", 
         method: "get",
-        params: token,
     })
 }
 

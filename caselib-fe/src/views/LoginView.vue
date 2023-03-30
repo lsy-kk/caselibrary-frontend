@@ -59,17 +59,16 @@
 <script setup lang="ts">
 import { reactive, ref } from 'vue'
 import { ElMessage, type FormInstance } from 'element-plus'
-import { login} from '../request/api/login'
+import { useStore } from '@/store'
 import { useRouter } from 'vue-router';
 import type { ILoginForm } from '@/type/login';
 const ruleFormRef = ref<FormInstance>()
-
 // 初始化表单
 const ruleForm:ILoginForm = reactive({
   email: '',
   password: '',
 })
-
+const store = useStore()
 const router = useRouter()
 // 校验输入
 const rules = reactive({
@@ -94,37 +93,10 @@ const submitForm = (formEl: FormInstance | undefined) => {
   if (!formEl) return
   formEl.validate((valid) => {
     if (valid) {
-      console.log('提交成功')
-      login(ruleForm).then((res)=>{
-        console.log(res)
-        const msg:string = res.msg
-        if (msg == 'success'){
-          // 保存用户信息及token
-          localStorage.setItem('token', res.data)
-          console.log(res.data);
-          // 登录成功
-          ElMessage({
-            type:"success",
-            message:"登录成功",
-            showClose: true,
-          })
-          // 跳转页面到首页
-          router.push('/')
-        }
-        else {
-          // 密码错误提示
-          ElMessage({
-            type:"error",
-            message:"账号或密码错误",
-            showClose: true,
-          })
-        }
-      }).catch((err) => {
-        ElMessage({
-            type:"error",
-            message:"服务器错误，请重试",
-            showClose: true,
-          })
+      store.dispatch('login', ruleForm).then(() => {
+        router.go(-1)
+      }).catch(error => {
+        ElMessage.error(error)
       })
     } else {
       return false

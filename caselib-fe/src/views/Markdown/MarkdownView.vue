@@ -129,14 +129,12 @@ import type { ICaseParam } from '@/type/case'
 import type { ITagVo} from '@/type/tag'
 import type { IFileVo } from '@/type/file'
 import { useRouter, useRoute } from 'vue-router'
-import { useStore } from 'vuex';
-import { key } from '@/store'
-import { DeleteFilled } from '@element-plus/icons-vue'
+import { useStore } from '@/store'
 const router = useRouter()
 // 初始化内容
 const activeNames = ref(['1','2','3'])
 // 获取store
-const store = useStore(key);
+const store = useStore();
 const route = useRoute();
 var timer: number
 var caseParam = ref<ICaseParam>({
@@ -256,7 +254,7 @@ var optionList = ref<ITagVo[]>([])
 const reloadTag = (prefix: String) => {
   if (!optionList.value || optionList.value.length === 0){
     getTagListByPrefix(prefix).then((res) => {
-      if (res.msg === 'success'){
+      if (res.success){
         optionList.value = res.data
       }
     })
@@ -397,7 +395,7 @@ const reload = () => {
   // 后端获取接口
   if (caseParam.value.caseHeader.id !== undefined){
     getCaseParam(caseParam.value.caseHeader.id).then((res) => {
-      if (res.msg === 'success'){
+      if (res.success){
         caseParam.value = res.data
         if (caseParam.value.caseBodyVoLatest.appendixList !== null){
           // 将附件加入
@@ -440,7 +438,7 @@ const handleSave = (op: String) => {
   caseParam.value.caseBodyVoLatest.appendixList = appendixList
   // 后端提交接口
   submitCaseParam(caseParam.value).then((res) => {
-    if (res.msg === 'success'){
+    if (res.success){
       console.log(res.data);
       ElMessage.success(op + "成功")
       if (op === "提交"){

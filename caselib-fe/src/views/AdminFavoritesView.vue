@@ -185,7 +185,7 @@ const handleUpdate = (formEl: FormInstance | undefined) => {
   formEl.validate((valid) => {
       if (valid) {
           updateFavorites(form.value).then(res=>{
-              if(res.msg === 'success'){
+              if (res.success){
                   ElMessage({
                       type:"success",
                       message:"修改权限成功"
@@ -230,7 +230,7 @@ const handleStatusEdit = (favoritesForm: IFavorites) => {
   }
   // 更新操作
   updateFavorites(form.value).then(res=>{
-      if(res.msg === 'success'){
+      if (res.success){
           ElMessage({
               type:"success",
               message:"更新状态成功"

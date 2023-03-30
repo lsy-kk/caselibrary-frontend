@@ -77,8 +77,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import { useStore } from 'vuex'
-import { key } from '@/store'
+import { useStore } from '@/store'
 import type { ICommentVo, IComment } from '@/type/comment'
 import { insertComment } from '@/request/api/comment';
 import { ChatSquare} from '@element-plus/icons-vue'; 
@@ -98,7 +97,7 @@ onMounted(() => {
 const emit = defineEmits<{
   (e: 'clickReplyReload', index: number, commentVo: ICommentVo): void
 }>()
-const store = useStore(key)
+const store = useStore()
 const replyInputShow = ref(false)
 const replyComment = ref<IComment>({
     content: "",
@@ -117,7 +116,7 @@ const handleReply = () => {
 const handleSubmitComment = () => {
   replyComment.value.caseId = props.caseId
   insertComment(replyComment.value).then((res) => {
-    if (res.msg === "success"){
+    if (res.success){
       ElMessage.success("评论成功");
       // 二级评论，传递给父组件
       emit('clickReplyReload', props.index, res.data)

@@ -27,7 +27,7 @@ export const userModule: Module<ICaseBodyState, IState> = {
         getUserByToken({commit}){
             return new Promise((resolve, reject) => {
                 getUserByToken(getToken()).then((res) => { 
-                    if (res.msg == 'success'){
+                    if (res.success){
                         // 保存用户信息
                         commit('setContent', res.data.content)
                         resolve('success')
