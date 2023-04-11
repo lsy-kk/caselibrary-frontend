@@ -1,5 +1,5 @@
 <template>
-  <div class="static flex">
+  <div class="static flex w-full">
     <div class="static w-1/6">
       
     </div>
@@ -32,6 +32,7 @@
               :fetch-suggestions="querySearch"
               placeholder="输入关键字搜索......"
               @select="handleSelect"
+              @keyup.enter.native="handleSearch"
             />
         </div>
       </el-menu>
@@ -39,16 +40,18 @@
     <template v-else>
       <slot></slot>
     </template>
-
-
-    <div class="static w-1/6">
+    <div class="flex justify-end items-center flex-grow mr-8">
         <!--假若找不到权限，说明是游客用户-->
         <template v-if="store.state.authority === -1">
           <el-button type="primary" class="mt-4" @click="handleLogin">登录</el-button>
           <el-button type="primary" class="mt-4" @click="handleRegister">注册</el-button>
         </template>
         <template v-else>
-          <!--已登录-下拉菜单-->
+          <div class="">
+          <!--已登录-通知按钮和下拉菜单-->
+          <el-button class="mt-4 mr-4" @click="handleNotification">
+            <el-icon><Notification /></el-icon>
+          </el-button>
           <el-dropdown class="mt-2" @command="handleCommand">
             <div>
               <el-avatar
@@ -86,6 +89,7 @@
               </el-dropdown-menu>
             </template>
           </el-dropdown>
+        </div>
         </template>
 
     </div>
@@ -95,6 +99,7 @@
 <script setup lang="ts">
 import { useStore } from '@/store'
 import { Edit, Notification } from '@element-plus/icons-vue';
+import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 // 组件参数
 const props = defineProps<{
@@ -108,6 +113,21 @@ const props = defineProps<{
 const store = useStore()
 // 获取router
 const router = useRouter()
+const querySearch = () => {
+
+}
+const handleSelect = () => {
+
+}
+const keyword = ref('')
+// 搜索
+const handleSearch = () => {
+  router.push({path:`/search/${keyword.value}`})
+}
+// 通知系统
+const handleNotification = () => {
+  router.push({path:`/notification/${store.state.id}`})
+}
 const handleLogin = () => {
   router.push('/login')
 }
@@ -128,9 +148,8 @@ const handleCommand = (command: string) => {
       router.push('/hot')
     })
   }
-  
-  
 }
+
 </script>
 
 <style scoped>
