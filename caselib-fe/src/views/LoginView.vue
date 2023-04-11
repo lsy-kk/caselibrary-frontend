@@ -1,5 +1,7 @@
 <template>
-    <div class="login-box">
+    <div 
+        class="w-full h-full fixed min-h-full p-1 text-center"
+        :style="{backgroundImage:'url('+bgImg+')', backgroundSize: '100% 100%'}">
         <el-form
             ref="ruleFormRef"
             :model="ruleForm"
@@ -57,19 +59,20 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, ref } from 'vue'
+import { reactive, ref} from 'vue'
 import { ElMessage, type FormInstance } from 'element-plus'
 import { useStore } from '@/store'
 import { useRouter } from 'vue-router';
 import type { ILoginForm } from '@/type/login';
+import bgImg from '@/assets/background/red-bg.png'
+const store = useStore()
+const router = useRouter()
 const ruleFormRef = ref<FormInstance>()
 // 初始化表单
 const ruleForm:ILoginForm = reactive({
   email: '',
   password: '',
 })
-const store = useStore()
-const router = useRouter()
 // 校验输入
 const rules = reactive({
   email: [
@@ -117,14 +120,4 @@ const handleRegister = () => {
 
 <!--lang='scss'，使用css预处理器scss-->
 <style lang="scss" scoped>
-    .login-box{
-        width: 100%;
-        height: 100%;
-        min-height: 100vh; //base.css中有了
-        background: url("../assets/bg.jpg");
-        background-size: 100%;
-        opacity: 0.8;
-        padding: 1px;
-        text-align: center;
-    }
 </style>
