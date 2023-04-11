@@ -146,8 +146,9 @@ const router = createRouter({
 router.beforeEach((to, from, next) => {
   // 前端已登录
   if (getToken()) {
-    console.log(store);
-    console.log(getToken());
+    if (to.path === '/login' || to.path==='/register') {
+      next({path: '/'})
+    }
     // 找不到用户信息，则根据token从后端接口获取
     if (store.state.id === -1) {
       store.dispatch('getUserByToken').then(() => { 
