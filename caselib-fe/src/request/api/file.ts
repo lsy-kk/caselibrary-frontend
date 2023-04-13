@@ -4,7 +4,7 @@ import type { ICaseBodyVo } from "@/type/case";
 
 // 另一种，用来传输文件
 const serviceFile = axios.create({
-    baseURL: "http://kkysl.free.svipss.top",
+    baseURL: import.meta.env.VITE_BASE_URL,
     timeout: 5000,
     headers:{
         "Content-Type": "multipart/form-data;charset=utf-8"

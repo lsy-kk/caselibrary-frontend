@@ -46,7 +46,7 @@
         <!--展示已上传的附件-->
         <!--上传附件，手动上传-->
         <el-upload
-          action="http://kkysl.free.svipss.top/file/uploadFile"
+          :action="url"
           multiple
           v-model:file-list = "fileList"
           :before-upload="beforeUpload"
@@ -70,7 +70,7 @@
         <el-col>
           <el-upload
             ref="upload"
-            action=""
+            action="url"
             :before-upload="beforeUploadMd"
             :limit="1"
             :show-file-list="false"
@@ -133,6 +133,7 @@ import { useStore } from '@/store'
 const router = useRouter()
 // 初始化内容
 const activeNames = ref(['1','2','3'])
+const url = import.meta.env.VITE_BASE_URL + "/file/uploadFile"
 // 获取store
 const store = useStore();
 const route = useRoute();

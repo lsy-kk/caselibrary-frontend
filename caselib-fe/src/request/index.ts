@@ -1,11 +1,10 @@
 import axios from 'axios'
-import { useStore } from '@/store'
-import {getToken} from '@/request/api/token'
-import { ElMain, ElMessage } from 'element-plus'
+import { store } from '@/store'
+import { ElMessage } from 'element-plus'
 
 // 创建axios实例
 const service = axios.create({
-    baseURL: "http://kkysl.free.svipss.top",
+    baseURL: import.meta.env.VITE_BASE_URL,
     timeout: 5000,
     headers:{
         "Content-Type": "application/json;charset=utf-8"
@@ -22,7 +21,6 @@ service.interceptors.request.use((config)=>{
 // 响应拦截
 service.interceptors.response.use((res)=>{
     //全局统一处理 Session超时
-    const store = useStore()
     if (res.headers['session_time_out'] == 'timeout') {
         store.dispatch('logout')
     }
