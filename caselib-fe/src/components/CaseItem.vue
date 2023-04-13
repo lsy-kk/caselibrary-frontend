@@ -4,30 +4,30 @@
       :body-style="{ padding: '16px' }"
       shadow="hover">
       <div class="pb-4">
-
-        <a @click="handleViewCase(id)" class="font-semibold text-base" v-html="title"></a>
+        <a @click="handleViewCase(caseVo.id)" 
+          class="font-semibold text-base" 
+          v-html="caseVo.title">
+        </a>
         <span class="float-right pl-4 text-xs text-gray-400">
-          <el-icon><Comment /></el-icon>&nbsp;{{comment}}
+          <el-icon><Comment /></el-icon>&nbsp;{{caseVo.comment}}
         </span>
         <span class="float-right pl-4 text-xs text-gray-400">
-          <el-icon><View /></el-icon>&nbsp;{{viewtimes}}
+          <el-icon><View /></el-icon>&nbsp;{{caseVo.viewtimes}}
         </span>
       </div>
 
       <div class="text-sm mb-4 break-all">
-        <a v-html="summary"></a>
+        <a v-html="caseVo.summary"></a>
       </div> 
 
       <div>
         <span class="text-sm pr-4 text-gray-400">
-          <el-icon><User /></el-icon>&nbsp;{{author.username}}
+          <el-icon><User /></el-icon>&nbsp;{{caseVo.author.username}}
         </span>
 
         <el-tag 
-          v-for="t in tags" 
+          v-for="t in caseVo.tags" 
           :key="t.id" 
-          size="mini" 
-          type="primary" 
           round 
           plain
           class="mr-2">
@@ -35,7 +35,7 @@
         </el-tag>
 
         <span class="float-right pl-4 text-xs text-gray-400">
-          <el-icon><Stopwatch /></el-icon>&nbsp;{{createTime}}
+          <el-icon><Stopwatch /></el-icon>&nbsp;{{caseVo.createTime}}
         </span>
       </div>
     </el-card>
@@ -43,25 +43,10 @@
 
 <script setup lang="ts">
 import { useRouter } from 'vue-router';
-import type { ICaseBodyVo} from '@/type/case';
-import type { IUserVo } from '@/type/user';
-import type { ICommentVo } from '@/type/comment';
-import type { ITagVo } from "@/type/tag";
+import type { ICaseHeaderVo } from '@/type/case';
 import { Comment, View, User, Stopwatch} from '@element-plus/icons-vue'; 
-defineProps<{
-  id: number,
-  title: string,
-  summary: string,
-  thumb: number,
-  viewtimes: number, 
-  comment: number,
-  visible: number,
-  createTime: string,
-  updateTime: string,
-  caseBody: ICaseBodyVo,
-  author: IUserVo,
-  tags: Array<ITagVo>,
-  comments: Array<ICommentVo>,
+const props = defineProps<{
+  caseVo: ICaseHeaderVo
 }>()
 const router = useRouter()
 // 跳转到案例内容页面
