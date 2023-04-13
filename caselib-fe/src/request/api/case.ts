@@ -1,5 +1,22 @@
 import type { ICaseHeader, ISelectCase, ICaseParam } from "@/type/case";
 import service from "..";
+// 根据条件，获取案例列表（管理员）
+export function getCaseList(data: ISelectCase){
+    return service({
+        url: "/case/getCaseList", 
+        method: "get",
+        params: {
+            page: data.page,
+            pageSize: data.pageSize,
+            id: data.id,
+            authorId: data.authorId,
+            visible: data.visible,
+            state: data.state,
+            status: data.status
+        }
+    })
+}
+
 // 根据条件，获取案例列表
 export function getCaseVoList(data: ISelectCase){
     return service({
@@ -12,7 +29,6 @@ export function getCaseVoList(data: ISelectCase){
             authorId: data.authorId,
             visible: data.visible,
             state: data.state,
-            status: data.status,
         }
     })
 }

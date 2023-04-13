@@ -73,7 +73,7 @@ export interface ISelectCase{
     // 页面大小
     pageSize: number,
 }
-export class CaseData{
+export class CaseVoData{
     selectData: ISelectCase={
         page: 1,
         pageSize: 10,
@@ -82,4 +82,14 @@ export class CaseData{
     pageCount: number = 0;
     // 案例列表
     list: ICaseHeaderVo[]=[]
+}
+export class CaseData{
+    selectData: ISelectCase={
+        page: 1,
+        pageSize: 10,
+    }
+    // 总页码
+    pageCount: number = 0;
+    // 案例列表
+    list: ICaseHeader[]=[]
 }
