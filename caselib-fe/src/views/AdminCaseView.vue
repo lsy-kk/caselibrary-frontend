@@ -56,11 +56,11 @@
                   <span v-if="scope.row.state === 1">已发布</span>
               </template>
           </el-table-column>
-          <el-table-column prop="createTime" label="创建时间" sortable show-overflow-tooltip width="150px"/>
-          <el-table-column prop="updateTime" label="更新时间" sortable show-overflow-tooltip width="150px"/>
-          <el-table-column label="操作" fixed="right" width="300px">
+          <el-table-column prop="createTime" label="创建时间" sortable show-overflow-tooltip/>
+          <el-table-column prop="updateTime" label="更新时间" sortable show-overflow-tooltip/>
+          <el-table-column label="操作" fixed="right" width="200px">
               <template #default="scope">
-                  <el-button size="default" @click="handleShowCase(scope.row)">查看内容</el-button>
+                  <el-button size="default" @click="handleShowCase(scope.row)">查看详情</el-button>
                   <el-button v-if="scope.row.status === 1" size="default" @click="handleStatusEdit(scope.row)" color="green">启用中</el-button>
                   <el-button v-if="scope.row.status === 0" size="default" @click="handleStatusEdit(scope.row)" color="red">禁用中</el-button>
               </template>
@@ -132,13 +132,7 @@ const handleShowCase = (caseForm: ICaseHeader) => {
 }
 // 用于存放对话框中的表单数据
 // 注意,不能直接给form赋值,会使得其失去响应式
-var form = ref<ICaseHeader>({
-    title: "",
-    summary: "",
-    authorId: 0,
-    state: 0,
-    visible: 0,
-})
+var form = ref<ICaseHeader>({})
 // 点击"禁用"或是"启用"按钮,更新案例状态信息
 const handleStatusEdit = (caseForm: ICaseHeader) => {
     // 深拷贝

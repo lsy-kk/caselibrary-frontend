@@ -65,3 +65,14 @@ export function getUserById(id: number){
         }
     })
 }
+
+// 根据id获取用户信息vo()
+export function getUserVoById(id: number){
+    return service({
+        url: "/user/getUserVoById", 
+        method: "get",
+        params: {
+            id: id
+        }
+    })
+}

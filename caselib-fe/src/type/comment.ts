@@ -21,21 +21,22 @@ export interface ICommentVo{
     createTime: string,
     updateTime: string,
 }
-export interface ISelectData{
+export interface ISelectComment{
     // 搜索信息，非必要
     id?: number,
+    authorId?: number,
+    caseId?: number,
+    status?: number,
     // 当前页码
     page: number,
     // 页面大小
     pageSize: number,
 }
-export class InitComment{
-    selectData: ISelectData={
+export class CommentData{
+    selectData: ISelectComment={
         // 页码信息
         page: 1,
         pageSize: 10,
-        // 搜索信息,设置为可选
-        id: undefined,
     }
     // 总页码
     pageCount: number = 0;

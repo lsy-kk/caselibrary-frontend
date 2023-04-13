@@ -4,14 +4,14 @@ import service from "..";
 // 获取收藏夹列表
 export function getFavoritesList(data: ISelectFavorites){
     return service({
-        url: "/favorites/getList", 
+        url: "/favorites/getFavoritesList", 
         method: "get",
         params: {
             page: data.page,
             pageSize: data.pageSize,
             ownerId: data.ownerId,
             id: data.id,
-            name: data.name
+            status: data.status,
         }
     })
 }

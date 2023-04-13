@@ -14,7 +14,7 @@ export interface ISelectFavorites{
     // 搜索信息（所有人id，收藏夹id，收藏夹名称）
     ownerId?: number,
     id?: number,
-    name?: string,
+    status?: number,
     // 当前页码
     page: number,
     // 页面大小
@@ -22,9 +22,6 @@ export interface ISelectFavorites{
 }
 export class FavoritesData{
     selectData: ISelectFavorites={
-        ownerId: undefined,
-        id: undefined,
-        name: undefined,
         page: 1,
         pageSize: 10,
     }

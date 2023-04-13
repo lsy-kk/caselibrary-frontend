@@ -33,8 +33,8 @@
         <!--border 边框 stripe 斑马纹 sortable 代表排序-->
         <el-table :data="data.list" border stripe style="width: 100%">
             <el-table-column fixed prop="id" label="用户ID" sortable width="100px"/>
-            <el-table-column prop="email" label="邮箱" sortable width="200px"/>
-            <el-table-column prop="username" label="名称" sortable width="200px"/>
+            <el-table-column prop="email" label="邮箱" sortable width="200px" show-overflow-tooltip/>
+            <el-table-column prop="username" label="名称" sortable width="200px" show-overflow-tooltip/>
             <el-table-column prop="authority" label="权限" sortable width="80px">
                 <template #default="scope">
                     <span v-if="scope.row.authority === 0">管理员</span>

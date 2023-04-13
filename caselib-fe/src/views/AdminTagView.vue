@@ -22,9 +22,9 @@
       <!--border 边框 stripe 斑马纹 sortable 代表排序-->
       <el-table :data="data.list" border stripe style="width: 100%">
           <el-table-column fixed prop="id" label="标签ID" sortable width="100px"/>
-          <el-table-column prop="name" label="名称" sortable width="150px"/>
-          <el-table-column prop="description" label="描述" sortable width="300px"/>
-          <el-table-column prop="image" label="图像" sortable width="200px"/>
+          <el-table-column prop="name" label="名称" sortable width="150px" show-overflow-tooltip/>
+          <el-table-column prop="description" label="描述" sortable width="300px" show-overflow-tooltip/>
+          <el-table-column prop="image" label="图像" sortable width="200px" show-overflow-tooltip/>
           <el-table-column prop="status" label="状态" sortable width="80px">
               <template #default="scope">
                   <span v-if="scope.row.status === 0">禁用中</span>
@@ -77,7 +77,17 @@
                     <el-input v-model="form.description" style="width: 80%"> </el-input>
                 </el-form-item>
                 <el-form-item label="图像" prop="image">
-                    <el-input v-model="form.image" style="width: 80%"> </el-input>
+                    <el-upload
+                        class="avatar-uploader"
+                        :action="url"
+                        :show-file-list="false"
+                        :on-success="handleAvatarSuccess"
+                        :before-upload="beforeAvatarUpload"
+                    >
+                        <el-avatar v-if="form.image" 
+                            shape="square" :size="100" fit="fill" :src="form.image" />
+                        <el-icon v-else class="avatar-uploader-icon"><Plus /></el-icon>
+                    </el-upload>
                 </el-form-item>
               </el-form>
               <template #footer>
@@ -112,7 +122,20 @@
                     <el-input v-model="form.description" style="width: 80%"> </el-input>
                 </el-form-item>
                 <el-form-item label="图像" prop="image">
-                    <el-input v-model="form.image" style="width: 80%"> </el-input>
+                    <el-upload
+                        class="avatar-uploader"
+                        :action="url"
+                        :show-file-list="false"
+                        :limit="1"
+                        :on-success="handleAvatarSuccess"
+                        :before-upload="beforeAvatarUpload"
+                        :on-preview="handleAvatarPreview"
+                    >
+                        <el-avatar v-if="form.image" 
+                            shape="square" :size="100" fit="fill" :src="form.image" />
+                        <el-icon v-else><Plus /></el-icon>
+                        
+                    </el-upload>
                 </el-form-item>
               </el-form>
               <template #footer>
@@ -125,12 +148,17 @@
           </el-dialog>
       </div>
   </div>
+  <el-dialog v-model="dialogVisible">
+    <img w-full :src="dialogImageUrl" alt="Preview Image" />
+  </el-dialog>
 </template>
 
 <script setup lang="ts">
 import { ref, reactive, onMounted } from 'vue'
 import { ElMessage } from 'element-plus' 
 import type { FormInstance } from 'element-plus'
+import { Plus } from '@element-plus/icons-vue'
+import type { UploadProps, UploadUserFile, UploadFile } from 'element-plus'
 import { getTagList, updateTag, insertTag } from '@/request/api/tag';
 import {type ITag, TagData } from '@/type/tag'
 const data = reactive(new TagData())
@@ -177,13 +205,30 @@ const rules = reactive({
         message: "标签描述的字数应当在0~200字之间",
         trigger: 'blur'
     },],
-    image: [{
-        min: 0,
-        max: 200,
-        message: "图像地址超长，请重新输入",
-        trigger: 'blur'
-    },]
 })
+// 上传头像
+const url = import.meta.env.VITE_BASE_URL + "/file/uploadFile"
+// 附件列表
+const handleAvatarSuccess: UploadProps['onSuccess'] = (response, uploadFile) => {
+    form.value.image = URL.createObjectURL(uploadFile.raw!)
+}
+const beforeAvatarUpload: UploadProps['beforeUpload'] = (rawFile) => {
+  if (rawFile.type !== 'image/jpeg' && rawFile.type !== 'image/png') {
+    ElMessage.error('上传的图片格式应当为jpg或png，请重新提交。')
+    return false
+  } else if (rawFile.size / 1024 / 1024 > 2) {
+    ElMessage.error('图片大小不得超过2MB，请重新提交。')
+    return false
+  }
+  return true
+}
+const dialogImageUrl = ref('')
+const dialogVisible = ref(false)
+const handleAvatarPreview = (file: UploadFile) => {
+  dialogImageUrl.value = file.url!
+  dialogVisible.value = true
+}
+
 
 // 控制"新增"对话框的弹出
 var insertDialogVisible = ref(false)
@@ -194,24 +239,12 @@ const handleSave = (formEl: FormInstance | undefined) => {
   formEl.validate((valid) => {
       if (valid) {
           insertTag(form.value).then(res=>{
-              if(res.success){
-                  ElMessage({
-                      type:"success",
-                      message:"新增成功"
-                  })
-                  reload() // 刷新数据
-                  insertDialogVisible.value = false //关闭"新增"弹窗
-              }
-              else{
-                  ElMessage({
-                      type:"error",
-                      message:"新增失败"
-                  })
-              }
+            ElMessage.success("新增成功")
+            reload() // 刷新数据
+            insertDialogVisible.value = false //关闭"新增"弹窗
           }).catch((err) => {
               console.log(err)
           })
-          
       }
       else {
           return false
@@ -245,24 +278,12 @@ const handleUpdate = (formEl: FormInstance | undefined) => {
   formEl.validate((valid) => {
       if (valid) {
           updateTag(form.value).then(res=>{
-              if (res.success){
-                  ElMessage({
-                      type:"success",
-                      message:"修改权限成功"
-                  })
-                  reload() // 刷新数据
-                  editDialogVisible.value = false //关闭"修改信息"弹窗
-              }
-              else{
-                  ElMessage({
-                      type:"error",
-                      message:"修改权限失败"
-                  })
-              }
+            ElMessage.success("修改成功")
+            reload() // 刷新数据
+            editDialogVisible.value = false //关闭"修改信息"弹窗
           }).catch((err) => {
               console.log(err)
           })
-          
       }
       else {
           return false
@@ -290,19 +311,8 @@ const handleStatusEdit = (tagForm: ITag) => {
   }
   // 更新操作
   updateTag(form.value).then(res=>{
-      if (res.success){
-          ElMessage({
-              type:"success",
-              message:"更新状态成功"
-          })
-          reload() // 刷新数据
-      }
-      else{
-          ElMessage({
-              type:"error",
-              message:"更新状态失败"
-          })
-      }
+    ElMessage.success("更新状态成功")
+    reload() // 刷新数据
   }).catch((err) => {
       console.log(err)
   })
