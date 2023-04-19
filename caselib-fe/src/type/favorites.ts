@@ -1,4 +1,6 @@
-// 标签信息
+import { ICaseHeaderVo } from "./case";
+
+// 收藏夹
 export interface IFavorites{
     id?: number,
     name?: string,
@@ -7,8 +9,36 @@ export interface IFavorites{
     ownerId?: number,
     status?: number,
     visible?: number,
-    createTime?: string,
-    updateTime?: string,
+    createTime?: Date,
+    updateTime?: Date,
+}
+export interface IFavoritesVo{
+    id: number,
+    name: string,
+    description: string,
+    image: string,
+    ownerId: number,
+    visible: number,
+    caseList: ICaseHeaderVo[],
+    caseNumber: number,
+    favorites: boolean,
+    createTime: string,
+    updateTime: string,
+}
+// 收藏夹记录
+export interface IFavoritesInstance{
+    id?: number,
+    caseId?: number,
+    favoritesId?: number,
+    userId?: number,
+    status?: number,
+    createTime?: Date,
+    updateTime?: Date,
+}
+// 特定用户对特定案例的点赞和收藏情况
+export interface IUserAttitude{
+    favorites: boolean,
+    thumb: boolean,
 }
 export interface ISelectFavorites{
     // 搜索信息（所有人id，收藏夹id，收藏夹名称）

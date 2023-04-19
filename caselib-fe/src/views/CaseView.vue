@@ -61,8 +61,6 @@
               <el-tag 
                 v-for="t in caseHeader.tags" 
                 :key="t.id" 
-                size="mini" 
-                type="primary" 
                 round 
                 plain
                 class="mr-2">
@@ -106,19 +104,19 @@
           class="overflow-auto"
         />
         <!--操作部分-->
-        <div class="mt-8 flex-1 relative">
+        <div v-if = "store.state.id!=-1" class="mt-8 flex-1 relative">
           <el-button
             @click="handleThumb()"
             class="absolute bottom-0 right-20 mr-4"
             type="primary"
-            plain>
+            :plain="!userAttitude.thumb">
             <el-icon class="mr-1"><CaretTop /></el-icon>点赞
           </el-button>
           <el-button
             @click="dialogShow = true"
             class="absolute bottom-0 right-0"
             type="warning"
-            plain>
+            :plain="!userAttitude.favorites">
             <el-icon class="mr-1"><StarFilled /></el-icon>收藏
           </el-button>
         </div>
@@ -126,7 +124,8 @@
         <FavoritesDialog 
             :dialogShow="dialogShow" 
             @dialogClose="dialogClose"
-            @dialogSuccess="dialogSuccess">
+            @dialogSuccess="dialogSuccess"
+            @dialogDelete="dialogDelete">
         </FavoritesDialog>
       </div>
     </div>
@@ -138,7 +137,7 @@
       </div>
       <div class="flex-1 bg-white">
         <!--评论提交-->
-        <div class="relative align-middle flex">
+        <div v-if = "store.state.id!=-1" class="relative align-middle flex">
           <el-avatar
             :size="80" 
             class="m-2" 
@@ -197,6 +196,9 @@ import { Comment, View, Edit, ChatSquare, CaretTop, StarFilled, Plus} from '@ele
 import router from '@/router'
 import { insertComment } from '@/request/api/comment';
 import { ElMessage } from 'element-plus';
+import { IUserAttitude } from '@/type/favorites';
+import { getUserAttitudeVo } from '@/request/api/favorites'
+import { insertThumb, deleteThumb } from '@/request/api/thumb';
 const store = useStore()
 const route = useRoute()
 const caseHeader = ref<ICaseHeaderVo>({
@@ -233,16 +235,24 @@ const comment = ref<IComment>({
     authorId: store.state.id,
     parentId: 0,
 })
+// 用户的点赞、收藏情况
+const userAttitude = ref<IUserAttitude>({
+    favorites: false,
+    thumb: false,
+})
 onMounted(() => {
   reload()
 })
 const reload = () => {
   caseHeader.value.id = Number(route.params.id)
   getCaseHeaderVo(caseHeader.value.id, true, true).then((res) => {
-      if (res.success){
-          caseHeader.value = res.data
-      }
+      caseHeader.value = res.data
   })
+  if (store.state.id != -1){
+    getUserAttitudeVo(caseHeader.value.id, store.state.id).then((res) => {
+      userAttitude.value = res.data
+    })
+  }
 }
 const handleEdit = () => {
   router.push({
@@ -284,6 +294,17 @@ const getReply = (index: number, commentVo: ICommentVo) => {
 }
 // 点赞操作
 const handleThumb = () => {
+  if (userAttitude.value.thumb){
+    deleteThumb(caseHeader.value.id, store.state.id).then((res) => {
+      ElMessage.success('取消点赞成功')
+    })
+  }
+  else {
+    insertThumb(caseHeader.value.id, store.state.id).then((res) => {
+      ElMessage.success('点赞成功')
+    })
+  }
+  userAttitude.value.thumb = !userAttitude.value.thumb
   
 }
 // 控制收藏弹窗操作
@@ -292,9 +313,16 @@ const dialogClose = () =>{
   dialogShow.value = false
 }
 const dialogSuccess = () =>{
+  ElMessage.success('收藏成功')
+  userAttitude.value.favorites = true
   dialogShow.value = false
-  ElMessage.success("收藏成功")
 }
+const dialogDelete = () =>{
+  ElMessage.success('取消收藏成功')
+  userAttitude.value.favorites = false
+  dialogShow.value = false
+}
+
 </script>
 
 <style scoped>
