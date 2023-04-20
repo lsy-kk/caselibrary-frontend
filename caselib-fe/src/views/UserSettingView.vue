@@ -89,10 +89,7 @@ const reset = () => {
   }
 }
 const getImageUrl = (url: string) => {
-  form.value.image = url
-  console.log("url");
-  console.log(url);
-  
+  form.value.image = url  
 }
 const handlePasswordJump = () => {
   router.push({path:`/reset`})
@@ -114,7 +111,6 @@ const submitForm = (formEl: FormInstance | undefined) => {
   if (!formEl) return
   formEl.validate((valid) => {
     if (valid) {
-      console.log();
       updateUser(form.value).then((res) => {
         store.dispatch('reLogin')
         ElMessage.success("修改成功")
