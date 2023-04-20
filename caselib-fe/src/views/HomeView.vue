@@ -5,7 +5,7 @@
       <div class="px-0 h-60px flex-shrink-0
                   box-border overflow-auto relative 
                   ring-2 ring-gray-400 ring-opacity-50">
-          <BaseHeader :active-index="activeIndex" :showHeader=false />
+          <BaseHeader :showHeader=false />
       </div>
       <div class="h-[calc(100%-60px)] block flex-1
                   box-border overflow-auto bg-blue-100 ">

@@ -7,11 +7,14 @@
         <div v-if="!showHeader" class="static w-2/3">
             <el-menu 
                 menu-trigger="click" 
-                :default-active="activeIndex"
-                mode="horizontal">
-                <el-menu-item index="case" @click="handleJumpCase">案例</el-menu-item>
-                <el-menu-item index="favorites" @click="handleJumpFavorites">收藏</el-menu-item>
-                <el-menu-item index="setting" @click="handleJumpSetting">设置</el-menu-item>
+                :default-active="$route.path.substring($route.path.lastIndexOf('/')+1)"
+                mode="horizontal"
+                router>
+                <el-menu-item index="case" >案例</el-menu-item>
+                <el-menu-item index="favorites">收藏</el-menu-item>
+                <template v-if="route.params.id === String(store.state.id)">
+                    <el-menu-item index="setting">设置</el-menu-item>
+                </template>
             </el-menu>
         </div>
         <template v-else>
@@ -22,26 +25,19 @@
 
 <script setup lang="ts">
 import { useRoute, useRouter } from 'vue-router';
-import { key } from '@/store'
-import { ArrowDown, Edit, Notification } from '@element-plus/icons-vue';
+import { useStore } from '@/store'
+import { onMounted } from 'vue'
 // 组件参数
 const props = defineProps<{
-  // 当前默认选中页面
-  activeIndex: String,
   // 是否展示BaseHeader头部
   showHeader: Boolean,
 }>()
 const route = useRoute()
 const router = useRouter()
-const handleJumpCase=() => {
-    router.push({path:`/user/${route.params.id}/case`})
-}
-const handleJumpFavorites=() => {
-    router.push({path:`/user/${route.params.id}/favorites`})
-}
-const handleJumpSetting=() => {
-    router.push({path:`/user/${route.params.id}/setting`})
-}
+const store = useStore()
+onMounted(() => {
+    
+})
 </script>
 
 <style scoped>

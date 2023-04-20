@@ -11,6 +11,11 @@ const router = createRouter({
       component: () => import('../views/HomeView.vue'),
       children:[
         {
+          //在地址为空时，直接跳转hot路由
+          path:'',//默认缺省值
+          redirect:'/hot'
+        },
+        {
           // 首页，显示最热案例
           path:'/hot',
           component: () => import('../views/HotCaseView.vue')
@@ -29,7 +34,31 @@ const router = createRouter({
         {
           // 搜索结果页面，type为搜索类型，keyword为搜索关键字
           path:'/search/:keyword',
-          component: () => import('../views/SearchView.vue')
+          component: () => import('../views/SearchView.vue'),
+          children:[
+            {
+              path:'/search/:keyword',
+              redirect:{
+                name: 'searchCase',
+              }
+            },
+            {
+              // 关键字综合搜索
+              path:'/search/:keyword/case/:opt?',
+              name: 'searchCase',
+              component: () => import('../views/SearchCaseView.vue'),
+            },
+            {
+              // 标签（匹配优先）
+              path:'/search/:keyword/tag?',
+              component: () => import('../views/SearchTagView.vue'),
+            },
+            {
+              // 作者搜索（匹配优先）
+              path:'/search/:keyword/user?',
+              component: () => import('../views/SearchUserView.vue'),
+            }
+          ]
         },
         {
           // markdown编辑案例页面
@@ -50,8 +79,15 @@ const router = createRouter({
           component: () => import('../views/UserHomeView.vue'),
           children:[
             {
+              path:'/user/:id',
+              redirect:{
+                name: 'userCase',
+              }
+            },
+            {
               // 个人发布案例
               path:'/user/:id/case',
+              name: 'userCase',
               component: () => import('../views/UserCaseView.vue'),
             },
             {
@@ -74,6 +110,10 @@ const router = createRouter({
       name: 'admin',
       component: () => import('../views/AdminHomeView.vue'),
       children:[
+        {
+          path:'/admin',
+          redirect:'/admin/user'
+        },
         {
           path: '/admin/user',
           name: 'adminUser',
@@ -134,11 +174,27 @@ const router = createRouter({
       component: () => import('../views/RegisterView.vue')
     }, 
     {
+      // 更改密码
+      path: '/reset',
+      name: 'reset',
+      component: () => import('../views/ResetEmailOrPasswordView.vue')
+    }, 
+    {
       // 忘记密码页
       path: '/confirmpwd',
       name: 'confirmpwd',
-      component: () => import('../views/ConfirmPasswordView.vue')
+      component: () => import('../views/ResetEmailOrPasswordView.vue')
     }, 
+    // 兜底404页
+    {
+      name: 'notfound',
+      path: '/notfound',
+      component: () => import('@/views/NotFoundView.vue')
+    },
+    {
+      path: '/:pathMatch(.*)*',
+      redirect: '/notfound'
+    },
   ]
 })
 

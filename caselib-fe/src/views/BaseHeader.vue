@@ -7,7 +7,7 @@
       <el-menu 
         :router=true 
         menu-trigger="click" 
-        :default-active="activeIndex"
+        :default-active="$route.path"
         mode="horizontal">
         <el-menu-item index="/hot">首页</el-menu-item>
         <el-menu-item index="/tag">标签</el-menu-item>
@@ -25,22 +25,13 @@
           
         </template>
         <!--搜索框-->
-        <div class="mx-auto">
-            <el-autocomplete
-              v-model="keyword"
-              class="w-100 mt-4 border-2 border-gray-300 rounded-md"
-              :fetch-suggestions="querySearch"
-              placeholder="输入关键字搜索......"
-              @select="handleSelect"
-              @keyup.enter.native="handleSearch"
-            />
-        </div>
+        <SearchInput class="mx-auto"/>
       </el-menu>
     </div>
     <template v-else>
       <slot></slot>
     </template>
-    <div class="flex justify-end items-center flex-grow mr-8">
+    <div class="flex justify-end flex-grow mr-8">
         <!--假若找不到权限，说明是游客用户-->
         <template v-if="store.state.authority === -1">
           <el-button type="primary" class="mt-4" @click="handleLogin">登录</el-button>
@@ -64,7 +55,7 @@
                 <div class="relative">
                   <el-avatar
                     :size="80"
-                    class="block mr-4"
+                    class="block mx-4"
                     :src="store.state.image"/>
                     <div class="inline-block">
                       <div class="text-sm align-middle mr-4"> 
@@ -98,13 +89,12 @@
 
 <script setup lang="ts">
 import { useStore } from '@/store'
+import SearchInput from '@/components/SearchInput.vue'
 import { Edit, Notification } from '@element-plus/icons-vue';
 import { ref } from 'vue';
-import { useRouter } from 'vue-router';
+import { useRouter, useRoute } from 'vue-router';
 // 组件参数
 const props = defineProps<{
-  // 当前默认选中页面
-  activeIndex: String,
   // 是否展示BaseHeader头部
   showHeader: Boolean,
 }>()
@@ -113,16 +103,10 @@ const props = defineProps<{
 const store = useStore()
 // 获取router
 const router = useRouter()
-const querySearch = () => {
+const route = useRoute()
 
-}
 const handleSelect = () => {
 
-}
-const keyword = ref('')
-// 搜索
-const handleSearch = () => {
-  router.push({path:`/search/${keyword.value}`})
 }
 // 通知系统
 const handleNotification = () => {
@@ -137,15 +121,14 @@ const handleRegister = () => {
 const handleCommand = (command: string) => {
   console.log(`click on item ${command}`);
   if (command === 'center'){
-    router.push({path:`/user/${store.state.id}`})
+    router.push({path:`/user/${store.state.id}/case`})
   }
   else if (command === 'setting'){
     router.push({path:`/user/${store.state.id}/setting`})
   }
   else if (command === 'logout'){
     store.dispatch('logout').then(() => { 
-      // 登出并跳转到首页
-      router.push('/hot')
+      // 登出
     })
   }
 }

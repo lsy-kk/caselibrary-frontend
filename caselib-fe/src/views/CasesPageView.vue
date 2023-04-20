@@ -2,7 +2,11 @@
   <!--案例列表-->
   <div class="m-1 flex-1 box-border overflow-auto block">
       <!--案例列表主体-->
-      <CaseItem v-for="a in data.list" :key="a.id" v-bind="a" class="mb-4"/>
+      <CaseItem 
+        v-for="(item, index) in data.list" 
+        :key="index" 
+        :caseVo="item" 
+        class="mb-4"/>
 
       <div style="margin: 10px 0">
           <!--分页栏-->
@@ -24,8 +28,8 @@
 import { reactive, onMounted } from 'vue'
 import CaseItem from '@/components/CaseItem.vue' 
 import { getCaseVoList } from '@/request/api/case';
-import { CaseData } from '@/type/case';
-const data = reactive(new CaseData())
+import { CaseVoData } from '@/type/case';
+const data = reactive(new CaseVoData())
 // 生命周期函数
 onMounted(() => {
   reload()
