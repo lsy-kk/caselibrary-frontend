@@ -1,7 +1,7 @@
 <!--个人信息管理：表单-->
 <template>
     <div>
-      <div class="flex max-w-3xl mx-auto mt-28 p-12 rounded-2xl bg-white">
+      <div class="flex max-w-3xl mx-auto mt-8 p-12 rounded-2xl bg-white">
         <UploadImage :oldImageUrl="store.state.image"
           @imageUrl="getImageUrl" class="w-1/4"></UploadImage>
         <el-form 
