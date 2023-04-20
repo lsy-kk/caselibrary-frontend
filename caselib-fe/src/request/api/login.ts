@@ -12,7 +12,15 @@ export function login(data: ILoginForm){
 // 登出
 export function logout(){
     return service({
-        url: "/logout", 
+        url: "/login/logout", 
+        method: "get",
+    })
+}
+
+// 重新登陆
+export function reLogin(){
+    return service({
+        url: "/login/reLogin", 
         method: "get",
     })
 }
@@ -20,7 +28,7 @@ export function logout(){
 // 发送验证码
 export function sendEmailCode(data:ILoginForm){
     return service({
-        url: "/sendEmailCode",
+        url: "/login/sendEmailCode",
         method: "post",
         data,
     })
@@ -28,7 +36,7 @@ export function sendEmailCode(data:ILoginForm){
 // 通过邮件验证码登录
 export function loginByEmailCode(data:ILoginForm){
     return service({
-        url: "/loginByEmailCode", 
+        url: "/login/loginByEmailCode", 
         method: "post",
         data,
     })

@@ -2,7 +2,7 @@ import { createStore, useStore as baseUseStore, Store } from 'vuex'
 import type { InjectionKey } from 'vue'
 import { userModule} from './modules/user'
 import type { IUserState } from './modules/user'
-import { login, logout, loginByEmailCode } from '@/request/api/login'
+import { login, logout, reLogin, loginByEmailCode } from '@/request/api/login'
 import { getUserByToken } from '@/request/api/user'
 import { getToken, setToken, removeToken } from '@/request/api/token'
 import userImg from '@/assets/image/user.png';
@@ -125,6 +125,35 @@ export const store = createStore<IState>({
                     }
                     else{
                         reject(res.msg)
+                    }
+                }).catch(error => {
+                    reject(error)
+                })
+            })
+        },
+        // 重新登录，刷新用户信息
+        reLogin({commit}) {
+            return new Promise((resolve, reject) => {
+                reLogin().then((res)=>{ 
+                    if (res.success){
+                        commit('setId', res.data.id)
+                        commit('setEmail', res.data.email)
+                        commit('setUsername', res.data.username)
+                        commit('setImage', res.data.image)
+                        commit('setAuthority', res.data.authority)
+                        commit('setToken', res.data.token)
+                        resolve(res.msg)
+                    }
+                    else{
+                        // token过期，登出
+                        commit('setId', -1)
+                        commit('setEmail', '')
+                        commit('setUsername', '')
+                        commit('setImage', userImg)
+                        commit('setAuthority', -1)
+                        commit('setToken', '')
+                        removeToken()
+                        resolve(res.msg)
                     }
                 }).catch(error => {
                     reject(error)

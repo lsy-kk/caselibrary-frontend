@@ -27,7 +27,7 @@ service.interceptors.response.use((res)=>{
     if (res.status != 200){
         return Promise.reject();
     }
-    if (res.data.code === '00000'){
+    if (res.data.success){
         return res.data
     }
     ElMessage.error(res.data.msg)
