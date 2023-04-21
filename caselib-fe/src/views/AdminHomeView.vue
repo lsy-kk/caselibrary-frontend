@@ -4,12 +4,12 @@
         <el-container class="w-screen h-screen">
             <!--管理员后台管理系统：头部导航栏-->
             <el-header class="ring-2 ring-gray-400 ring-opacity-50">
-                <BaseHeader :active-index="activeIndexHeader" :showHeader=false />
+                <BaseHeader :showHeader=false />
             </el-header>
             <el-container class="bg-blue-100">
                 <!--管理员后台管理系统：侧边导航栏-->
                 <el-aside>
-                    <AdminAsideView :activeIndex="activeIndexAside" />
+                    <AdminAsideView />
                 </el-aside>
                 <el-main>
                     <!--路由出口-->

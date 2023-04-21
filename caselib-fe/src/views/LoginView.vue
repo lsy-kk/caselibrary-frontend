@@ -99,7 +99,7 @@ const submitForm = (formEl: FormInstance | undefined) => {
       store.dispatch('login', ruleForm).then(() => {
         router.go(-1)
       }).catch(error => {
-        ElMessage.error(error)
+        //ElMessage.error(error)
       })
     } else {
       return false

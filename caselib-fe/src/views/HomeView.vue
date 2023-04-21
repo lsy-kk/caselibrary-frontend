@@ -23,12 +23,4 @@ var activeIndex:String = '/hot'
 
 
 <style>
-
-.el-aside {
-  width: 180px;
-  min-height: calc(100vh - 60px);
-}
-.el-main {
-    height: calc(100vh - 60px);
-}
 </style>

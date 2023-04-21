@@ -8,19 +8,11 @@
         </template>
         <el-menu
             :collapse="isCollapse"
-            default-active="activeIndex"
+            :default-active="$route.path"
             @open="handleOpen"
             @close="handleClose"
             router
         >
-            <!--动态路由模式-->
-            <!--
-            <el-menu-item :index="item.path" v-for="item in list" :key="item.path">
-                <span>{{ item.meta.title }}</span>
-            </el-menu-item>
-            -->
-            <!--router开启路由模式，根据index（路径）进行页面的跳转-->
-
             <el-menu-item index="/admin/user">
                 <el-icon><UserFilled /></el-icon>
                 <span>用户管理</span>
@@ -61,15 +53,8 @@ import {
 DArrowRight,
 } from '@element-plus/icons-vue'
 import { ref } from 'vue';
-// import { useRouter } from 'vue-router';
-// 动态路由模式
-// const router = useRouter();
-// const list = router.getRoutes().filter(v=>v.meta.isShow)
-// console.log(list)
-const props = defineProps<{
-  // 当前默认选中页面
-  activeIndex: String,
-}>()
+import { useRoute } from 'vue-router';
+const route = useRoute();
 const isCollapse = ref(false)
 
 const handleOpen = (key: string, keyPath: string[]) => {
