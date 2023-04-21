@@ -1,4 +1,5 @@
 import { ICaseHeaderVo } from "./case";
+import { IUserVo } from "./user";
 
 // 收藏夹
 export interface IFavorites{
@@ -17,7 +18,7 @@ export interface IFavoritesVo{
     name: string,
     description: string,
     image: string,
-    ownerId: number,
+    owner: IUserVo,
     visible: number,
     caseList: ICaseHeaderVo[],
     caseNumber: number,

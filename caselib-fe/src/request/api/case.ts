@@ -57,6 +57,18 @@ export function getOtherAuthorList(page: Number, pageSize: Number, userid: Numbe
     })
 }
 
+// 获取收藏夹内案例列表
+export function getCaseByFavoritesId(page: Number, pageSize: Number, id: number){
+    return service({
+        url: "/case/getCasesByFavoritesId", 
+        method: "get",
+        params:{
+            page: page,
+            pageSize: pageSize,
+            favoritesId: id,
+        }
+    })
+}
 
 // 更新信息
 export function updateCase(data: ICaseHeader){
