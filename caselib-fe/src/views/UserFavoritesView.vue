@@ -33,7 +33,6 @@ const router = useRouter()
 const userId = Number(route.params.id)
 const choosenFavoritesVo = ref()
 const favoritesVoList = ref()
-const isChoosen = ref(false)
 onMounted(() => {
     getChoosenFavoritesVoByRoute()
     getFavoritesVoList()
@@ -49,18 +48,16 @@ const getChoosenFavoritesVoByRoute = () => {
     if (route.query.fid){
         getFavoritesVoById(Number(route.query.fid)).then((res) => {
             choosenFavoritesVo.value = res.data
-            isChoosen.value = true
         })
     }
 }
-// 将新增的收藏夹插入队尾
+// 将新增的收藏夹插入队尾，选中收藏夹改为新建的收藏夹
 const getNewFavoritesVo = (favoritesVo: IFavoritesVo) => {
     favoritesVoList.value.push(favoritesVo)
 }
 // 获取选中的收藏夹vo
 const getChoosenFavoritesVo = (favoritesVo: IFavoritesVo) =>{
     choosenFavoritesVo.value = favoritesVo
-    isChoosen.value = true
 }
 // 删除选中收藏夹
 const getDelete = () => {

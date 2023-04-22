@@ -45,7 +45,7 @@ onMounted(() => {
     if (route.query.fid){
         fid.value = String(route.query.fid)
     }
-    else {
+    else if (props.favoritesVoList && props.favoritesVoList.length>0){
         fid.value = String(props.favoritesVoList[0].id)
         if (props.favoritesVoList[0]){
             handleChange(props.favoritesVoList[0])
@@ -64,6 +64,7 @@ const sendNewFavoritesVo = (newFavoritesVo: IFavoritesVo) =>{
   dialogShow.value = false
   ElMessage.success("收藏夹新建成功")
   emit('sendNewFavoritesVo', newFavoritesVo);
+  handleChange(newFavoritesVo)
 }
 // 打开插入收藏夹对话框
 const handleInsert = () => {

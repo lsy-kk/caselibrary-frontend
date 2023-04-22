@@ -26,26 +26,28 @@
                         创建时间：&nbsp;{{favoritesVo.createTime}}
                     </div>
                 </div>
-                <el-popconfirm 
-                    width="220"
-                    confirm-button-text="确认"
-                    cancel-button-text="取消"
-                    :icon="InfoFilled"
-                    icon-color="#626AEF"
-                    title="确定要删除该收藏夹吗?"
-                    @confirm="handleDelete">
-                    <template #reference>
-                        <el-button
-                            class="absolute top-0 right-20 mr-4"
-                            type="danger" size="small" plain>删除
-                        </el-button>
-                    </template>
-                </el-popconfirm>
-                <el-button
-                    @click="dialogShow=true"
-                    class="absolute top-0 right-0"
-                    type="primary" size="small" plain>修改信息
-                </el-button>
+                <div v-if="favoritesVo.owner.id === store.state.id">
+                    <el-popconfirm 
+                        width="220"
+                        confirm-button-text="确认"
+                        cancel-button-text="取消"
+                        :icon="InfoFilled"
+                        icon-color="#626AEF"
+                        title="确定要删除该收藏夹吗?"
+                        @confirm="handleDelete">
+                        <template #reference>
+                            <el-button
+                                class="absolute top-0 right-20 mr-4"
+                                type="danger" size="small" plain>删除
+                            </el-button>
+                        </template>
+                    </el-popconfirm>
+                    <el-button
+                        @click="dialogShow=true"
+                        class="absolute top-0 right-0"
+                        type="primary" size="small" plain>修改信息
+                    </el-button>
+                </div>
                 <FavoritesDetailDialog
                     :favoritesVo="favoritesVo"
                     :key="dialogShow" 
@@ -91,9 +93,11 @@ import { CaseVoData } from '@/type/case';
 import { ref, reactive, onMounted } from 'vue';
 import { InfoFilled } from '@element-plus/icons-vue'
 import { useRoute, useRouter } from 'vue-router';
+import { useStore } from '@/store';
 const route = useRoute()
 const data = reactive(new CaseVoData())
 const dialogShow = ref(false)
+const store = useStore()
 const props = defineProps<{
   favoritesVo: IFavoritesVo
 }>()
