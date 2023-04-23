@@ -22,7 +22,7 @@ export interface IFavoritesVo{
     visible: number,
     caseList: ICaseHeaderVo[],
     caseNumber: number,
-    favorites: boolean,
+    favorites: number,
     createTime: string,
     updateTime: string,
 }
