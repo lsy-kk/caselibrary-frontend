@@ -3,16 +3,22 @@
     <el-card 
       :body-style="{ padding: '16px' }"
       shadow="hover">
-      <div class="pb-4">
+      <div class="relative pb-4">
         <a @click="handleViewCase(caseVo.id)" 
           class="font-semibold text-base" 
           v-html="caseVo.title">
         </a>
-        <span class="float-right pl-4 text-xs text-gray-400">
+        <span class="absolute right-24 pl-4 text-xs text-gray-400">
+          <el-icon><View /></el-icon>&nbsp;{{caseVo.viewtimes}}
+        </span>
+        <span class="absolute right-16 pl-4 text-xs text-gray-400">
           <el-icon><Comment /></el-icon>&nbsp;{{caseVo.comment}}
         </span>
-        <span class="float-right pl-4 text-xs text-gray-400">
-          <el-icon><View /></el-icon>&nbsp;{{caseVo.viewtimes}}
+        <span class="absolute right-8 pl-4 text-xs text-gray-400">
+          <el-icon><CaretTop /></el-icon>&nbsp;{{caseVo.thumb}}
+        </span>
+        <span class="absolute right-0 pl-4 text-xs text-gray-400">
+          <el-icon><StarFilled /></el-icon>&nbsp;{{caseVo.thumb}}
         </span>
       </div>
 
@@ -44,7 +50,7 @@
 <script setup lang="ts">
 import { useRouter } from 'vue-router';
 import type { ICaseHeaderVo } from '@/type/case';
-import { Comment, View, User, Stopwatch} from '@element-plus/icons-vue'; 
+import { Comment, View, User, Stopwatch, CaretTop, StarFilled} from '@element-plus/icons-vue'; 
 const props = defineProps<{
   caseVo: ICaseHeaderVo
 }>()

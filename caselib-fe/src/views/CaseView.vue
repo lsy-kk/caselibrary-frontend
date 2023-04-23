@@ -29,6 +29,12 @@
               <span class="ml-4">
                 <el-icon class="mr-1"><Comment /></el-icon>评论   {{caseHeader.comment}}
               </span>
+              <span class="ml-4">
+                <el-icon class="mr-1"><CaretTop /></el-icon>点赞   {{caseHeader.thumb}}
+              </span>
+              <span class="ml-4">
+                <el-icon class="mr-1"><StarFilled /></el-icon>点赞   {{caseHeader.thumb}}
+              </span>
             </div>
             <!--发布更新时间-->
             <div class="text-xs text-gray-400 mb-1">
@@ -109,6 +115,7 @@
             @click="handleThumb()"
             class="absolute bottom-0 right-20 mr-4"
             type="primary"
+            :key="userAttitude.thumb"
             :plain="!userAttitude.thumb">
             <el-icon class="mr-1"><CaretTop /></el-icon>点赞
           </el-button>
@@ -116,6 +123,7 @@
             @click="dialogShow = true"
             class="absolute bottom-0 right-0"
             type="warning"
+            :key="userAttitude.favorites"
             :plain="!userAttitude.favorites">
             <el-icon class="mr-1"><StarFilled /></el-icon>收藏
           </el-button>
