@@ -1,9 +1,6 @@
 <!--个人中心：头部栏-->
 <template>
     <div class="static flex bg-white">
-        <div class="static w-1/6 text-center my-auto">
-            你的名字
-        </div>
         <div v-if="!showHeader" class="static w-2/3">
             <el-menu 
                 menu-trigger="click" 

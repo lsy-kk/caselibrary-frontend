@@ -16,7 +16,12 @@
                 </span>
             </div>
             <div class="my-1">
-                <span class="text-sm pr-4 text-gray-400">
+                <span class="text-sm mr-8 text-gray-400">
+                    <span v-if="userVo.authority === 0">管理员</span>
+                    <span v-if="userVo.authority === 1">教师</span>
+                    <span v-if="userVo.authority === 2">学生</span>
+                </span>
+                <span class="text-sm text-gray-400">
                     {{userVo.caseNumber}}个内容
                 </span>
             </div>
