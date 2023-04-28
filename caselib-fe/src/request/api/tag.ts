@@ -37,6 +37,29 @@ export function getTagListByPrefix(prefix: String){
         }
     })
 }
+// 根据关键字，获取tagVo列表
+export function getSearchList(page: Number, pageSize: Number, keyword: string){
+    return service({
+        url: "/tag/getSearchList", 
+        method: "get",
+        params: {
+            page: page,
+            pageSize: pageSize,
+            keyword: keyword,
+        }
+    })
+}
+
+// 根据id，获取标签vo
+export function getTagVoById(tagId: number){
+    return service({
+        url: "/tag/getTagVoById", 
+        method: "get",
+        params: {
+            id: tagId
+        }
+    })
+}
 // 根据案例id，获取标签列表
 export function findTagVoByCaseId(caseId: number){
     return service({

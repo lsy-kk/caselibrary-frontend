@@ -16,7 +16,18 @@ export function getUserList(data:ISelectData){
         }
     })
 }
-
+// 根据关键字，获取userVo列表
+export function getSearchList(page: Number, pageSize: Number, keyword: string){
+    return service({
+        url: "/user/getSearchList", 
+        method: "get",
+        params: {
+            page: page,
+            pageSize: pageSize,
+            keyword: keyword,
+        }
+    })
+}
 // 更新用户信息（权限和状态）
 export function updateUser(data: IUser){
     return service({

@@ -86,7 +86,7 @@
 </template>
 
 <script setup lang="ts">
-import { getCaseByFavoritesId } from '@/request/api/case'
+import { getListByFavoritesId } from '@/request/api/case'
 import { IFavoritesVo } from '@/type/favorites';
 import { changeFavoritesStatus } from '@/request/api/favorites'
 import { CaseVoData } from '@/type/case';
@@ -106,7 +106,7 @@ onMounted(() => {
 })
 const reload = () => {
     if (props.favoritesVo.id !== -1){
-        getCaseByFavoritesId(data.selectData.page, data.selectData.pageSize, props.favoritesVo.id).then((res) => {
+        getListByFavoritesId(data.selectData.page, data.selectData.pageSize, props.favoritesVo.id).then((res) => {
             data.list = res.data.recordList
             data.pageCount = res.data.total
         })

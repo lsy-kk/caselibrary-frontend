@@ -5,8 +5,8 @@ export interface ITag{
     description?: string,
     image?: string,
     status?: number,
-    createTime?: string,
-    updateTime?: string,
+    createTime?: Date,
+    updateTime?: Date,
 }
 // VO
 export interface ITagVo{
@@ -14,6 +14,9 @@ export interface ITagVo{
     name: string,
     description: string,
     image: string,
+    status: number,
+    caseNumber: number,
+    createTime: string,
 }
 export interface ICaseTagVo{
     id: number,
@@ -29,7 +32,7 @@ export interface ISelectTag{
     // 页面大小
     pageSize: number,
 }
-export class TagData{
+export class TagVoData{
     selectData: ISelectTag={
         page: 1,
         pageSize: 10,
@@ -39,5 +42,5 @@ export class TagData{
     // 总页码
     pageCount: number = 0;
     // 标签列表
-    list: ITag[]=[]
+    list: ITagVo[]=[]
 }

@@ -216,7 +216,9 @@ const caseHeader = ref<ICaseHeaderVo>({
     thumb: 0,
     viewtimes: 0, 
     comment: 0,
+    hot: 0.0,
     visible: 0,
+    status: 1,
     createTime: "",
     updateTime: "",
     caseBody: {

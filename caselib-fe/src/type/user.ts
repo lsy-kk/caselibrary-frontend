@@ -16,6 +16,9 @@ export interface IUserVo{
     image: string,
     username: string,
     authority: number,
+    status: number,
+    caseNumber: number,
+    createTime: string,
 }
 export interface ISelectData{
     // 搜索信息，非必要

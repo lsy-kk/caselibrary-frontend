@@ -3,7 +3,6 @@
     <div class="flex-1 box-border overflow-auto p-8 bg-white">
         <div>
           <!--头部表单，搜索框-->
-          <!--头部表单，搜索框-->
           <el-form 
             ref="searchFormRef"
             :model="data.selectData"
@@ -70,7 +69,7 @@
 import { ref, reactive, onMounted } from 'vue'
 import { ElMessage } from 'element-plus'
 import type { FormInstance } from 'element-plus'
-import { getFavoritesList, updateFavorites} from '@/request/api/favorites';
+import { getFavoritesList, updateFavorites, changeFavoritesStatus} from '@/request/api/favorites';
 import {type IFavorites, FavoritesData } from '@/type/favorites'
 import { useRouter } from 'vue-router';
 const data = reactive(new FavoritesData())
@@ -108,15 +107,23 @@ const reload = () => {
   })
 }
 
-// 显示案例具体内容  未完待续...
+// 显示案例具体内容 
 const handleShowCase = (favoritesForm: IFavorites) => {
-    router.push({path:`/favorites/${favoritesForm.id}`})
+  router.push({
+        path: `/user/${favoritesForm.ownerId}/favorites`,
+        query: {
+            fid: favoritesForm.id,
+        }
+    })
 }
 // 用于存放对话框中的表单数据
 // 注意,不能直接给form赋值,会使得其失去响应式
 var form = ref<IFavorites>({})
 // 点击"禁用"或是"启用"按钮,更新案例状态信息
 const handleStatusEdit = (favoritesForm: IFavorites) => {
+  if (!form.value.id) {
+    return 
+  }
   // 深拷贝
   form.value = JSON.parse(JSON.stringify(favoritesForm))
   if (form.value.status == 1){
@@ -125,13 +132,14 @@ const handleStatusEdit = (favoritesForm: IFavorites) => {
   else {
       form.value.status = 1
   }
-  // 更新操作
-  updateFavorites(form.value).then(res=>{
+  // 更新状态操作
+  changeFavoritesStatus(Number(form.value.id), form.value.status).then(res=>{
     ElMessage.success("更新状态成功")
     reload() // 刷新数据
   }).catch((err) => {
       console.log(err)
   })
+
 }
 
 

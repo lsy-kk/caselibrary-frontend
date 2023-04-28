@@ -8,13 +8,10 @@ const router = createRouter({
     {
       path: '',
       name: 'Home',
+      //在地址为空时，直接跳转hot路由
+      redirect:'/hot',
       component: () => import('../views/HomeView.vue'),
       children:[
-        {
-          //在地址为空时，直接跳转hot路由
-          path:'',//默认缺省值
-          redirect:'/hot'
-        },
         {
           // 首页，显示最热案例
           path:'/hot',
@@ -23,6 +20,11 @@ const router = createRouter({
         {
           // 标签
           path:'/tag',
+          component: () => import('../views/HotTagView.vue'),
+        },
+        {
+          // 标签及对应的案例
+          path:'/tag/:id',
           name: 'tag',
           component: () => import('../views/TagView.vue'),
         },
@@ -44,18 +46,18 @@ const router = createRouter({
             },
             {
               // 关键字综合搜索
-              path:'/search/:keyword/case/:opt?',
+              path:'/search/:keyword/case',
               name: 'searchCase',
               component: () => import('../views/SearchCaseView.vue'),
             },
             {
               // 标签（匹配优先）
-              path:'/search/:keyword/tag?',
+              path:'/search/:keyword/tag',
               component: () => import('../views/SearchTagView.vue'),
             },
             {
               // 作者搜索（匹配优先）
-              path:'/search/:keyword/user?',
+              path:'/search/:keyword/user',
               component: () => import('../views/SearchUserView.vue'),
             }
           ]

@@ -33,7 +33,7 @@ export function getCaseVoList(data: ISelectCase){
     })
 }
 // 根据关键字，获取案例列表
-export function getSearchList(page: Number, pageSize: Number, keyword: string){
+export function getSearchList(page: Number, pageSize: Number, keyword: string, sortOpt: string){
     return service({
         url: "/case/getSearchList", 
         method: "get",
@@ -41,6 +41,7 @@ export function getSearchList(page: Number, pageSize: Number, keyword: string){
             page: page,
             pageSize: pageSize,
             keyword: keyword,
+            type: sortOpt,
         }
     })
 }
@@ -56,11 +57,22 @@ export function getOtherAuthorList(page: Number, pageSize: Number, userid: Numbe
         }
     })
 }
-
-// 获取收藏夹内案例列表
-export function getCaseByFavoritesId(page: Number, pageSize: Number, id: number){
+// 获取含有对应标签的案例列表
+export function getListByTagId(page: Number, pageSize: Number, id: number){
     return service({
-        url: "/case/getCasesByFavoritesId", 
+        url: "/case/getListByTagId", 
+        method: "get",
+        params:{
+            page: page,
+            pageSize: pageSize,
+            tagId: id,
+        }
+    })
+}
+// 获取收藏夹内案例列表
+export function getListByFavoritesId(page: Number, pageSize: Number, id: number){
+    return service({
+        url: "/case/getListByFavoritesId", 
         method: "get",
         params:{
             page: page,
