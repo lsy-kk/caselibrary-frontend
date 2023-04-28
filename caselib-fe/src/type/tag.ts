@@ -32,6 +32,18 @@ export interface ISelectTag{
     // 页面大小
     pageSize: number,
 }
+export class TagData{
+    selectData: ISelectTag={
+        page: 1,
+        pageSize: 10,
+        id: undefined,
+        name: undefined,
+    }
+    // 总页码
+    pageCount: number = 0;
+    // 标签列表
+    list: ITag[]=[]
+}
 export class TagVoData{
     selectData: ISelectTag={
         page: 1,
