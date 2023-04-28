@@ -77,17 +77,10 @@
                     <el-input v-model="form.description" style="width: 80%"> </el-input>
                 </el-form-item>
                 <el-form-item label="图像" prop="image">
-                    <el-upload
-                        class="avatar-uploader"
-                        :action="url"
-                        :show-file-list="false"
-                        :on-success="handleAvatarSuccess"
-                        :before-upload="beforeAvatarUpload"
-                    >
-                        <el-avatar v-if="form.image" 
-                            shape="square" :size="100" fit="fill" :src="form.image" />
-                        <el-icon v-else class="avatar-uploader-icon"><Plus /></el-icon>
-                    </el-upload>
+                    <UploadImage 
+                        :oldImageUrl="String(form.image)"
+                        :key="String(form.image)"
+                        @imageUrl="getImageUrl" />
                 </el-form-item>
               </el-form>
               <template #footer>
@@ -122,20 +115,10 @@
                     <el-input v-model="form.description" style="width: 80%"> </el-input>
                 </el-form-item>
                 <el-form-item label="图像" prop="image">
-                    <el-upload
-                        class="avatar-uploader"
-                        :action="url"
-                        :show-file-list="false"
-                        :limit="1"
-                        :on-success="handleAvatarSuccess"
-                        :before-upload="beforeAvatarUpload"
-                        :on-preview="handleAvatarPreview"
-                    >
-                        <el-avatar v-if="form.image" 
-                            shape="square" :size="100" fit="fill" :src="form.image" />
-                        <el-icon v-else><Plus /></el-icon>
-                        
-                    </el-upload>
+                    <UploadImage 
+                        :oldImageUrl="String(form.image)"
+                        :key="String(form.image)"
+                        @imageUrl="getImageUrl" />
                 </el-form-item>
               </el-form>
               <template #footer>
@@ -148,17 +131,13 @@
           </el-dialog>
       </div>
   </div>
-  <el-dialog v-model="dialogVisible">
-    <img w-full :src="dialogImageUrl" alt="Preview Image" />
-  </el-dialog>
 </template>
 
 <script setup lang="ts">
+import UploadImage from '@/components/UploadImage.vue'
 import { ref, reactive, onMounted } from 'vue'
 import { ElMessage } from 'element-plus' 
 import type { FormInstance } from 'element-plus'
-import { Plus } from '@element-plus/icons-vue'
-import type { UploadProps, UploadUserFile, UploadFile } from 'element-plus'
 import { getTagList, updateTag, insertTag } from '@/request/api/tag';
 import {type ITag, TagData } from '@/type/tag'
 const data = reactive(new TagData())
@@ -208,28 +187,9 @@ const rules = reactive({
 })
 // 上传头像
 const url = import.meta.env.VITE_BASE_URL + "/file/uploadFile"
-// 附件列表
-const handleAvatarSuccess: UploadProps['onSuccess'] = (response, uploadFile) => {
-    form.value.image = URL.createObjectURL(uploadFile.raw!)
+const getImageUrl = (url: string) => {
+    form.value.image = url  
 }
-const beforeAvatarUpload: UploadProps['beforeUpload'] = (rawFile) => {
-  if (rawFile.type !== 'image/jpeg' && rawFile.type !== 'image/png') {
-    ElMessage.error('上传的图片格式应当为jpg或png，请重新提交。')
-    return false
-  } else if (rawFile.size / 1024 / 1024 > 2) {
-    ElMessage.error('图片大小不得超过2MB，请重新提交。')
-    return false
-  }
-  return true
-}
-const dialogImageUrl = ref('')
-const dialogVisible = ref(false)
-const handleAvatarPreview = (file: UploadFile) => {
-  dialogImageUrl.value = file.url!
-  dialogVisible.value = true
-}
-
-
 // 控制"新增"对话框的弹出
 var insertDialogVisible = ref(false)
 const insertFormRef = ref<FormInstance>()
@@ -265,9 +225,6 @@ const handleInsert = () => {
   reset()
   insertDialogVisible.value = true
 }
-
-
-
 
 var editDialogVisible = ref(false)
 const editFormRef = ref<FormInstance>()
