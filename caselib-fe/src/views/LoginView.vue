@@ -97,10 +97,9 @@ const submitForm = (formEl: FormInstance | undefined) => {
   formEl.validate((valid) => {
     if (valid) {
       store.dispatch('login', ruleForm).then(() => {
+        ElMessage.success('登录成功')
         router.go(-1)
-      }).catch(error => {
-        //ElMessage.error(error)
-      })
+      }).catch(error => {})
     } else {
       return false
     }

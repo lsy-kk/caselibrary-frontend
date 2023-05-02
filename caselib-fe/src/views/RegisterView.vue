@@ -129,12 +129,7 @@ const handleEmailCode = () => {
   sendEmailCode(ruleForm).then((res) => {
     loading.value = false;
     console.log(res);
-    if (res.success){
-      ElMessage.success("发送成功")
-    }
-    else {
-      ElMessage.error("发送失败，请重试")
-    }
+    ElMessage.success("发送成功")
   })
   // 每秒计时
   timer = setInterval(() => {
@@ -145,7 +140,6 @@ const handleEmailCode = () => {
       isSend.value = false;
     }
   }, 1000);
-  
 }
 
 const handleJumpLogin = () => {

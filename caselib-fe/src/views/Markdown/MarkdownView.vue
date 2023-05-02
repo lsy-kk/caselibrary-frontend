@@ -66,28 +66,6 @@
         </el-upload>
       </el-collapse-item>
       <el-collapse-item title="Markdown文本编辑" name="3">
-        <!--md文本的导入导出-->
-        <el-col>
-          <el-upload
-            ref="upload"
-            action="url"
-            :before-upload="beforeUploadMd"
-            :limit="1"
-            :show-file-list="false"
-            :on-exceed="onExceedMd"
-            class="w-1/4">
-            <template #trigger>
-              <el-button type="primary">导入</el-button>
-            </template>
-            <el-button type="primary" @click="handleExport" class="ml-4">导出</el-button>
-            <template #tip>
-              <div class="el-upload__tip">
-                上传的文件应当为md格式，大小不应大于2MB
-              </div>
-            </template>
-          </el-upload>
-        </el-col>
-        
         <!--markdown编辑器-->
         <md-editor 
           previewTheme="vuepress"
@@ -119,7 +97,6 @@ import type {
   UploadFile } from 'element-plus'
 import { 
   uploadFile, 
-  exportMarkdownFile, 
   deleteFile } from '@/request/api/file'
 import {
   submitCaseParam,
@@ -365,23 +342,6 @@ const readMarkdownFile = (file: UploadRawFile) => {
   }
 }
 
-// 后端将casebody中的content转化为文件，返回文件流，前端下载
-const handleExport = () => {
-  exportMarkdownFile(caseParam.value.caseBodyVoLatest).then((res) => {
-    let blob = new Blob([res], {
-      type: 'application/force-download'
-    })
-    let fileName = "mdExport.md"
-    const url = window.URL.createObjectURL(blob);
-    const link = document.createElement('a');
-        link.style.display = 'none';
-        link.href = url;
-        link.download = fileName;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-  })
-}
 // 附件列表
 const fileList = ref<UploadUserFile[]>([])
 // 加载案例头部以及内容
