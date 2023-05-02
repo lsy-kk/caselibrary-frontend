@@ -31,12 +31,12 @@ const router = createRouter({
         {
           // 消息中心，id为用户id
           path:'/notification/:id',
-          component: () => import('../views/NotificationView.vue')
+          component: () => import('../views/Notice/NoticeView.vue')
         },
         {
           // 搜索结果页面，type为搜索类型，keyword为搜索关键字
           path:'/search/:keyword',
-          component: () => import('../views/SearchView.vue'),
+          component: () => import('../views/Search/SearchView.vue'),
           children:[
             {
               path:'/search/:keyword',
@@ -48,17 +48,17 @@ const router = createRouter({
               // 关键字综合搜索
               path:'/search/:keyword/case',
               name: 'searchCase',
-              component: () => import('../views/SearchCaseView.vue'),
+              component: () => import('../views/Search/SearchCaseView.vue'),
             },
             {
               // 标签（匹配优先）
               path:'/search/:keyword/tag',
-              component: () => import('../views/SearchTagView.vue'),
+              component: () => import('../views/Search/SearchTagView.vue'),
             },
             {
               // 作者搜索（匹配优先）
               path:'/search/:keyword/user',
-              component: () => import('../views/SearchUserView.vue'),
+              component: () => import('../views/Search/SearchUserView.vue'),
             }
           ]
         },
@@ -78,7 +78,7 @@ const router = createRouter({
         {
           // 个人主页，id为用户id
           path:'/user/:id',
-          component: () => import('../views/UserHomeView.vue'),
+          component: () => import('../views/UserHome/UserHomeView.vue'),
           children:[
             {
               path:'/user/:id',
@@ -90,17 +90,17 @@ const router = createRouter({
               // 个人发布案例
               path:'/user/:id/case',
               name: 'userCase',
-              component: () => import('../views/UserCaseView.vue'),
+              component: () => import('../views/UserHome/UserCaseView.vue'),
             },
             {
               // 个人收藏夹
               path:'/user/:id/favorites',
-              component: () => import('../views/UserFavoritesView.vue'),
+              component: () => import('../views/UserHome/UserFavoritesView.vue'),
             },
             {
               // 个人设置页面
               path:'/user/:id/setting',
-              component: () => import('../views/UserSettingView.vue'),
+              component: () => import('../views/UserHome/UserSettingView.vue'),
             }
           ]
         },
@@ -110,7 +110,7 @@ const router = createRouter({
       // 后台管理系统（仅管理员可进）
       path: '/admin',
       name: 'admin',
-      component: () => import('../views/AdminHomeView.vue'),
+      component: () => import('../views/Admin/AdminHomeView.vue'),
       children:[
         {
           path:'/admin',
@@ -123,7 +123,7 @@ const router = createRouter({
             isShow: true,
             title: "用户管理"
           },
-          component: () => import('../views/AdminUserView.vue'),
+          component: () => import('../views/Admin/AdminUserView.vue'),
         },
         {
           path: '/admin/tag',
@@ -132,7 +132,7 @@ const router = createRouter({
             isShow: true,
             title: "标签管理"
           },
-          component: () => import('../views/AdminTagView.vue'),
+          component: () => import('../views/Admin/AdminTagView.vue'),
         },
         {
           path: '/admin/case',
@@ -141,7 +141,7 @@ const router = createRouter({
             isShow: true,
             title: "案例管理"
           },
-          component: () => import('../views/AdminCaseView.vue'),
+          component: () => import('../views/Admin/AdminCaseView.vue'),
         },
         {
           path: '/admin/comment',
@@ -150,7 +150,7 @@ const router = createRouter({
             isShow: true,
             title: "评论管理"
           },
-          component: () => import('../views/AdminCommentView.vue'),
+          component: () => import('../views/Admin/AdminCommentView.vue'),
         },
         {
           path: '/admin/favorites',
@@ -159,7 +159,7 @@ const router = createRouter({
             isShow: true,
             title: "收藏夹管理"
           },
-          component: () => import('../views/AdminFavoritesView.vue'),
+          component: () => import('../views/Admin/AdminFavoritesView.vue'),
         },
       ]
     }, 
