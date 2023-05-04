@@ -51,19 +51,15 @@ const store = useStore()
 const reload = () => {
   getListByUserIdAndTypeAndIsRead(store.state.id, props.type, 0).then((res)=>{
     unreadList.value = res.data
-    console.log('unread');
-    console.log(res.data);
-    
   })
   getListByUserIdAndTypeAndIsRead(store.state.id, props.type, 1).then((res)=>{
-    noticeList.value = res.data
-    console.log('read');
-    console.log(res.data);
+    noticeList.value = res.dat
   })
 }
 // 将未读消息更新为已读
 const updateAllUnRead = () => {
   updateUnRead(store.state.id, props.type).then((res) => {})
+  store.commit('clearNotice')
 }
 </script>
 
