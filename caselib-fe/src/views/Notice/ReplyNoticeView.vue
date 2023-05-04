@@ -1,13 +1,13 @@
 <template>
     <div>
-        <NoticePageView :type="1"></NoticePageView>
+        <NoticePageView :type="2"></NoticePageView>
     </div>
 </template>
 
-<script lang="ts" setup>
+<script setup lang="ts">
 import NoticePageView from './NoticePageView.vue';
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
 
 </style>

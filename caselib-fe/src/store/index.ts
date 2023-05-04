@@ -1,11 +1,11 @@
 import { createStore, useStore as baseUseStore, Store } from 'vuex'
 import type { InjectionKey } from 'vue'
-import { userModule} from './modules/user'
-import type { IUserState } from './modules/user'
 import { login, logout, reLogin, loginByEmailCode } from '@/request/api/login'
 import { getUserByToken } from '@/request/api/user'
 import { getToken, setToken, removeToken } from '@/request/api/token'
 import userImg from '@/assets/image/user.png';
+import { ElMessage, ElNotification } from 'element-plus'
+import { INoticeVo } from '@/type/notice'
 export interface IState{
     id: number,
     email: string,
@@ -13,9 +13,13 @@ export interface IState{
     image: string,
     authority: number,
     token: string,
+    // ws相关
+    noticeList: INoticeVo[],
+    webSocket: WebSocket,
+    isConnect: boolean,
+    timer: number,
 }
 type Modules = {
-    user: IUserState
 }
 // 定义injectKey
 export const key: InjectionKey<Store<IState & Modules>> = Symbol()
@@ -29,6 +33,11 @@ export const store = createStore<IState>({
         image: userImg,
         authority: -1,
         token: getToken(),
+        // websocket相关
+        noticeList: [],
+        webSocket: new WebSocket(import.meta.env.VITE_BASE_WS_URL+'/notice/0'),
+        isConnect: false,
+        timer: 0,
     },
     // 通过getter对state状态进行筛选（例如过滤、计数），类似于计算属性
     // 通过mutations改变state状态，必须是同步的操作
@@ -50,6 +59,49 @@ export const store = createStore<IState>({
         },
         setToken(state, token){
             state.token = token
+        },
+        // websocket连接初始化，rootState：使用其他模块
+        initWebsocket(state) {
+            // 连接的ws地址
+            state.webSocket = new WebSocket(import.meta.env.VITE_BASE_WS_URL+'/notice/'+ state.id)
+            
+            // 建立连接
+            state.webSocket.onopen = function () {
+                // 连接成功
+                console.log('通讯开始')
+                state.isConnect = true
+                // 心跳，防止ws协议自动断联
+                state.timer = setInterval(() => {state.webSocket.send('1')}, 1000 * 60)
+            }
+            //接收服务端消息
+            state.webSocket.onmessage = function (e){
+                // 收到消息时回调函数
+                console.log('收到的数据：', e.data)
+                let noticeVo: INoticeVo = JSON.parse(e.data)
+                ElNotification({
+                    title: noticeVo.title,
+                    message: noticeVo.content,
+                    type: 'info',
+                    position: 'top-left',
+                })
+                state.noticeList.push(noticeVo)
+            }
+            // 通讯异常处理
+            state.webSocket.onerror = function () {
+                state.isConnect = false
+                console.log('通讯异常')
+            }
+            //关闭连接时的回调函数
+            state.webSocket.close = function () { 
+                state.isConnect = false
+                console.log('连接已断开')
+            }
+        },
+        // 关闭websocket连接
+        websocketClose(state) {
+            state.isConnect = false
+            // 不再发送心跳信号
+            clearInterval(state.timer)
         },
     },
     // action提交mutations方法，但不同的是可以执行异步操作
@@ -83,6 +135,9 @@ export const store = createStore<IState>({
                         commit('setImage', res.data.image)
                         commit('setAuthority', res.data.authority)
                         commit('setToken', res.data.token)
+                        // 开启websocket连接
+                        commit('initWebsocket')
+                        
                         resolve(res.msg)
                     }
                     else {
@@ -94,6 +149,8 @@ export const store = createStore<IState>({
                         commit('setAuthority', -1)
                         commit('setToken', '')
                         removeToken()
+                        // 关闭websocket连接
+                        store.commit('websocketClose')
                         resolve(res.msg)
                     }
                 }).catch(error => {
@@ -104,6 +161,8 @@ export const store = createStore<IState>({
                     commit('setAuthority', -1)
                     commit('setToken', '')
                     removeToken()
+                    // 关闭websocket连接
+                    store.commit('websocketClose')
                     // 抛出异常
                     reject(error)
                 })
@@ -121,6 +180,8 @@ export const store = createStore<IState>({
                         commit('setAuthority', -1)
                         commit('setToken', '')
                         removeToken()
+                        // 关闭websocket连接
+                        store.commit('websocketClose')
                         resolve(res.msg)
                     }
                     else{
@@ -179,7 +240,6 @@ export const store = createStore<IState>({
         }
     },
     modules: {
-        user: userModule,
     }
 })
 export function useStore () {

@@ -30,8 +30,29 @@ const router = createRouter({
         },
         {
           // 消息中心，id为用户id
-          path:'/notification/:id',
-          component: () => import('../views/Notice/NoticeView.vue')
+          path:'/notice/:id',
+          component: () => import('../views/Notice/NoticeView.vue'),
+          children:[
+            {
+              path: '/notice/:id',
+              redirect:{
+                name: 'reply',
+              }
+            },
+            {
+              path: '/notice/:id/system',
+              component: () => import('../views/Notice/SystemNoticeView.vue'),
+            },
+            {
+              path: '/notice/:id/reply',
+              name: 'reply',
+              component: () => import('../views/Notice/ReplyNoticeView.vue'),
+            },
+            {
+              path: '/notice/:id/communication',
+              component: () => import('../views/Notice/CommunicationNoticeView.vue'),
+            },
+          ]
         },
         {
           // 搜索结果页面，type为搜索类型，keyword为搜索关键字
@@ -201,6 +222,7 @@ const router = createRouter({
 })
 
 // 路由前，检查登录状态
+// 若已经登陆，检查websocket连接状态
 router.beforeEach((to, from, next) => {
   // 前端已登录
   if (getToken()) {

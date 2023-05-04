@@ -40,8 +40,13 @@
         <template v-else>
           <div class="">
           <!--已登录-通知按钮和下拉菜单-->
-          <el-button class="mt-4 mr-4" @click="handleNotification">
-            <el-icon><Notification /></el-icon>
+          <el-button class="mt-4 mr-4" @click="handleNotification" text>
+            <template v-if="store.state.noticeList.length !== 0">
+              <img :src="noticeImg" class="w-6 h-6 m-2">
+            </template>
+            <template v-else>
+              <img :src="notnoticeImg" class="w-6 h-6 m-2">
+            </template>
           </el-button>
           <el-dropdown class="mt-2" @command="handleCommand">
             <div>
@@ -91,7 +96,8 @@
 import { useStore } from '@/store'
 import SearchInput from '@/components/SearchInput.vue'
 import { Edit, Notification } from '@element-plus/icons-vue';
-import { ref } from 'vue';
+import notnoticeImg from '@/assets/image/NotNotice.png';
+import noticeImg from '@/assets/image/Notice.png';
 import { useRouter, useRoute } from 'vue-router';
 // 组件参数
 const props = defineProps<{
@@ -110,7 +116,7 @@ const handleSelect = () => {
 }
 // 通知系统
 const handleNotification = () => {
-  router.push({path:`/notification/${store.state.id}`})
+  router.push({path:`/notice/${store.state.id}`})
 }
 const handleLogin = () => {
   router.push('/login')
@@ -119,7 +125,7 @@ const handleRegister = () => {
   router.push('/register')
 }
 const handleCommand = (command: string) => {
-  console.log(`click on item ${command}`);
+  //console.log(`click on item ${command}`);
   if (command === 'center'){
     router.push({path:`/user/${store.state.id}/case`})
   }

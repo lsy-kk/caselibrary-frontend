@@ -14,7 +14,7 @@
 </template>
 
 <script setup lang="ts">
-import NotificationAside from '@/components/NotificationAside.vue'
+import NotificationAside from '@/components/NoticeAside.vue'
 var activeIndexHeader:String = '/admin'
 var activeIndexAside:String = '/admin/user'
 </script>
