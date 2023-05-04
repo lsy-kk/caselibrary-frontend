@@ -135,6 +135,7 @@ const handleCommand = (command: string) => {
   else if (command === 'logout'){
     store.dispatch('logout').then(() => { 
       // 登出
+      router.push({path:`/hot`})
     })
   }
 }

@@ -61,6 +61,7 @@
                         </el-input>
                         <el-button
                             @click="handleSubmitComment"
+                            :disabled="store.state.id == -1"
                             class="mx-2">
                             <el-icon class="mr-1"><ChatSquare /></el-icon>发布评论
                         </el-button>

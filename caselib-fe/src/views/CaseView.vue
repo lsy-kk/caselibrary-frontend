@@ -145,7 +145,7 @@
       </div>
       <div class="flex-1 bg-white">
         <!--评论提交-->
-        <div v-if = "store.state.id!=-1" class="relative align-middle flex">
+        <div class="relative align-middle flex">
           <el-avatar
             :size="80" 
             class="m-2" 
@@ -162,7 +162,8 @@
               </el-input>
               <el-button
                 @click="handleComment"
-                class="mx-2">
+                class="mx-2"
+                :disabled="store.state.id == -1">
                 <el-icon class="mr-1"><ChatSquare /></el-icon>发布评论
               </el-button>
           </div>
@@ -236,6 +237,9 @@ const caseHeader = ref<ICaseHeaderVo>({
       image: "",
       username: "",
       authority: 0,
+      caseNumber: 0,
+      createTime: '',
+      status: 1,
     },
     tags: [],
     comments: [],

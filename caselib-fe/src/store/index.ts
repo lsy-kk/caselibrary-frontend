@@ -78,12 +78,7 @@ export const store = createStore<IState>({
                 // 收到消息时回调函数
                 console.log('收到的数据：', e.data)
                 let noticeVo: INoticeVo = JSON.parse(e.data)
-                ElNotification({
-                    title: noticeVo.title,
-                    message: noticeVo.content,
-                    type: 'info',
-                    position: 'top-left',
-                })
+                ElMessage.info("收到新消息，请前往消息系统查看")
                 state.noticeList.push(noticeVo)
             }
             // 通讯异常处理
@@ -102,6 +97,9 @@ export const store = createStore<IState>({
             state.isConnect = false
             // 不再发送心跳信号
             clearInterval(state.timer)
+        },
+        clearNotice(state) {
+            state.noticeList = []
         },
     },
     // action提交mutations方法，但不同的是可以执行异步操作
