@@ -5,3 +5,4 @@ interface ImportMetaEnv {
     // 更多环境变量...
 }
   
+declare module '*.png'
