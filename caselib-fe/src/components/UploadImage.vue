@@ -47,7 +47,6 @@ const handleAvatarSuccess: UploadProps['onSuccess'] = (response, uploadFile) => 
         uploadFile.url = response.data
         imageUrl.value = response.data
         ElMessage.success("上传成功")  
-        console.log(response.data);
         sendImageUrl()
     }
     else {

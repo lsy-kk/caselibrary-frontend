@@ -158,10 +158,10 @@ window.onbeforeunload = function (e){
 document.addEventListener('visibilitychange',function(e){
   let state = document.visibilityState
   if (state == 'hidden'){
-      console.log(document.visibilityState,'用户离开了')
+      //console.log(document.visibilityState,'用户离开了')
   }
   if (state == 'visible'){
-      console.log(document.visibilityState,'回来了')
+      //console.log(document.visibilityState,'回来了')
   }
 })
 // 清空、重置表单
@@ -400,7 +400,6 @@ const handleSave = (op: String) => {
   // 后端提交接口
   submitCaseParam(caseParam.value).then((res) => {
     if (res.success){
-      console.log(res.data);
       ElMessage.success(op + "成功")
       if (op === "提交"){
         // 跳转到案例页面,....
@@ -433,9 +432,7 @@ const onUploadImg = async (files: FileList, callback: (urls: string[]) => void) 
       return new Promise((resolve, reject) => {
         const form = new FormData()
         form.append('file', file)
-        console.log(file)
         uploadFile(form).then((res) => {
-          console.log(res)
           resolve(res.data)
         })
           .catch((error) => reject(error))

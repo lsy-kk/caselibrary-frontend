@@ -53,7 +53,7 @@
 
 <script setup lang="ts">
 import UploadImage from '@/components/UploadImage.vue'
-import { store } from '@/store';
+import { useStore } from '@/store';
 import { IFavorites, IFavoritesVo } from '@/type/favorites';
 import { insertFavorites, updateFavorites } from '@/request/api/favorites'
 import { FormInstance } from 'element-plus';
@@ -65,6 +65,7 @@ const props = defineProps<{
 onMounted(() => {
     reset()
 })
+const store = useStore()
 const visible = computed({
   get: () => props.dialogShow,
   set: (value) => {

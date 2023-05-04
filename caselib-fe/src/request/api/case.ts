@@ -45,6 +45,17 @@ export function getSearchList(page: Number, pageSize: Number, keyword: string, s
         }
     })
 }
+// 获取最热的案例列表
+export function getHotList(page: Number, pageSize: Number){
+    return service({
+        url: "/case/getHotList", 
+        method: "get",
+        params: {
+            page: page,
+            pageSize: pageSize,
+        }
+    })
+}
 // 根据用户id，获取他人案例列表
 export function getOtherAuthorList(page: Number, pageSize: Number, userid: Number){
     return service({

@@ -1,4 +1,4 @@
-export class PageParmas{
-    page: Number = 1;
-    pageSize: Number = 10;
+export interface PageParams{
+    page: Number
+    pageSize: Number
 }

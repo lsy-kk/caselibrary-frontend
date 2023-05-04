@@ -42,9 +42,10 @@ import { ElMain, ElMessage, FormInstance } from 'element-plus'
 import bgImg from '@/assets/background/red-bg.png'
 import { updatePassword } from '@/request/api/user'
 import { IUser } from '@/type/user';
-import { store } from '@/store';
+import { useStore } from '@/store';
 import router from '@/router';
 const ruleFormRef = ref<FormInstance>()
+const store = useStore()
 // 检查输入密码的合法性
 const validatePass = (rule: any, value: any, callback: any) => {
   //必须包含大小写字母和数字，长度在6-20位之间

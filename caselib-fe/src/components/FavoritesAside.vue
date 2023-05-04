@@ -5,6 +5,7 @@
             menu-trigger="click" 
             :default-active="fid"> 
             <el-menu-item 
+                v-if="userId === store.state.id"
                 @click="handleInsert"
                 index="-1">
                 <el-icon><FolderAdd /></el-icon>
@@ -33,6 +34,8 @@ import { IFavoritesVo } from '@/type/favorites';
 import { ref, onMounted } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import { ElMessage } from 'element-plus';
+import { useStore } from '@/store';
+const store = useStore()
 const route = useRoute()
 const router = useRouter()
 const userId = Number(route.params.id)

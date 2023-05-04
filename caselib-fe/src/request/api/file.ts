@@ -48,13 +48,3 @@ export function deleteFile(data: String){
         }
     })
 }
-
-// 导出markdown文本
-export function exportMarkdownFile(data: ICaseBodyVo){
-    return service({
-        url: "/file/exportMarkdownFile", 
-        method: "post",
-        data,
-        responseType: 'blob',
-    })
-}
