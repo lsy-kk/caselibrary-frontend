@@ -10,7 +10,10 @@
             <div class="m-2 w-full">
                 <!--作者名称-->
                 <div class="flex"> 
-                    <span class="mr-2">{{ comment.author.username }}</span>
+                    <a 
+                        @click="handleViewUser(comment.author.id)" 
+                        class="font-semibold text-base mr-2" 
+                        v-html="comment.author.username"></a>
                     <template v-if="comment.author.id === caseAuthorId">
                         <span>[作者]</span>
                     </template>
@@ -84,6 +87,7 @@ import { ChatSquare} from '@element-plus/icons-vue';
 import { ElMessage } from 'element-plus';
 import { defineEmits } from 'vue'
 import ChildCommentItem from '@/components/ChildCommentItem.vue';
+import { useRouter } from 'vue-router';
 // 组件参数
 const props = defineProps<{
     comment: ICommentVo,
@@ -132,6 +136,10 @@ const wantToReply = (commentVo : ICommentVo) => {
     replyInputShow.value = true
     replyComment.value.toUserId = commentVo.author.id
     placeholder.value = "回复 @" + commentVo.author.username + " : ";
+}
+const router = useRouter()
+const handleViewUser = (id: number) => {
+  router.push({path:`/user/${id}`})
 }
 </script>
 

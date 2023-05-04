@@ -10,7 +10,10 @@
             <div class="my-2 w-full">
                 <!--作者名称-->
                 <div class="flex"> 
-                    <span class="mr-2">{{ comment.author.username }}</span>
+                    <a 
+                        @click="handleViewUser(comment.author.id)" 
+                        class="font-semibold text-base mr-2" 
+                        v-html="comment.author.username"></a>
                     <template v-if="comment.author.id === caseAuthorId">
                         <span>[作者]</span>
                     </template>
@@ -18,9 +21,10 @@
                 <div class="my-2 break-all">
                     <template v-if="comment.toUser !== undefined && comment.toUser !== null">
                         回复 
-                        <a href="https://blog.mszlu.com/#/view/1517502795805274114"
-                            class="no-underline"> @{{ comment.toUser.username }}
-                        </a>
+                        <a 
+                            @click="handleViewUser(comment.toUser.id)" 
+                            class="text-cyan-500 no-underline"> 
+                            @{{ comment.toUser.username }}</a>
                         : 
                     </template>
                     {{comment.content}}
@@ -56,17 +60,21 @@
 <script setup lang="ts">
 import type { ICommentVo } from '@/type/comment' 
 import { defineEmits } from 'vue'
-// 组件参数
+import { useRouter } from 'vue-router'
 const props = defineProps<{
     comment: ICommentVo,
     caseAuthorId: number,
 }>()
 const emit = defineEmits<{
-  (e: 'wantToReply', comment: ICommentVo): void
+    (e: 'wantToReply', comment: ICommentVo): void
 }>()
 // 展开回复评论列表
 const handleReply = () => {
     emit('wantToReply', props.comment);
+}
+const router = useRouter()
+const handleViewUser = (id: number) => {
+  router.push({path:`/user/${id}`})
 }
 </script>
 
