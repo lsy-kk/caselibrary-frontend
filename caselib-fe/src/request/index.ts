@@ -24,16 +24,18 @@ service.interceptors.response.use((res)=>{
     if (res.headers['session_time_out'] == 'timeout') {
         store.dispatch('logout')
     }
-    if (res.status != 200){
-        return Promise.reject();
-    }
     if (res.data.success){
         return res.data
     }
     ElMessage.error(res.data.msg)
     return Promise.reject(res.data)
 },(error)=>{
-    console.log(error);
+    ElMessage({
+        type: "error",
+        showClose: true,
+        message: "连接超时",
+    })
+    return Promise.reject('error')
 })
 // 把axios实例暴露出去
 export default service
