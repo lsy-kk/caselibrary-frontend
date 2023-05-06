@@ -132,7 +132,7 @@ const handleEmailCode = () => {
     ElMessage.success("发送成功")
   })
   // 每秒计时
-  timer = setInterval(() => {
+  timer = window.setInterval(() => {
     counts.value--;
     if (counts.value < 0) {
       clearInterval(timer);

@@ -137,7 +137,7 @@ var caseParam = ref<ICaseParam>({
 // 该方法在页面初始化，刷新时被调用
 onMounted(() => {
   // 每5分钟存一次md文本
-  timer = setInterval(onSave, 1000 * 60 * 5)
+  timer = window.setInterval(onSave, 1000 * 60 * 5)
   clearCase()
   // 载入案例
   reload()
@@ -191,7 +191,7 @@ watch(route, async (newRoute, oldRoute) => {
   clearInterval(timer)
   // 清除缓存
   localStorage.removeItem('body')
-  timer = setInterval(onSave, 1000 * 60 * 5)
+  timer = window.setInterval(onSave, 1000 * 60 * 5)
   clearCase()
   activeNames.value = ['1','2','3']
   fileList.value = []

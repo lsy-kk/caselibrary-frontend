@@ -15,7 +15,7 @@ export interface IState{
     token: string,
     // ws相关
     noticeList: INoticeVo[],
-    webSocket: WebSocket,
+    webSocket?: WebSocket,
     isConnect: boolean,
     timer: number,
 }
@@ -35,7 +35,6 @@ export const store = createStore<IState>({
         token: getToken(),
         // websocket相关
         noticeList: [],
-        webSocket: new WebSocket(import.meta.env.VITE_BASE_WS_URL+'/notice/0'),
         isConnect: false,
         timer: 0,
     },
@@ -71,7 +70,9 @@ export const store = createStore<IState>({
                 console.log('通讯开始')
                 state.isConnect = true
                 // 心跳，防止ws协议自动断联
-                state.timer = setInterval(() => {state.webSocket.send('1')}, 1000 * 60)
+                if (state.webSocket !== undefined){
+                    state.timer = window.setInterval(() => {state.webSocket.send('1')}, 1000 * 60)
+                }
             }
             //接收服务端消息
             state.webSocket.onmessage = function (e){
