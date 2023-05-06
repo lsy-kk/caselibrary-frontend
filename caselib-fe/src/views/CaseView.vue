@@ -95,7 +95,6 @@
       <div class="mr-2">
         <el-affix :offset="160">
           <MarkdownCatalog 
-              theme="light" 
               id="my-editor"
               class="sticky overflow-auto bg-white"
               style="width: 200px;"
@@ -104,7 +103,6 @@
       </div>
       <div class="bg-white p-4 flex-1">
         <MarkdownPreview 
-          theme="light" 
           id="my-editor" 
           :text="caseHeader.caseBody.content" 
           class="overflow-auto"
