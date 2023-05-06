@@ -133,7 +133,6 @@ export const store = createStore<IState>({
                         commit('setUsername', res.data.username)
                         commit('setImage', res.data.image)
                         commit('setAuthority', res.data.authority)
-                        commit('setToken', res.data.token)
                         // 开启websocket连接
                         commit('initWebsocket')
                         
@@ -201,7 +200,6 @@ export const store = createStore<IState>({
                         commit('setUsername', res.data.username)
                         commit('setImage', res.data.image)
                         commit('setAuthority', res.data.authority)
-                        commit('setToken', res.data.token)
                         resolve(res.msg)
                     }
                     else{
