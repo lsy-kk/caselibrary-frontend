@@ -22,7 +22,7 @@
             </div>
         </div>
         
-        <el-tooltip
+        <!-- <el-tooltip
             effect="light"
             content="预览"
             placement="top"
@@ -32,7 +32,7 @@
                 @click="previewHanlder">
                 <el-icon><View /></el-icon>
             </div>
-        </el-tooltip>
+        </el-tooltip> -->
         <el-tooltip
             effect="light"
             content="下载"
@@ -95,14 +95,15 @@ const sizeWithKB = (fileSize: number | undefined) => {
 const reload = () => {
 
 }
-// 预览
-const previewHanlder = () => {
-    window.open(
-      // 备用在线预览-微软官方：https://view.officeapps.live.com/op/view.aspx?src=
-      // xdoc文档预览云服务
-      `https://view.xdocin.com/view?src=${encodeURIComponent(props.file.url)}`
-    );
-}
+// // 预览
+// const previewHanlder = () => {
+//     window.open(
+//       // 备用在线预览-微软官方：
+//       `https://view.officeapps.live.com/op/view.aspx?src=${encodeURIComponent(props.file.url)}`
+//       // xdoc文档预览云服务
+//       //`https://view.xdocin.com/view?src=${encodeURIComponent(props.file.url)}`
+//     );
+// }
 // 下载
 const downloadHanlder = () => {
     // 创建一个请求二进制文件的请求
