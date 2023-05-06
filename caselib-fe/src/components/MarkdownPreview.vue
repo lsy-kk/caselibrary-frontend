@@ -1,11 +1,11 @@
 <template>
     <!--md预览-->
     <div>
-        <md-editor
+        <MdEditor
             previewTheme="vuepress"
             v-model="props.text"
             :editorId="props.id"
-            :theme="props.theme"
+            theme="light"
             preview-only />
     </div>
 </template>
@@ -13,32 +13,28 @@
 <script setup lang="ts">
 import MdEditor from 'md-editor-v3';
 import 'md-editor-v3/lib/style.css';
+import { onMounted } from 'vue';
+onMounted(() => {
+    replaceStateRedesign()
+})
 // 组件参数
 const props = defineProps<{
-    theme: string,
     text: string,
     id: string,
 }>()
-// 重写replaceState和pushState
-const bindEventListener = (type: string) => {
+// 设置replaceState监听
+const replaceStateRedesign = () =>{
     // 获取原始定义
-    const historyEvent = history[type];
-    return function() {
-        // 经过包装的pushState或replaceState
-        const newEvent = historyEvent.apply(this, arguments);
-        // 定义一个type的新事件
-        const event = new Event(type);
-        // 将调用pushState或replaceState时的参数放到事件参数event上
-        event.arguments = arguments;
-        // 调用pushState或replaceState时触发该事件
-        window.dispatchEvent(event);
-        return newEvent;
+    var _replaceState = history.replaceState;
+    // 重定义replaceState事件
+    history.replaceState = function (state, title, url) {
+      _replaceState.call(this, state, title, url);
+      // 调用replaceState时触发该事件(state-replace)
+      window.dispatchEvent(new CustomEvent("state-replace", state));
     };
-};
-//修改原始定义
-history.replaceState = bindEventListener('replaceState');
+}
 // 监听replaceState事件
-window.addEventListener('replaceState', ()=>{ 
+window.addEventListener('state-replace', ()=>{ 
     onHtmlChanged()
 });
 // 防止多次触发滑动事件的函数

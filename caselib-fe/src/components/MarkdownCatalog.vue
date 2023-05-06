@@ -1,10 +1,11 @@
 <template>
     <!--md目录-->
     <div>
-        <md-catalog
+        <MdCatalog
             :editorId="props.id"
-            :scroll-element="scrollElement"
-            :theme="props.theme"
+            theme="light"
+            :offset-top="0"
+            :scroll-element-offset-top="60"
             @on-click="onClick"
         />
     </div>
@@ -17,7 +18,6 @@ import type { TocItem } from 'md-editor-v3/lib/MdEditor/extensions/MdCatalog';
 const MdCatalog = MdEditor.MdCatalog;
 // 组件参数
 const props = defineProps<{
-    theme: string,
     id: string,
 }>()
 const scrollElement = document.documentElement;
