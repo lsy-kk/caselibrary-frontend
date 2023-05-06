@@ -1,11 +1,11 @@
 <template>
   <div class="m-1 flex-1 box-border overflow-auto block">
       <!--未读-->
-      <div v-if="unreadList.length!==0" class="my-2 ml-2">
+      <div v-if="unreadList!==null && unreadList.length!==0" class="my-2 ml-2">
         <el-divider content-position="center"/>
         <span>未读消息</span>
       </div>
-      <div v-else>
+      <div v-if="unreadList===null ||unreadList.length===0">
         <el-divider content-position="center"/>
         <span>暂无新消息</span>
       </div>
@@ -15,7 +15,7 @@
           :noticeVo="item" 
           class="mb-4"/>
       <!--已读--> 
-      <div v-if="noticeList.length!==0" class="my-4">
+      <div v-if="noticeList!==null && noticeList.length!==0" class="my-4">
         <el-divider content-position="center"/>
         <span class="">已读消息</span>
       </div>
@@ -53,11 +53,14 @@ const reload = () => {
     unreadList.value = res.data
   })
   getListByUserIdAndTypeAndIsRead(store.state.id, props.type, 1).then((res)=>{
-    noticeList.value = res.dat
+    noticeList.value = res.data
   })
 }
 // 将未读消息更新为已读
 const updateAllUnRead = () => {
+  if (unreadList.value.length === 0){
+    return
+  }
   updateUnRead(store.state.id, props.type).then((res) => {})
   store.commit('clearNotice')
 }

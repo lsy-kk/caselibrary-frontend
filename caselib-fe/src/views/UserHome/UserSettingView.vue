@@ -111,9 +111,9 @@ const submitForm = (formEl: FormInstance | undefined) => {
   if (!formEl) return
   formEl.validate((valid) => {
     if (valid) {
-      updateUser(form.value).then((res) => {
-        store.dispatch('reLogin')
+      updateUser(form.value).then((res) => {       
         ElMessage.success("修改成功")
+        store.dispatch('reLogin')
       })
     } 
     else {

@@ -35,8 +35,6 @@ const list = [
     //     title: "私信"
     // },
 ]
-const props = defineProps<{
-}>()
 const isCollapse = ref(false)
 
 const handleOpen = (key: string, keyPath: string[]) => {

@@ -3,7 +3,7 @@
         <el-container class="bg-blue-100">
             <!--管理员后台管理系统：侧边导航栏-->
             <el-aside>
-                <NotificationAside :activeIndex="activeIndexAside" />
+                <NotificationAside />
             </el-aside>
             <el-main>
                 <!--路由出口-->
@@ -15,8 +15,6 @@
 
 <script setup lang="ts">
 import NotificationAside from '@/components/NoticeAside.vue'
-var activeIndexHeader:String = '/admin'
-var activeIndexAside:String = '/admin/user'
 </script>
 
 <style scoped>
