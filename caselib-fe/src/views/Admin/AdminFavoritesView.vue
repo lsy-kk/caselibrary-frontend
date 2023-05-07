@@ -69,7 +69,7 @@
 import { ref, reactive, onMounted } from 'vue'
 import { ElMessage } from 'element-plus'
 import type { FormInstance } from 'element-plus'
-import { getFavoritesList, updateFavorites, changeFavoritesStatus} from '@/request/api/favorites';
+import { getFavoritesList, changeFavoritesStatus} from '@/request/api/favorites';
 import {type IFavorites, FavoritesData } from '@/type/favorites'
 import { useRouter } from 'vue-router';
 const data = reactive(new FavoritesData())

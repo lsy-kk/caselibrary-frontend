@@ -231,7 +231,7 @@ router.beforeEach((to, from, next) => {
     }
     // 找不到用户信息，则根据token从后端接口获取
     if (store.state.id === -1) {
-      store.dispatch('getUserByToken').then(() => { 
+      store.dispatch('getUserVoByToken').then(() => { 
         // 正常获取用户信息并跳转
         next()
       }).catch(() => {

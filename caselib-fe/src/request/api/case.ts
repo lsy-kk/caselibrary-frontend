@@ -56,18 +56,6 @@ export function getHotList(page: Number, pageSize: Number){
         }
     })
 }
-// 根据用户id，获取他人案例列表
-export function getOtherAuthorList(page: Number, pageSize: Number, userid: Number){
-    return service({
-        url: "/case/getOtherAuthorList", 
-        method: "get",
-        params: {
-            page: page,
-            pageSize: pageSize,
-            userid: userid
-        }
-    })
-}
 // 获取含有对应标签的案例列表
 export function getListByTagId(page: Number, pageSize: Number, id: number){
     return service({

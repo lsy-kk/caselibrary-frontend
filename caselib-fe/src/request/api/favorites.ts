@@ -86,7 +86,7 @@ export function changeFavoritesStatus(favoritesId: number, status: number){
         url: "/favorites/changeStatus", 
         method: "get",
         params: {
-            favoritesId: favoritesId,
+            favorites: favoritesId,
             status: status,
         }
     })

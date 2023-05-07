@@ -60,16 +60,6 @@ export function getTagVoById(tagId: number){
         }
     })
 }
-// 根据案例id，获取标签列表
-export function findTagVoByCaseId(caseId: number){
-    return service({
-        url: "/tag/findTagVoByCaseId", 
-        method: "get",
-        params: {
-            caseId: caseId
-        }
-    })
-}
 // 更新标签信息
 export function updateTag(data: ITag){
     return service({

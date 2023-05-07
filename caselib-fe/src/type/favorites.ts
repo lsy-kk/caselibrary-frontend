@@ -20,8 +20,6 @@ export interface IFavoritesVo{
     image: string,
     owner: IUserVo,
     visible: number,
-    caseList: ICaseHeaderVo[],
-    caseNumber: number,
     favorites: number,
     createTime: string,
     updateTime: string,

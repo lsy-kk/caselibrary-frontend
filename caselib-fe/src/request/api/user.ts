@@ -56,24 +56,10 @@ export function insertUser(data: IUser){
 }
 
 // 根据token获取用户信息
-export function getUserByToken(token: string){
+export function getUserVoByToken(){
     return service({
-        url: "/user/getUserByToken", 
+        url: "/user/getUserVoByToken", 
         method: "get",
-        params: {
-            token: token
-        },
-    })
-}
-
-// 根据id获取用户信息
-export function getUserById(id: number){
-    return service({
-        url: "/user/getUserById", 
-        method: "get",
-        params: {
-            id: id
-        }
     })
 }
 

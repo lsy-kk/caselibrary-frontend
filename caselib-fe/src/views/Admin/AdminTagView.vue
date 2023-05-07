@@ -153,8 +153,8 @@ const handleSearch = () => {
 // 更新页面上的数据
 const reload = () => {
   getTagList(data.selectData).then(res=>{
-      data.list = res.data
-      data.pageCount = res.data.length
+      data.list = res.data.recordList
+      data.pageCount = res.data.total
   })
 }
 

@@ -33,7 +33,7 @@ import TagItem from '@/components/TagItem.vue'
 import CaseItem from '@/components/CaseItem.vue' 
 import { onMounted, ref, reactive } from 'vue'
 import { useRoute } from 'vue-router';
-import { getCaseVoList, getListByTagId } from '@/request/api/case'
+import { getListByTagId } from '@/request/api/case'
 import { CaseVoData } from '@/type/case';
 const data = reactive(new CaseVoData())
 const route = useRoute()

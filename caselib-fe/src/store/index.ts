@@ -1,7 +1,7 @@
 import { createStore, useStore as baseUseStore, Store } from 'vuex'
 import type { InjectionKey } from 'vue'
 import { login, logout, reLogin, loginByEmailCode } from '@/request/api/login'
-import { getUserByToken } from '@/request/api/user'
+import { getUserVoByToken } from '@/request/api/user'
 import { getToken, setToken, removeToken } from '@/request/api/token'
 import userImg from '@/assets/image/user.png';
 import { ElMessage, ElNotification } from 'element-plus'
@@ -63,7 +63,6 @@ export const store = createStore<IState>({
         initWebsocket(state) {
             // 连接的ws地址
             state.webSocket = new WebSocket(import.meta.env.VITE_BASE_WS_URL+'/notice/'+ state.id)
-            
             // 建立连接
             state.webSocket.onopen = function () {
                 // 连接成功
@@ -85,11 +84,13 @@ export const store = createStore<IState>({
             // 通讯异常处理
             state.webSocket.onerror = function () {
                 state.isConnect = false
+                clearInterval(state.timer)
                 console.log('通讯异常')
             }
             //关闭连接时的回调函数
             state.webSocket.close = function () { 
                 state.isConnect = false
+                clearInterval(state.timer)
                 console.log('连接已断开')
             }
         },
@@ -123,9 +124,9 @@ export const store = createStore<IState>({
             })
         },
         // 根据前端token，获取用户信息
-        getUserByToken({commit}){
+        getUserVoByToken({commit}){
             return new Promise((resolve, reject) => {
-                getUserByToken(getToken()).then((res) => { 
+                getUserVoByToken().then((res) => { 
                     if (res.success){
                         // 保存用户信息
                         commit('setId', res.data.id)
