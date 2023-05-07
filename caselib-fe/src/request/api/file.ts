@@ -26,7 +26,7 @@ serviceFile.interceptors.response.use((res)=>{
     }
     return res.data
 },(err)=>{
-    console.log(err)
+    // console.log(err)
 })
 
 // 上传文件

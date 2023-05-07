@@ -128,7 +128,7 @@ const handleEmailCode = () => {
   loading.value = true;
   sendEmailCode(ruleForm).then((res) => {
     loading.value = false;
-    console.log(res);
+    // console.log(res);
     ElMessage.success("发送成功")
   })
   // 每秒计时

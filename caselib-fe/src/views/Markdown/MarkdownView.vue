@@ -158,10 +158,10 @@ window.onbeforeunload = function (e){
 document.addEventListener('visibilitychange',function(e){
   let state = document.visibilityState
   if (state == 'hidden'){
-      //console.log(document.visibilityState,'用户离开了')
+      //// console.log(document.visibilityState,'用户离开了')
   }
   if (state == 'visible'){
-      //console.log(document.visibilityState,'回来了')
+      //// console.log(document.visibilityState,'回来了')
   }
 })
 // 清空、重置表单
@@ -410,7 +410,7 @@ const handleSave = (op: String) => {
       ElMessage.error(op + "失败")
     }
   }).catch(error => {
-    console.log(error);
+    // console.log(error);
     ElMessage.error(op + "失败")
   })
 }

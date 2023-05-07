@@ -137,7 +137,7 @@ const handleStatusEdit = (favoritesForm: IFavorites) => {
     ElMessage.success("更新状态成功")
     reload() // 刷新数据
   }).catch((err) => {
-      console.log(err)
+      // console.log(err)
   })
 
 }

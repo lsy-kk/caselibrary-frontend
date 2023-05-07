@@ -160,10 +160,10 @@ const handleFavorites = async () => {
     let insertItems = newItems.value.filter(item => !oldSet.has(item))
     // 差集, oldItem - newItem, 需要删除的收藏实例             
     let deleteItems = oldItems.value.filter(item => !newSet.has(item))
-    // console.log(oldItems.value);
-    // console.log(newItems.value);
-    // console.log(insertItems);
-    // console.log(deleteItems);
+    // // console.log(oldItems.value);
+    // // console.log(newItems.value);
+    // // console.log(insertItems);
+    // // console.log(deleteItems);
     // 生成新增收藏记录的数组
     let insertFavorites: IFavoritesInstance[] = []
     let favoritesItem: IFavoritesInstance = {

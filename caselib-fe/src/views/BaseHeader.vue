@@ -125,7 +125,7 @@ const handleRegister = () => {
   router.push('/register')
 }
 const handleCommand = (command: string) => {
-  //console.log(`click on item ${command}`);
+  //// console.log(`click on item ${command}`);
   if (command === 'center'){
     router.push({path:`/user/${store.state.id}/case`})
   }

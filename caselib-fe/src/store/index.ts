@@ -66,7 +66,7 @@ export const store = createStore<IState>({
             // 建立连接
             state.webSocket.onopen = function () {
                 // 连接成功
-                console.log('通讯开始')
+                // console.log('通讯开始')
                 state.isConnect = true
                 // 心跳，防止ws协议自动断联
                 if (state.webSocket !== undefined){
@@ -76,7 +76,7 @@ export const store = createStore<IState>({
             //接收服务端消息
             state.webSocket.onmessage = function (e){
                 // 收到消息时回调函数
-                console.log('收到的数据：', e.data)
+                // // console.log('收到的数据：', e.data)
                 let noticeVo: INoticeVo = JSON.parse(e.data)
                 ElMessage.info("收到新消息，请前往消息系统查看")
                 state.noticeList.push(noticeVo)
@@ -85,13 +85,19 @@ export const store = createStore<IState>({
             state.webSocket.onerror = function () {
                 state.isConnect = false
                 clearInterval(state.timer)
-                console.log('通讯异常')
+                // console.log('通讯异常')
+            }
+            state.webSocket.onclose = function (){
+                state.isConnect = false
+                clearInterval(state.timer)
+                state.webSocket = new WebSocket(import.meta.env.VITE_BASE_WS_URL+'/notice/'+ state.id)
+                // console.log('连接断开')
             }
             //关闭连接时的回调函数
             state.webSocket.close = function () { 
                 state.isConnect = false
                 clearInterval(state.timer)
-                console.log('连接已断开')
+                // console.log('连接已断开')
             }
         },
         // 关闭websocket连接

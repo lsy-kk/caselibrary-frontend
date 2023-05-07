@@ -284,7 +284,7 @@ const handleSave = (formEl: FormInstance | undefined) => {
                     })
                 }
             }).catch((err) => {
-                console.log(err)
+                // console.log(err)
             })
             
         }
@@ -353,7 +353,7 @@ const handlePasswordUpdate = (formEl: FormInstance | undefined) => {
                     })
                 }
             }).catch((err) => {
-                console.log(err)
+                // console.log(err)
             })
         }
         else {
@@ -404,7 +404,7 @@ const handleAuthorityUpdate = (formEl: FormInstance | undefined) => {
                     })
                 }
             }).catch((err) => {
-                console.log(err)
+                // console.log(err)
             })
         }
         else {
@@ -448,7 +448,7 @@ const handleStatusEdit = (userForm: IUser) => {
         }
         
     }).catch((err) => {
-        console.log(err)
+        // console.log(err)
     })
 }
 

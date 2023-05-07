@@ -20,7 +20,7 @@ import { ref } from 'vue';
 // 动态路由模式
 // const router = useRouter();
 // const list = router.getRoutes().filter(v=>v.meta.isShow)
-// console.log(list)
+// // console.log(list)
 const list = [
     {
         path: "reply",
@@ -38,10 +38,10 @@ const list = [
 const isCollapse = ref(false)
 
 const handleOpen = (key: string, keyPath: string[]) => {
-  console.log(key, keyPath)
+  // console.log(key, keyPath)
 }
 const handleClose = (key: string, keyPath: string[]) => {
-  console.log(key, keyPath)
+  // console.log(key, keyPath)
 }
 </script>
 
