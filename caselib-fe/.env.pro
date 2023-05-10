@@ -1,0 +1,3 @@
+NODE_ENV = "production"
+VITE_BASE_URL = 'http://47.102.116.87:8080'
+VITE_BASE_WS_URL = 'ws://47.102.116.87:8080'
