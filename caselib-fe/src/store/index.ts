@@ -69,9 +69,10 @@ export const store = createStore<IState>({
                 // console.log('通讯开始')
                 state.isConnect = true
                 // 心跳，防止ws协议自动断联
-                if (state.webSocket !== undefined){
-                    state.timer = window.setInterval(() => {state.webSocket.send('1')}, 1000 * 60)
-                }
+                   state.timer = window.setInterval(() => {
+                        if (state.webSocket !== undefined){
+                            state.webSocket.send('1')
+                        }}, 1000 * 60)
             }
             //接收服务端消息
             state.webSocket.onmessage = function (e){
