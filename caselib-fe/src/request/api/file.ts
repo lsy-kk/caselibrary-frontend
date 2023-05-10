@@ -1,6 +1,5 @@
 import axios from 'axios'
 import service from '..'
-import type { ICaseBodyVo } from "@/type/case";
 
 // 另一种，用来传输文件
 const serviceFile = axios.create({
