@@ -11,5 +11,9 @@ COPY dist/  /usr/share/nginx/html/
 RUN rm /etc/nginx/conf.d/default.conf
 # 添加我们自己的配置 default.conf 在下面
 ADD default.conf /etc/nginx/conf.d/
+# 挂载nginx.conf到nginx
+# COPY nginx.conf /etc/nginx/nginx.conf
+# 挂载证书文件至nginx的'ssl'文件夹
+# COPY ssl/ /etc/nginx/ssl/
 # 暴露端口
 EXPOSE 80

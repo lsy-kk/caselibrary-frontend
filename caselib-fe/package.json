@@ -3,9 +3,12 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "dev": "vite --mode dev", 
-    "pro": "vite --mode pro",  
-    "build": "run-p type-check build-only",
+    "serve": "vite",
+    "dev": "vite --mode dev",
+    "pro": "vite --mode pro",
+    "build": "vue-tsc --noEmit && vite build",
+    "build:dev": "vue-tsc --noEmit && vite build --mode dev",
+    "build:pro": "vue-tsc --noEmit && vite build --mode pro",
     "preview": "vite preview",
     "test:unit": "vitest --environment jsdom --root src/",
     "build-only": "vite build",
@@ -17,6 +20,7 @@
     "element-plus": "^2.2.28",
     "katex": "^0.16.4",
     "md-editor-v3": "^2.8.0",
+    "mqtt": "^4.3.7",
     "vue": "^3.2.45",
     "vue-router": "^4.1.6",
     "vuex": "^4.0.2"
