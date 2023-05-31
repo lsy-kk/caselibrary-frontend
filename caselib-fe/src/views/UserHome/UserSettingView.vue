@@ -112,8 +112,7 @@ const submitForm = (formEl: FormInstance | undefined) => {
   formEl.validate((valid) => {
     if (valid) {
       updateUser(form.value).then((res) => {       
-        ElMessage.success("修改成功")
-        store.dispatch('reLogin')
+        ElMessage.success("修改成功，预计5分钟后更新")
       })
     } 
     else {

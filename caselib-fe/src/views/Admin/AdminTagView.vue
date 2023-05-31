@@ -185,8 +185,6 @@ const rules = reactive({
         trigger: 'blur'
     },],
 })
-// 上传头像
-const url = import.meta.env.VITE_BASE_URL + "/file/uploadFile"
 const getImageUrl = (url: string) => {
     form.value.image = url  
 }

@@ -3,9 +3,10 @@
     <el-card 
       :body-style="{ padding: '16px' }"
       shadow="hover">
-      <div class="relative block my-auto">
+      <div class="relative my-auto">
         <el-avatar shape="square" :size="100" fit="fill" :src="tagVo.image" />
-        <div class="ml-10 inline-block align-top">
+        <!--bug：当标签描述过长时，图片在文字上方而不是左侧，已修复-->
+        <div class="absolute ml-10 inline-block align-top">
           <a class="font-semibold text-base"
             @click="handleViewCase(tagVo.id)"
             v-html="tagVo.name">

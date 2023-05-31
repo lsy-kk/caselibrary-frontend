@@ -170,10 +170,11 @@
         <div v-if="caseHeader.comments !== undefined && 
                   caseHeader.comments !== null && 
                   caseHeader.comments.length !== 0" 
+            :key = caseHeader.comment
             class="my-2 w-full">
             <CommentItem 
               v-for="(item, index) in caseHeader.comments"
-              :key="index"
+              :key="item.id"
               :comment="item"
               :case-id="caseHeader.id"
               :caseAuthorId="caseHeader.author.id"
@@ -288,9 +289,9 @@ const handleComment = () => {
   insertComment(comment.value).then((res) => {
     if (res.success){
       ElMessage.success("评论成功");
-      // 更新评论列表，评论数+1
-      caseHeader.value.comments.push(res.data)
-      caseHeader.value.comment += 1
+      // 更新评论列表（从头部增加），评论数+1
+      caseHeader.value.comments.unshift(res.data)
+      caseHeader.value.comment +=1
     }
     else {
       ElMessage.error("评论失败，请稍后重试")
@@ -301,8 +302,7 @@ const handleComment = () => {
 }
 // 获取子组件的评论（二级评论），更新评论列表，评论数+1
 const getReply = (index: number, commentVo: ICommentVo) => {
-  caseHeader.value.comments[index].children.push(commentVo);
-  caseHeader.value.comment += 1
+  caseHeader.value.comment = caseHeader.value.comments[index].children.push(commentVo);
 }
 // 点赞操作
 const handleThumb = () => {
