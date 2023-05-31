@@ -13,13 +13,20 @@
               class="font-semibold text-base text-cyan-400 mr-2" 
               v-html="noticeVo.fromUser.username"></a>
             <a 
+              v-if="noticeVo.type === 1"
+              class="font-semibold text-base" 
+              v-html="noticeVo.title"></a>
+            <a 
+              v-if="noticeVo.type === 2"
               @click="handleViewCase(noticeVo.caseId)" 
               class="font-semibold text-base" 
               v-html="noticeVo.title"></a>
           </div>
 
           <div class="text-sm mb-4 break-all">
-            <a v-html="noticeVo.content"></a>
+            <a 
+              v-if="noticeVo.type !== 3"
+              v-html="noticeVo.content"></a>
           </div> 
 
           <div>

@@ -4,8 +4,9 @@ import { login, logout, reLogin, loginByEmailCode } from '@/request/api/login'
 import { getUserVoByToken } from '@/request/api/user'
 import { getToken, setToken, removeToken } from '@/request/api/token'
 import userImg from '@/assets/image/user.png';
-import { ElMessage, ElNotification } from 'element-plus'
+import { ElMessage } from 'element-plus'
 import { INoticeVo } from '@/type/notice'
+
 export interface IState{
     id: number,
     email: string,
@@ -13,11 +14,12 @@ export interface IState{
     image: string,
     authority: number,
     token: string,
+    reloginTimer: number,
     // ws相关
     noticeList: INoticeVo[],
     webSocket?: WebSocket,
     isConnect: boolean,
-    timer: number,
+    websocketTimer: number,
 }
 type Modules = {
 }
@@ -33,10 +35,11 @@ export const store = createStore<IState>({
         image: userImg,
         authority: -1,
         token: getToken(),
+        reloginTimer: 0,
         // websocket相关
         noticeList: [],
         isConnect: false,
-        timer: 0,
+        websocketTimer: 0,
     },
     // 通过getter对state状态进行筛选（例如过滤、计数），类似于计算属性
     // 通过mutations改变state状态，必须是同步的操作
@@ -59,6 +62,14 @@ export const store = createStore<IState>({
         setToken(state, token){
             state.token = token
         },
+        clearUserVo(state){
+            state.id = -1
+            state.email = ''
+            state.username = ''
+            state.image = userImg
+            state.authority = -1
+            state.token = ''
+        },
         // websocket连接初始化，rootState：使用其他模块
         initWebsocket(state) {
             // 连接的ws地址
@@ -69,10 +80,10 @@ export const store = createStore<IState>({
                 // console.log('通讯开始')
                 state.isConnect = true
                 // 心跳，防止ws协议自动断联
-                   state.timer = window.setInterval(() => {
-                        if (state.webSocket !== undefined){
-                            state.webSocket.send('1')
-                        }}, 1000 * 60)
+                state.websocketTimer = window.setInterval(() => {
+                    if (state.webSocket !== undefined){
+                        state.webSocket.send('1')
+                    }}, 1000 * 60)
             }
             //接收服务端消息
             state.webSocket.onmessage = function (e){
@@ -85,19 +96,19 @@ export const store = createStore<IState>({
             // 通讯异常处理
             state.webSocket.onerror = function () {
                 state.isConnect = false
-                clearInterval(state.timer)
+                clearInterval(state.websocketTimer)
                 // console.log('通讯异常')
             }
             state.webSocket.onclose = function (){
                 state.isConnect = false
-                clearInterval(state.timer)
+                clearInterval(state.websocketTimer)
                 state.webSocket = new WebSocket(import.meta.env.VITE_BASE_WS_URL+'/notice/'+ state.id)
                 // console.log('连接断开')
             }
             //关闭连接时的回调函数
             state.webSocket.close = function () { 
                 state.isConnect = false
-                clearInterval(state.timer)
+                clearInterval(state.websocketTimer)
                 // console.log('连接已断开')
             }
         },
@@ -105,11 +116,16 @@ export const store = createStore<IState>({
         websocketClose(state) {
             state.isConnect = false
             // 不再发送心跳信号
-            clearInterval(state.timer)
+            state.webSocket = undefined
+            clearInterval(state.websocketTimer)
         },
         clearNotice(state) {
             state.noticeList = []
         },
+        reloginTimerSetting(state){
+            // 23小时刷新一次token
+            state.reloginTimer = window.setInterval(reLogin, 1000 * 60 * 60 * 23)
+        }
     },
     // action提交mutations方法，但不同的是可以执行异步操作
     actions: {
@@ -143,29 +159,18 @@ export const store = createStore<IState>({
                         commit('setAuthority', res.data.authority)
                         // 开启websocket连接
                         commit('initWebsocket')
-                        
                         resolve(res.msg)
                     }
                     else {
                         // 后端token失效，变为未登录状态
-                        commit('setId', -1)
-                        commit('setEmail', '')
-                        commit('setUsername', '')
-                        commit('setImage', userImg)
-                        commit('setAuthority', -1)
-                        commit('setToken', '')
+                        commit('clearUserVo')
                         removeToken()
                         // 关闭websocket连接
                         store.commit('websocketClose')
-                        resolve(res.msg)
+                        reject(res.msg)
                     }
                 }).catch(error => {
-                    commit('setId', -1)
-                    commit('setEmail', '')
-                    commit('setUsername', '')
-                    commit('setImage', userImg)
-                    commit('setAuthority', -1)
-                    commit('setToken', '')
+                    commit('clearUserVo')
                     removeToken()
                     // 关闭websocket连接
                     store.commit('websocketClose')
@@ -179,12 +184,7 @@ export const store = createStore<IState>({
             return new Promise((resolve, reject) => {
                 logout().then((res)=>{ 
                     if (res.success){
-                        commit('setId', -1)
-                        commit('setEmail', '')
-                        commit('setUsername', '')
-                        commit('setImage', userImg)
-                        commit('setAuthority', -1)
-                        commit('setToken', '')
+                        commit('clearUserVo')
                         removeToken()
                         // 关闭websocket连接
                         store.commit('websocketClose')
@@ -212,14 +212,9 @@ export const store = createStore<IState>({
                     }
                     else{
                         // token过期，登出
-                        commit('setId', -1)
-                        commit('setEmail', '')
-                        commit('setUsername', '')
-                        commit('setImage', userImg)
-                        commit('setAuthority', -1)
-                        commit('setToken', '')
+                        commit('clearUserVo')
                         removeToken()
-                        resolve(res.msg)
+                        reject(res.msg)
                     }
                 }).catch(error => {
                     reject(error)
