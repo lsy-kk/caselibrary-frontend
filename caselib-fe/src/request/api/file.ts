@@ -1,4 +1,6 @@
 import axios from 'axios'
+import { store } from '@/store'
+import { ElMessage } from 'element-plus'
 import service from '..'
 
 // 另一种，用来传输文件
@@ -13,19 +15,28 @@ const serviceFile = axios.create({
 serviceFile.interceptors.request.use((config)=>{
     config.headers = config.headers || {}
     if (localStorage.getItem('token')){
-        config.headers.token = localStorage.getItem('token') || ""
+        config.headers['Authorization'] = localStorage.getItem('token') || ""
     }
     return config
 })
 // 响应拦截
 serviceFile.interceptors.response.use((res)=>{
-    const status:number = res.status
-    if (status != 200){
-        return Promise.reject();
+    //全局统一处理 Session超时
+    if (res.headers['session_time_out'] == 'timeout') {
+        store.dispatch('logout')
     }
-    return res.data
-},(err)=>{
-    // console.log(err)
+    if (res.data.success){
+        return res.data
+    }
+    ElMessage.error(res.data.msg)
+    return Promise.reject(res.data)
+},(error)=>{
+    ElMessage({
+        type: "error",
+        showClose: true,
+        message: "连接超时",
+    })
+    return Promise.reject('error')
 })
 
 // 上传文件

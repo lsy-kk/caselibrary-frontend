@@ -47,7 +47,7 @@
         <!--上传附件，手动上传-->
         <el-upload
           :action="url"
-          multiple
+          :headers="headerObj"
           v-model:file-list = "fileList"
           :before-upload="beforeUpload"
           :on-success="onSuccess"
@@ -71,11 +71,12 @@
           previewTheme="vuepress"
           v-model="caseParam.caseBodyVoLatest.content" 
           width="400px"
+          style="height: 80vh;"
           @onSave="onSave" 
           @onUploadImg="onUploadImg"/>
       </el-collapse-item>
     </el-collapse>
-    <div class="fixed inset-x-0 bottom-0 text-center">
+    <div class="mt-4 inset-x-0 bottom-0 text-center">
       <el-button type="primary" @click="handleSubmit" class="w-2/5 z-50">提交</el-button>
       <el-button @click="handleSaveAndReload" class="w-2/5 z-50">保存</el-button>
     </div>
@@ -107,9 +108,13 @@ import type { ITagVo} from '@/type/tag'
 import type { IFileVo } from '@/type/file'
 import { useRouter, useRoute } from 'vue-router'
 import { useStore } from '@/store'
+import { getToken } from '@/request/api/token'
 const router = useRouter()
 // 初始化内容
 const activeNames = ref(['1','2','3'])
+// 请求头部，鉴权
+var headerObj = new Headers();
+headerObj.append('Authorization', getToken())
 const url = import.meta.env.VITE_BASE_URL + "/file/uploadFile"
 // 获取store
 const store = useStore();

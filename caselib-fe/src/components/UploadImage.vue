@@ -7,6 +7,7 @@
                     style="width: 120px; height: 120px;"
                     :limit="1"
                     :action="url"
+                    :headers="headerObj"
                     :show-file-list="false"
                     :on-success="handleAvatarSuccess"
                     :before-upload="beforeAvatarUpload"
@@ -27,10 +28,14 @@ import { ref, defineEmits } from 'vue'
 import { ElMessage } from 'element-plus'
 import { Plus } from '@element-plus/icons-vue'
 import type { UploadProps } from 'element-plus'
+import { getToken } from '@/request/api/token'
 const props = defineProps<{
   oldImageUrl: string,
 }>()
 const imageUrl = ref(props.oldImageUrl)
+// 请求头部，鉴权
+var headerObj = new Headers();
+headerObj.set('Authorization', getToken())
 const url = import.meta.env.VITE_BASE_URL + "/file/uploadFile"
 // 向父组件传参
 const emit = defineEmits<{
@@ -40,7 +45,6 @@ const emit = defineEmits<{
 const sendImageUrl = () => {
     emit('imageUrl', imageUrl.value);
 }
-
 const handleAvatarSuccess: UploadProps['onSuccess'] = (response, uploadFile) => {
     if (response.success){
         // 得到图片的url

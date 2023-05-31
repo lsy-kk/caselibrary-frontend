@@ -3,7 +3,7 @@ import { store } from '@/store'
 import { getToken } from '@/request/api/token'
 
 const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
+  history: createWebHistory(import.meta.env.PUBLIC_URL),
   routes: [
     {
       path: '',
@@ -235,8 +235,8 @@ router.beforeEach((to, from, next) => {
         // 正常获取用户信息并跳转
         next()
       }).catch(() => {
-        // 后端token失效，退出登录状态
-        return false
+        // 后端token失效，退出登录状态，跳回首页
+        next({path: '/'})
       })
     } 
     else {
